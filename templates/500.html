@@ -2,277 +2,45 @@
 
 {% block title %}500 - Server Error{% endblock %}
 
-{% block extra_css %}
-<style>
-    .error-container {
-        min-height: calc(100vh - 300px);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 2rem 1rem;
-    }
-    .error-content {
-        max-width: 600px;
-        width: 100%;
-        text-align: center;
-        padding: 2rem 1.5rem;
-        background: rgba(26, 22, 37, 0.5);
-        backdrop-filter: blur(10px);
-        border-radius: 2rem;
-        border: 1px solid rgba(255, 255, 255, 0.05);
-        animation: fadeInUp 0.6s ease-out;
-    }
-    .error-code {
-        font-size: clamp(4rem, 15vw, 8rem);
-        font-weight: 800;
-        line-height: 1;
-        background: linear-gradient(135deg, #ef4444, #f87171);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        margin-bottom: 1rem;
-        text-shadow: 0 0 40px rgba(239, 68, 68, 0.2);
-    }
-    .error-icon {
-        font-size: clamp(2rem, 5vw, 4rem);
-        color: #ef4444;
-        opacity: 0.2;
-        margin-bottom: 0.5rem;
-        display: block;
-    }
-    .error-title {
-        font-size: clamp(1.5rem, 4vw, 2.5rem);
-        font-weight: 700;
-        color: #fff;
-        margin-bottom: 0.75rem;
-    }
-    .error-message {
-        font-size: clamp(0.875rem, 1.5vw, 1.1rem);
-        color: rgba(255, 255, 255, 0.5);
-        margin-bottom: 2rem;
-        line-height: 1.6;
-        padding: 0 0.5rem;
-    }
-    .error-actions {
-        display: flex;
-        flex-direction: column;
-        gap: 0.75rem;
-        align-items: center;
-        justify-content: center;
-    }
-    .btn-primary-custom {
-        background: #d4a94b;
-        transition: all 0.3s ease;
-        color: black;
-        font-weight: 600;
-        padding: 0.75rem 2.5rem;
-        border-radius: 0.75rem;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        text-decoration: none;
-        font-size: clamp(0.875rem, 1.2vw, 1rem);
-        width: 100%;
-        max-width: 280px;
-        justify-content: center;
-    }
-    .btn-primary-custom:hover {
-        background: #b88d3a;
-        transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(212, 169, 75, 0.3);
-        color: black;
-    }
-    .btn-secondary-custom {
-        background: rgba(255, 255, 255, 0.05);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        color: rgba(255, 255, 255, 0.7);
-        transition: all 0.3s ease;
-        padding: 0.75rem 2rem;
-        border-radius: 0.75rem;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        text-decoration: none;
-        font-size: clamp(0.875rem, 1.2vw, 1rem);
-        width: 100%;
-        max-width: 280px;
-        justify-content: center;
-    }
-    .btn-secondary-custom:hover {
-        background: rgba(255, 255, 255, 0.1);
-        border-color: rgba(255, 255, 255, 0.2);
-        color: #fff;
-        transform: translateY(-2px);
-    }
-    .error-divider {
-        width: 60px;
-        height: 2px;
-        background: linear-gradient(to right, transparent, rgba(239, 68, 68, 0.5), transparent);
-        margin: 1.5rem auto;
-    }
-    .error-status-box {
-        background: rgba(239, 68, 68, 0.05);
-        border: 1px solid rgba(239, 68, 68, 0.1);
-        border-radius: 0.75rem;
-        padding: 1rem;
-        margin: 1.5rem 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.75rem;
-        flex-wrap: wrap;
-    }
-    .status-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.4rem;
-        padding: 0.3rem 0.8rem;
-        background: rgba(239, 68, 68, 0.15);
-        border-radius: 9999px;
-        font-size: 0.7rem;
-        font-weight: 600;
-        color: #f87171;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-    }
-    .status-badge i {
-        font-size: 0.5rem;
-        animation: pulse 1.5s ease-in-out infinite;
-    }
-    @keyframes pulse {
-        0%, 100% { opacity: 1; }
-        50% { opacity: 0.3; }
-    }
-    .error-suggestions {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 0.5rem;
-        margin-top: 1.5rem;
-        width: 100%;
-        max-width: 400px;
-    }
-    .suggestion-link {
-        color: rgba(255, 255, 255, 0.4);
-        font-size: clamp(0.7rem, 1vw, 0.8rem);
-        text-decoration: none;
-        transition: all 0.3s ease;
-        padding: 0.4rem 0.5rem;
-        border-radius: 0.5rem;
-        background: rgba(255, 255, 255, 0.02);
-        border: 1px solid rgba(255, 255, 255, 0.03);
-        text-align: center;
-    }
-    .suggestion-link:hover {
-        color: #d4a94b;
-        background: rgba(212, 169, 75, 0.05);
-        border-color: rgba(212, 169, 75, 0.1);
-    }
-    
-    @keyframes fadeInUp {
-        from {
-            opacity: 0;
-            transform: translateY(30px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-    
-    @media (max-width: 640px) {
-        .error-content {
-            padding: 1.5rem 1rem;
-            border-radius: 1.25rem;
-        }
-        .error-actions {
-            flex-direction: column;
-            gap: 0.75rem;
-        }
-        .btn-primary-custom,
-        .btn-secondary-custom {
-            width: 100%;
-            max-width: 100%;
-            padding: 0.7rem 1.5rem;
-            font-size: 0.875rem;
-        }
-        .error-suggestions {
-            grid-template-columns: 1fr 1fr;
-            gap: 0.4rem;
-        }
-        .suggestion-link {
-            font-size: 0.65rem;
-            padding: 0.3rem 0.4rem;
-        }
-        .error-status-box {
-            flex-direction: column;
-            gap: 0.5rem;
-            padding: 0.75rem;
-        }
-    }
-    
-    @media (max-width: 400px) {
-        .error-suggestions {
-            grid-template-columns: 1fr;
-        }
-        .error-content {
-            padding: 1rem 0.75rem;
-        }
-        .error-code {
-            font-size: 3.5rem;
-        }
-    }
-    
-    @media (min-width: 768px) {
-        .error-actions {
-            flex-direction: row;
-            gap: 1rem;
-        }
-        .btn-primary-custom,
-        .btn-secondary-custom {
-            width: auto;
-            max-width: none;
-        }
-    }
-</style>
-{% endblock %}
-
 {% block content %}
-<div class="error-container">
-    <div class="error-content">
-        <span class="error-icon">
-            <i class="fas fa-exclamation-triangle"></i>
-        </span>
-        <div class="error-code">500</div>
-        <div class="error-divider"></div>
-        <h1 class="error-title">Something Went Wrong</h1>
-        <p class="error-message">
-            We're experiencing some technical difficulties on our end. 
-            Please don't worry — our team has been notified and is working on it.
-        </p>
+<div class="min-h-[calc(100vh-300px)] flex items-center justify-center px-3 sm:px-4 py-8 sm:py-12">
+    <div class="max-w-lg w-full text-center p-6 sm:p-8 bg-[#1a1625]/50 backdrop-blur-lg rounded-2xl sm:rounded-3xl border border-white/5 animate-[fadeInUp_0.6s_ease-out]">
+        <i class="fas fa-exclamation-triangle text-4xl sm:text-5xl text-red-400 opacity-20 mb-2 block"></i>
+        <div class="text-7xl sm:text-8xl lg:text-9xl font-extrabold leading-none bg-gradient-to-r from-red-400 to-red-600 bg-clip-text text-transparent mb-4">500</div>
+        <div class="w-16 h-0.5 mx-auto my-6 bg-gradient-to-r from-transparent via-red-500/50 to-transparent"></div>
+        <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-3">Something Went Wrong</h1>
+        <p class="text-white/50 text-sm sm:text-base mb-6 leading-relaxed">We're experiencing technical difficulties. Our team has been notified.</p>
         
-        <div class="error-status-box">
-            <span class="status-badge">
-                <i class="fas fa-circle"></i> Server Error
+        <div class="bg-red-500/5 border border-red-500/10 rounded-xl p-3 sm:p-4 mb-6 flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4">
+            <span class="inline-flex items-center gap-2 px-3 py-1 bg-red-500/20 rounded-full text-xs font-semibold text-red-400 uppercase tracking-wider">
+                <i class="fas fa-circle text-[6px] animate-pulse"></i> Server Error
             </span>
-            <span class="text-xs text-white/30">|</span>
-            <span class="text-xs text-white/30">Reported to our team</span>
+            <span class="text-white/30 text-xs hidden sm:inline">|</span>
+            <span class="text-white/30 text-xs">Reported to our team</span>
         </div>
         
-        <div class="error-actions">
-            <a href="{{ url_for('index') }}" class="btn-primary-custom">
+        <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 items-center justify-center">
+            <a href="{{ url_for('index') }}" class="btn-primary px-6 sm:px-10 py-3 rounded-xl flex items-center gap-2 text-sm sm:text-base w-full sm:w-auto justify-center">
                 <i class="fas fa-home"></i> Go Home
             </a>
-            <a href="javascript:location.reload()" class="btn-secondary-custom">
+            <a href="javascript:location.reload()" class="bg-white/5 border border-white/10 text-white/70 hover:bg-white/10 hover:text-white px-6 sm:px-8 py-3 rounded-xl flex items-center gap-2 text-sm sm:text-base w-full sm:w-auto justify-center transition">
                 <i class="fas fa-sync-alt"></i> Try Again
             </a>
         </div>
         
-        <div class="error-suggestions">
-            <a href="{{ url_for('store') }}" class="suggestion-link">Browse Store</a>
-            <a href="{{ url_for('contact') }}" class="suggestion-link">Contact Support</a>
-            <a href="{{ url_for('about') }}" class="suggestion-link">About Us</a>
-            <a href="{{ url_for('cart') }}" class="suggestion-link">Cart</a>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-6 max-w-xs mx-auto">
+            <a href="{{ url_for('store') }}" class="text-white/30 text-xs sm:text-sm px-2 py-1.5 rounded-lg bg-white/5 border border-white/5 hover:text-[#d4a94b] hover:bg-[#d4a94b]/5 transition text-center">Store</a>
+            <a href="{{ url_for('contact') }}" class="text-white/30 text-xs sm:text-sm px-2 py-1.5 rounded-lg bg-white/5 border border-white/5 hover:text-[#d4a94b] hover:bg-[#d4a94b]/5 transition text-center">Support</a>
+            <a href="{{ url_for('about') }}" class="text-white/30 text-xs sm:text-sm px-2 py-1.5 rounded-lg bg-white/5 border border-white/5 hover:text-[#d4a94b] hover:bg-[#d4a94b]/5 transition text-center">About</a>
+            <a href="{{ url_for('cart') }}" class="text-white/30 text-xs sm:text-sm px-2 py-1.5 rounded-lg bg-white/5 border border-white/5 hover:text-[#d4a94b] hover:bg-[#d4a94b]/5 transition text-center">Cart</a>
         </div>
     </div>
 </div>
+
+<style>
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+</style>
 {% endblock %}

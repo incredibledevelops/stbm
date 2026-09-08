@@ -2,156 +2,76 @@
 
 {% block title %}Order Confirmation · STBM{% endblock %}
 
-{% block extra_css %}
-<style>
-    .confirmation-container {
-        min-height: calc(100vh - 300px);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 2rem 1rem;
-    }
-    .confirmation-content {
-        max-width: 640px;
-        width: 100%;
-    }
-    .success-icon {
-        width: 4rem;
-        height: 4rem;
-        font-size: 2rem;
-    }
-    .order-details-card {
-        padding: 1.5rem;
-        border-radius: 1rem;
-    }
-    
-    @media (max-width: 480px) {
-        .confirmation-container {
-            padding: 1rem 0.75rem;
-            min-height: calc(100vh - 200px);
-        }
-        .success-icon {
-            width: 3rem;
-            height: 3rem;
-            font-size: 1.5rem;
-        }
-        .confirmation-title {
-            font-size: 1.5rem !important;
-        }
-        .confirmation-subtitle {
-            font-size: 1rem !important;
-        }
-        .order-details-card {
-            padding: 1rem;
-        }
-        .order-detail-row {
-            font-size: 0.8rem !important;
-            padding: 0.6rem 0 !important;
-        }
-        .order-detail-label {
-            font-size: 0.7rem !important;
-        }
-        .order-detail-value {
-            font-size: 0.8rem !important;
-        }
-        .action-buttons {
-            flex-direction: column;
-            gap: 0.75rem;
-        }
-        .action-buttons a {
-            width: 100%;
-            justify-content: center;
-            text-align: center;
-            padding: 0.7rem 1.5rem !important;
-        }
-        .order-items-title {
-            font-size: 0.7rem !important;
-        }
-        .order-item {
-            font-size: 0.75rem !important;
-            padding: 0.4rem 0 !important;
-        }
-    }
-    
-    @media (max-width: 400px) {
-        .confirmation-content {
-            padding: 0 0.5rem;
-        }
-        .order-details-card {
-            padding: 0.75rem;
-        }
-    }
-</style>
-{% endblock %}
-
 {% block content %}
-<div class="confirmation-container">
-    <div class="confirmation-content px-3 sm:px-4 py-8 sm:py-12 text-center">
-        <div class="success-icon bg-green-400/10 border border-green-400/20 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
-            <i class="fas fa-check text-2xl sm:text-3xl text-green-400"></i>
-        </div>
-        
-        <h1 class="confirmation-title text-2xl sm:text-3xl font-bold mb-2">Thank You!</h1>
-        <p class="confirmation-subtitle text-white/50 text-base sm:text-lg">Your order has been placed successfully.</p>
-        
-        <div class="order-details-card bg-[#1a1625] border border-white/5 mt-6 sm:mt-8 text-left">
-            <div class="order-detail-row flex justify-between items-center border-b border-white/5 pb-3 sm:pb-4 mb-3 sm:mb-4">
-                <span class="order-detail-label text-white/50 text-xs sm:text-sm">Order Number</span>
-                <span class="order-detail-value font-mono font-bold text-[#d4a94b] text-xs sm:text-sm">{{ order.order_number }}</span>
-            </div>
-            <div class="order-detail-row flex justify-between items-center border-b border-white/5 pb-3 sm:pb-4 mb-3 sm:mb-4">
-                <span class="order-detail-label text-white/50 text-xs sm:text-sm">Total</span>
-                <span class="order-detail-value font-bold text-[#d4a94b] text-sm sm:text-base">{{ format_currency(order.total_amount) }}</span>
-            </div>
-            <div class="order-detail-row flex justify-between items-center border-b border-white/5 pb-3 sm:pb-4 mb-3 sm:mb-4">
-                <span class="order-detail-label text-white/50 text-xs sm:text-sm">Date</span>
-                <span class="order-detail-value text-white/70 text-xs sm:text-sm">{{ order.created_at.strftime('%B %d, %Y at %I:%M %p') }}</span>
-            </div>
-            <div class="order-detail-row flex justify-between items-center">
-                <span class="order-detail-label text-white/50 text-xs sm:text-sm">Status</span>
-                <span class="order-detail-value px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-semibold border 
-                    {% if order.status == 'Processing' %}border-blue-400/20 text-blue-400 bg-blue-400/10
-                    {% elif order.status == 'Shipped' %}border-purple-400/20 text-purple-400 bg-purple-400/10
-                    {% elif order.status == 'Delivered' %}border-green-400/20 text-green-400 bg-green-400/10
-                    {% else %}border-white/10 text-white/40 bg-white/5{% endif %}">
-                    {{ order.status }}
-                </span>
+<div class="min-h-[calc(100vh-300px)] flex items-center justify-center px-3 sm:px-4 py-8 sm:py-12">
+    <div class="max-w-2xl w-full px-3 sm:px-4">
+        <div class="text-center">
+            <div class="w-16 sm:w-20 h-16 sm:h-20 rounded-full bg-green-400/10 border border-green-400/20 flex items-center justify-center mx-auto mb-4 sm:mb-6">
+                <i class="fas fa-check text-2xl sm:text-3xl text-green-400"></i>
             </div>
             
-            {% if order.shipping_address %}
-            <div class="mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-white/5">
-                <span class="order-detail-label text-white/50 text-xs sm:text-sm block">Shipping Address</span>
-                <p class="order-detail-value text-white/70 text-xs sm:text-sm mt-1">{{ order.shipping_address }}</p>
-            </div>
-            {% endif %}
+            <h1 class="text-2xl sm:text-3xl font-bold mb-2">Thank You!</h1>
+            <p class="text-white/50 text-base sm:text-lg">Your order has been placed successfully.</p>
             
-            {% if order.payment_method %}
-            <div class="mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-white/5">
-                <span class="order-detail-label text-white/50 text-xs sm:text-sm block">Payment Method</span>
-                <p class="order-detail-value text-white/70 text-xs sm:text-sm mt-1">{{ order.payment_method|title }}</p>
-            </div>
-            {% endif %}
-            
-            {% if order.items %}
-            <div class="mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-white/5">
-                <span class="order-items-title text-white/50 text-xs sm:text-sm block mb-2">Order Items</span>
-                {% for item in order.items %}
-                <div class="order-item flex justify-between text-xs sm:text-sm py-1 border-b border-white/5 last:border-0">
-                    <span class="text-white/70">{{ item.product_name }} × {{ item.quantity }}</span>
-                    <span class="text-white/70">{{ format_currency(item.subtotal) }}</span>
+            <div class="bg-[#1a1625] p-4 sm:p-6 rounded-xl border border-white/5 mt-6 sm:mt-8 text-left">
+                <div class="flex justify-between items-center border-b border-white/5 pb-3 sm:pb-4 mb-3 sm:mb-4">
+                    <span class="text-white/50 text-xs sm:text-sm">Order Number</span>
+                    <span class="font-mono font-bold text-[#d4a94b] text-xs sm:text-sm">{{ order.order_number }}</span>
                 </div>
-                {% endfor %}
+                <div class="flex justify-between items-center border-b border-white/5 pb-3 sm:pb-4 mb-3 sm:mb-4">
+                    <span class="text-white/50 text-xs sm:text-sm">Total</span>
+                    <span class="font-bold text-[#d4a94b] text-sm sm:text-base">{{ format_currency(order.total_amount) }}</span>
+                </div>
+                <div class="flex justify-between items-center border-b border-white/5 pb-3 sm:pb-4 mb-3 sm:mb-4">
+                    <span class="text-white/50 text-xs sm:text-sm">Date</span>
+                    <span class="text-white/70 text-xs sm:text-sm">{{ order.created_at.strftime('%B %d, %Y at %I:%M %p') }}</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-white/50 text-xs sm:text-sm">Status</span>
+                    <span class="px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-[8px] sm:text-xs font-semibold border 
+                        {% if order.status == 'Processing' %}border-blue-400/20 text-blue-400 bg-blue-400/10
+                        {% elif order.status == 'Shipped' %}border-purple-400/20 text-purple-400 bg-purple-400/10
+                        {% elif order.status == 'Delivered' %}border-green-400/20 text-green-400 bg-green-400/10
+                        {% else %}border-white/10 text-white/40 bg-white/5{% endif %}">
+                        {{ order.status }}
+                    </span>
+                </div>
+                
+                {% if order.shipping_address %}
+                <div class="mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-white/5">
+                    <span class="text-white/50 text-xs sm:text-sm block">Shipping Address</span>
+                    <p class="text-white/70 text-xs sm:text-sm mt-1">{{ order.shipping_address }}</p>
+                </div>
+                {% endif %}
+                
+                {% if order.payment_method %}
+                <div class="mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-white/5">
+                    <span class="text-white/50 text-xs sm:text-sm block">Payment Method</span>
+                    <p class="text-white/70 text-xs sm:text-sm mt-1">{{ order.payment_method|title }}</p>
+                </div>
+                {% endif %}
+                
+                {% if order.items %}
+                <div class="mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-white/5">
+                    <span class="text-white/50 text-xs sm:text-sm block mb-2">Order Items</span>
+                    {% for item in order.items %}
+                    <div class="flex justify-between text-xs sm:text-sm py-1 border-b border-white/5 last:border-0">
+                        <span class="text-white/70">{{ item.product_name }} × {{ item.quantity }}</span>
+                        <span class="text-white/70">{{ format_currency(item.subtotal) }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
             </div>
-            {% endif %}
-        </div>
-        
-        <div class="action-buttons mt-6 sm:mt-8 flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
-            <a href="{{ url_for('store') }}" class="btn-primary px-6 sm:px-8 py-2.5 sm:py-3 rounded-lg inline-flex items-center justify-center text-sm sm:text-base">
-                <i class="fas fa-shopping-bag mr-2"></i> Continue Shopping
-            </a>
-            <a href="{{ url_for('profile') }}" class="bg-white/10 hover:bg-white/20 text-white px-6 sm:px-8 py-2.5 sm:py-3 rounded-lg inline-flex items-center justify-center transition text-sm sm:text-base">
-                <i class="fas fa-list mr-2"></i> View Orders
-            </a>
+            
+            <div class="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
+                <a href="{{ url_for('store') }}" class="btn-primary px-6 sm:px-8 py-2.5 sm:py-3 rounded-lg inline-flex items-center justify-center text-sm sm:text-base">
+                    <i class="fas fa-shopping-bag mr-2"></i> Continue Shopping
+                </a>
+                <a href="{{ url_for('profile') }}" class="bg-white/10 hover:bg-white/20 text-white px-6 sm:px-8 py-2.5 sm:py-3 rounded-lg inline-flex items-center justify-center transition text-sm sm:text-base">
+                    <i class="fas fa-list mr-2"></i> View Orders
+                </a>
+            </div>
         </div>
     </div>
 </div>

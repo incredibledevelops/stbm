@@ -2,68 +2,16 @@
 
 {% block admin_title %}Orders{% endblock %}
 
-{% block extra_css %}
-<style>
-    @media (max-width: 480px) {
-        .orders-title {
-            font-size: 1.5rem !important;
-        }
-        .orders-subtitle {
-            font-size: 0.75rem !important;
-        }
-        .orders-table th,
-        .orders-table td {
-            padding: 0.4rem 0.4rem !important;
-            font-size: 0.6rem !important;
-        }
-        .orders-table th {
-            font-size: 0.5rem !important;
-        }
-        .orders-id {
-            font-size: 0.55rem !important;
-        }
-        .orders-status {
-            font-size: 0.5rem !important;
-            padding: 0.1rem 0.3rem !important;
-        }
-        .orders-total {
-            font-size: 0.65rem !important;
-        }
-        .orders-select {
-            font-size: 0.55rem !important;
-            padding: 0.1rem 0.3rem !important;
-            min-width: 70px !important;
-        }
-        .orders-customer {
-            font-size: 0.6rem !important;
-        }
-        .orders-date {
-            font-size: 0.5rem !important;
-        }
-    }
-    
-    @media (max-width: 768px) {
-        .orders-table-wrapper {
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-        }
-        .orders-table {
-            min-width: 600px;
-        }
-    }
-</style>
-{% endblock %}
-
 {% block admin_content %}
-<div class="orders-container max-w-7xl mx-auto px-2 sm:px-4">
+<div class="max-w-7xl mx-auto">
     <div class="mb-6 sm:mb-8">
-        <h1 class="orders-title text-2xl sm:text-3xl font-bold text-white mb-1">Orders</h1>
-        <p class="orders-subtitle text-white/50 text-xs sm:text-sm">Track and manage customer orders.</p>
+        <h1 class="text-2xl sm:text-3xl font-bold text-white mb-1">Orders</h1>
+        <p class="text-white/50 text-xs sm:text-sm">Track and manage customer orders.</p>
     </div>
 
     <div class="bg-[#1a1625] border border-white/5 rounded-xl sm:rounded-2xl overflow-hidden shadow-xl">
-        <div class="orders-table-wrapper overflow-x-auto">
-            <table class="orders-table w-full text-left border-collapse min-w-[600px]">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse min-w-[600px]">
                 <thead>
                     <tr class="bg-white/5 text-white/40 text-[8px] sm:text-xs uppercase tracking-wider">
                         <th class="px-2 sm:px-6 py-3 sm:py-4 font-medium">Order ID</th>
@@ -77,11 +25,11 @@
                 <tbody class="divide-y divide-white/5 text-[9px] sm:text-sm">
                     {% for order in orders %}
                         <tr class="hover:bg-white/[0.02] transition">
-                            <td class="orders-id px-2 sm:px-6 py-3 sm:py-4 font-medium text-white font-mono text-[7px] sm:text-sm">{{ order.order_number }}</td>
-                            <td class="orders-customer px-2 sm:px-6 py-3 sm:py-4 truncate max-w-[60px] sm:max-w-none">{{ order.customer.name }}</td>
-                            <td class="orders-date px-2 sm:px-6 py-3 sm:py-4 text-white/50 text-[6px] sm:text-sm hidden sm:table-cell">{{ order.created_at.strftime('%b %d, %Y • %I:%M %p') }}</td>
+                            <td class="px-2 sm:px-6 py-3 sm:py-4 font-medium text-white font-mono text-[7px] sm:text-sm">{{ order.order_number }}</td>
+                            <td class="px-2 sm:px-6 py-3 sm:py-4 truncate max-w-[60px] sm:max-w-none">{{ order.customer.name }}</td>
+                            <td class="px-2 sm:px-6 py-3 sm:py-4 text-white/50 text-[6px] sm:text-sm hidden sm:table-cell">{{ order.created_at.strftime('%b %d, %Y • %I:%M %p') }}</td>
                             <td class="px-2 sm:px-6 py-3 sm:py-4">
-                                <span class="orders-status px-1.5 sm:px-2.5 py-0.5 sm:py-1 rounded-full text-[6px] sm:text-xs font-semibold border 
+                                <span class="px-1.5 sm:px-2.5 py-0.5 sm:py-1 rounded-full text-[6px] sm:text-xs font-semibold border 
                                     {% if order.status == 'Processing' %}border-blue-400/20 text-blue-400 bg-blue-400/10
                                     {% elif order.status == 'Shipped' %}border-purple-400/20 text-purple-400 bg-purple-400/10
                                     {% elif order.status == 'Delivered' %}border-green-400/20 text-green-400 bg-green-400/10
@@ -89,10 +37,10 @@
                                     {{ order.status }}
                                 </span>
                             </td>
-                            <td class="orders-total px-2 sm:px-6 py-3 sm:py-4 font-medium text-[#d4a94b] text-[8px] sm:text-sm">{{ format_currency(order.total_amount) }}</td>
+                            <td class="px-2 sm:px-6 py-3 sm:py-4 font-medium text-[#d4a94b] text-[8px] sm:text-sm">{{ format_currency(order.total_amount) }}</td>
                             <td class="px-2 sm:px-6 py-3 sm:py-4 text-right">
                                 <form action="{{ url_for('admin_update_order_status', order_id=order.id) }}" method="POST" class="inline">
-                                    <select name="status" class="orders-select bg-[#0f0c17] text-white text-[7px] sm:text-xs border border-white/10 rounded px-1 sm:px-2 py-0.5 sm:py-1 outline-none focus:border-[#d4a94b] min-w-[60px] sm:min-w-[80px]" onchange="this.form.submit()">
+                                    <select name="status" class="bg-[#0f0c17] text-white text-[7px] sm:text-xs border border-white/10 rounded px-1 sm:px-2 py-0.5 sm:py-1 outline-none focus:border-[#d4a94b] min-w-[60px] sm:min-w-[80px]" onchange="this.form.submit()">
                                         <option value="Processing" {% if order.status == 'Processing' %}selected{% endif %}>Processing</option>
                                         <option value="Shipped" {% if order.status == 'Shipped' %}selected{% endif %}>Shipped</option>
                                         <option value="Delivered" {% if order.status == 'Delivered' %}selected{% endif %}>Delivered</option>

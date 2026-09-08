@@ -2,85 +2,21 @@
 
 {% block admin_title %}Users{% endblock %}
 
-{% block extra_css %}
-<style>
-    .users-container {
-        padding: 0 0.5rem;
-    }
-    
-    @media (max-width: 480px) {
-        .users-title {
-            font-size: 1.5rem !important;
-        }
-        .users-subtitle {
-            font-size: 0.75rem !important;
-        }
-        .users-header {
-            flex-direction: column !important;
-            align-items: stretch !important;
-            gap: 0.75rem !important;
-        }
-        .users-add-btn {
-            font-size: 0.8rem !important;
-            padding: 0.5rem 1rem !important;
-            width: 100%;
-            justify-content: center;
-        }
-        .users-table th,
-        .users-table td {
-            padding: 0.5rem 0.5rem !important;
-            font-size: 0.7rem !important;
-        }
-        .users-table th {
-            font-size: 0.55rem !important;
-        }
-        .users-role-badge {
-            font-size: 0.55rem !important;
-            padding: 0.1rem 0.4rem !important;
-        }
-        .users-status-badge {
-            font-size: 0.55rem !important;
-            padding: 0.1rem 0.4rem !important;
-        }
-        .users-actions {
-            gap: 0.25rem !important;
-        }
-        .users-actions a,
-        .users-actions button {
-            font-size: 0.7rem !important;
-        }
-        .users-joined {
-            font-size: 0.6rem !important;
-        }
-    }
-    
-    @media (max-width: 768px) {
-        .users-table-wrapper {
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-        }
-        .users-table {
-            min-width: 600px;
-        }
-    }
-</style>
-{% endblock %}
-
 {% block admin_content %}
-<div class="users-container max-w-7xl mx-auto px-2 sm:px-4">
-    <div class="users-header mb-6 sm:mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+<div class="max-w-7xl mx-auto">
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 sm:mb-8">
         <div>
-            <h1 class="users-title text-2xl sm:text-3xl font-bold text-white mb-1">User Management</h1>
-            <p class="users-subtitle text-white/50 text-xs sm:text-sm">Manage system accounts, customers, and permissions.</p>
+            <h1 class="text-2xl sm:text-3xl font-bold text-white mb-1">User Management</h1>
+            <p class="text-white/50 text-xs sm:text-sm">Manage system accounts, customers, and permissions.</p>
         </div>
-        <a href="{{ url_for('admin_add_user') }}" class="users-add-btn btn-primary px-4 sm:px-5 py-2 sm:py-2.5 rounded-lg text-xs sm:text-sm flex items-center gap-2">
+        <a href="{{ url_for('admin_add_user') }}" class="btn-primary px-4 sm:px-5 py-2 sm:py-2.5 rounded-lg text-xs sm:text-sm flex items-center justify-center gap-2 w-full sm:w-auto">
             <i class="fas fa-user-plus"></i>Add User
         </a>
     </div>
 
     <div class="bg-[#1a1625] border border-white/5 rounded-xl sm:rounded-2xl overflow-hidden shadow-xl">
-        <div class="users-table-wrapper overflow-x-auto">
-            <table class="users-table w-full text-left border-collapse min-w-[600px]">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse min-w-[600px]">
                 <thead>
                     <tr class="bg-white/5 text-white/40 text-[10px] sm:text-xs uppercase tracking-wider">
                         <th class="px-3 sm:px-6 py-3 sm:py-4 font-medium">Name</th>
@@ -97,21 +33,21 @@
                             <td class="px-3 sm:px-6 py-3 sm:py-4 font-medium text-white truncate max-w-[80px] sm:max-w-none">{{ user.name }}</td>
                             <td class="px-3 sm:px-6 py-3 sm:py-4 text-white/60 truncate max-w-[100px] sm:max-w-none">{{ user.email }}</td>
                             <td class="px-3 sm:px-6 py-3 sm:py-4">
-                                <span class="users-role-badge px-1.5 sm:px-2 py-0.5 rounded-full text-[8px] sm:text-xs font-semibold border 
+                                <span class="px-1.5 sm:px-2 py-0.5 rounded-full text-[8px] sm:text-xs font-semibold border 
                                     {% if user.role == 'Admin' %}border-amber-400/20 text-amber-400 bg-amber-400/10
                                     {% else %}border-blue-400/20 text-blue-400 bg-blue-400/10{% endif %}">
                                     {{ user.role }}
                                 </span>
                             </td>
                             <td class="px-3 sm:px-6 py-3 sm:py-4">
-                                <span class="users-status-badge px-1.5 sm:px-2 py-0.5 rounded-full text-[8px] sm:text-xs font-semibold border 
+                                <span class="px-1.5 sm:px-2 py-0.5 rounded-full text-[8px] sm:text-xs font-semibold border 
                                     {% if user.status == 'Active' %}border-green-400/20 text-green-400 bg-green-400/10
                                     {% else %}border-red-400/20 text-red-400 bg-red-400/10{% endif %}">
                                     {{ user.status }}
                                 </span>
                             </td>
-                            <td class="users-joined px-3 sm:px-6 py-3 sm:py-4 text-white/50 text-[10px] sm:text-sm hidden sm:table-cell">{{ user.created_at.strftime('%b %d, %Y') if user.created_at else 'N/A' }}</td>
-                            <td class="users-actions px-3 sm:px-6 py-3 sm:py-4 text-right space-x-1 sm:space-x-2 whitespace-nowrap">
+                            <td class="px-3 sm:px-6 py-3 sm:py-4 text-white/50 text-[10px] sm:text-sm hidden sm:table-cell">{{ user.created_at.strftime('%b %d, %Y') if user.created_at else 'N/A' }}</td>
+                            <td class="px-3 sm:px-6 py-3 sm:py-4 text-right space-x-1 sm:space-x-2 whitespace-nowrap">
                                 <a href="{{ url_for('admin_edit_user_page', user_id=user.id) }}" class="text-white/40 hover:text-white transition text-xs sm:text-sm">
                                     <i class="fas fa-edit"></i>
                                 </a>

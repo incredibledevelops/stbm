@@ -2,139 +2,40 @@
 
 {% block title %}Contact · STBM{% endblock %}
 
-{% block extra_css %}
-<style>
-    .contact-container {
-        min-height: calc(100vh - 300px);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 2rem 1rem;
-    }
-    .contact-content {
-        max-width: 560px;
-        width: 100%;
-    }
-    .contact-form {
-        padding: 1.5rem;
-        border-radius: 1rem;
-    }
-    
-    @media (max-width: 480px) {
-        .contact-container {
-            padding: 1rem 0.75rem;
-            min-height: calc(100vh - 200px);
-        }
-        .contact-title {
-            font-size: 1.5rem !important;
-        }
-        .contact-subtitle {
-            font-size: 0.85rem !important;
-            margin-bottom: 1.5rem !important;
-        }
-        .contact-form {
-            padding: 1rem;
-            border-radius: 0.75rem;
-        }
-        .contact-label {
-            font-size: 0.75rem !important;
-        }
-        .contact-input {
-            padding: 0.6rem 0.75rem !important;
-            font-size: 0.875rem !important;
-        }
-        .contact-textarea {
-            padding: 0.6rem 0.75rem !important;
-            font-size: 0.875rem !important;
-            min-height: 100px !important;
-        }
-        .contact-btn {
-            padding: 0.7rem !important;
-            font-size: 0.875rem !important;
-        }
-    }
-    
-    @media (max-width: 400px) {
-        .contact-content {
-            padding: 0 0.5rem;
-        }
-        .contact-form {
-            padding: 0.75rem;
-        }
-    }
-    
-    .contact-input-custom {
-        background: #1a1625;
-        border: 1px solid rgba(255,255,255,0.1);
-        color: white;
-        width: 100%;
-        padding: 0.75rem 1rem;
-        border-radius: 0.5rem;
-        outline: none;
-        transition: 0.2s;
-        font-size: 1rem;
-    }
-    .contact-input-custom:focus {
-        border-color: #d4a94b;
-        box-shadow: 0 0 0 3px rgba(212, 169, 75, 0.2);
-    }
-    .contact-input-custom::placeholder {
-        color: rgba(255,255,255,0.3);
-    }
-    .contact-textarea-custom {
-        background: #1a1625;
-        border: 1px solid rgba(255,255,255,0.1);
-        color: white;
-        width: 100%;
-        padding: 0.75rem 1rem;
-        border-radius: 0.5rem;
-        outline: none;
-        transition: 0.2s;
-        font-size: 1rem;
-        resize: vertical;
-        min-height: 120px;
-    }
-    .contact-textarea-custom:focus {
-        border-color: #d4a94b;
-        box-shadow: 0 0 0 3px rgba(212, 169, 75, 0.2);
-    }
-</style>
-{% endblock %}
-
 {% block content %}
-<div class="contact-container">
-    <div class="contact-content px-3 sm:px-4 py-8 sm:py-12">
-        <h1 class="contact-title text-2xl sm:text-3xl font-bold mb-1 sm:mb-2">Get in Touch</h1>
-        <p class="contact-subtitle text-white/50 text-sm sm:text-base mb-4 sm:mb-8">Have a question about an order or want to collaborate? Drop us a line.</p>
+<div class="min-h-[calc(100vh-300px)] flex items-center justify-center px-3 sm:px-4 py-8 sm:py-12">
+    <div class="max-w-lg w-full px-3 sm:px-4">
+        <h1 class="text-2xl sm:text-3xl font-bold mb-1 sm:mb-2">Get in Touch</h1>
+        <p class="text-white/50 text-sm sm:text-base mb-4 sm:mb-8">Have a question about an order or want to collaborate? Drop us a line.</p>
         
-        <form method="POST" class="contact-form bg-[#1a1625] border border-white/5 space-y-4">
+        <form method="POST" class="bg-[#1a1625] border border-white/5 p-4 sm:p-6 rounded-xl sm:rounded-2xl space-y-4">
             {{ form.hidden_tag() }}
             
             <div>
-                {{ form.name.label(class="contact-label block text-xs sm:text-sm font-medium text-white/70 mb-1") }}
-                {{ form.name(class="contact-input-custom contact-input", placeholder="Your Name") }}
+                {{ form.name.label(class="block text-xs sm:text-sm font-medium text-white/70 mb-1") }}
+                {{ form.name(class="w-full bg-[#1a1625] border border-white/10 text-white rounded-lg px-3 sm:px-4 py-2 sm:py-3 outline-none focus:border-[#d4a94b] focus:shadow-[0_0_0_3px_rgba(212,169,75,0.2)] text-sm sm:text-base", placeholder="Your Name") }}
                 {% for error in form.name.errors %}
                     <span class="text-red-400 text-xs sm:text-sm">{{ error }}</span>
                 {% endfor %}
             </div>
             
             <div>
-                {{ form.email.label(class="contact-label block text-xs sm:text-sm font-medium text-white/70 mb-1") }}
-                {{ form.email(class="contact-input-custom contact-input", placeholder="Your Email") }}
+                {{ form.email.label(class="block text-xs sm:text-sm font-medium text-white/70 mb-1") }}
+                {{ form.email(class="w-full bg-[#1a1625] border border-white/10 text-white rounded-lg px-3 sm:px-4 py-2 sm:py-3 outline-none focus:border-[#d4a94b] focus:shadow-[0_0_0_3px_rgba(212,169,75,0.2)] text-sm sm:text-base", placeholder="Your Email") }}
                 {% for error in form.email.errors %}
                     <span class="text-red-400 text-xs sm:text-sm">{{ error }}</span>
                 {% endfor %}
             </div>
             
             <div>
-                {{ form.message.label(class="contact-label block text-xs sm:text-sm font-medium text-white/70 mb-1") }}
-                {{ form.message(class="contact-textarea-custom contact-textarea", rows="5", placeholder="Your Message") }}
+                {{ form.message.label(class="block text-xs sm:text-sm font-medium text-white/70 mb-1") }}
+                {{ form.message(class="w-full bg-[#1a1625] border border-white/10 text-white rounded-lg px-3 sm:px-4 py-2 sm:py-3 outline-none focus:border-[#d4a94b] focus:shadow-[0_0_0_3px_rgba(212,169,75,0.2)] text-sm sm:text-base min-h-[100px] resize-vertical", rows="5", placeholder="Your Message") }}
                 {% for error in form.message.errors %}
                     <span class="text-red-400 text-xs sm:text-sm">{{ error }}</span>
                 {% endfor %}
             </div>
             
-            <button type="submit" class="contact-btn btn-primary w-full py-3 rounded-lg mt-2 font-semibold text-sm sm:text-base flex items-center justify-center gap-2">
+            <button type="submit" class="btn-primary w-full py-2.5 sm:py-3 rounded-lg mt-2 font-semibold text-sm sm:text-base flex items-center justify-center gap-2">
                 <i class="fas fa-paper-plane"></i> Send Message
             </button>
         </form>

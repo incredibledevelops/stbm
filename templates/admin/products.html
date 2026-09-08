@@ -2,157 +2,21 @@
 
 {% block admin_title %}Products{% endblock %}
 
-{% block extra_css %}
-<style>
-    .stock-input {
-        width: 60px;
-        background: #0f0c17;
-        border: 1px solid rgba(255,255,255,0.1);
-        color: white;
-        padding: 0.2rem 0.3rem;
-        border-radius: 0.25rem;
-        text-align: center;
-        transition: 0.2s;
-        font-size: 0.75rem;
-    }
-    .stock-input:focus {
-        border-color: #d4a94b;
-        outline: none;
-        box-shadow: 0 0 0 2px rgba(212, 169, 75, 0.2);
-    }
-    .stock-update-btn {
-        background: transparent;
-        border: none;
-        color: #d4a94b;
-        cursor: pointer;
-        padding: 0.2rem 0.4rem;
-        border-radius: 0.25rem;
-        transition: 0.2s;
-        font-size: 0.6rem;
-    }
-    .stock-update-btn:hover {
-        background: rgba(212, 169, 75, 0.1);
-    }
-    .stock-update-btn.saving {
-        opacity: 0.5;
-        pointer-events: none;
-    }
-    .toast {
-        position: fixed;
-        bottom: 2rem;
-        right: 2rem;
-        padding: 0.75rem 1.25rem;
-        border-radius: 0.5rem;
-        color: white;
-        font-weight: 600;
-        transform: translateY(100px);
-        opacity: 0;
-        transition: all 0.3s ease;
-        z-index: 1000;
-        font-size: 0.85rem;
-        max-width: 90%;
-    }
-    .toast.show {
-        transform: translateY(0);
-        opacity: 1;
-    }
-    .toast.success {
-        background: #10b981;
-    }
-    .toast.error {
-        background: #ef4444;
-    }
-    
-    @media (max-width: 480px) {
-        .products-title {
-            font-size: 1.5rem !important;
-        }
-        .products-subtitle {
-            font-size: 0.75rem !important;
-        }
-        .products-header {
-            flex-direction: column !important;
-            align-items: stretch !important;
-            gap: 0.75rem !important;
-        }
-        .products-add-btn {
-            font-size: 0.8rem !important;
-            padding: 0.5rem 1rem !important;
-            width: 100%;
-            justify-content: center;
-        }
-        .products-table th,
-        .products-table td {
-            padding: 0.3rem 0.3rem !important;
-            font-size: 0.55rem !important;
-        }
-        .products-table th {
-            font-size: 0.45rem !important;
-        }
-        .products-name {
-            font-size: 0.6rem !important;
-        }
-        .products-category {
-            font-size: 0.5rem !important;
-        }
-        .products-stock-input {
-            width: 40px !important;
-            font-size: 0.55rem !important;
-            padding: 0.1rem 0.2rem !important;
-        }
-        .products-stock-btn {
-            font-size: 0.5rem !important;
-            padding: 0.1rem 0.2rem !important;
-        }
-        .products-status {
-            font-size: 0.45rem !important;
-            padding: 0.1rem 0.2rem !important;
-        }
-        .products-price {
-            font-size: 0.6rem !important;
-        }
-        .products-actions {
-            gap: 0.15rem !important;
-        }
-        .products-actions a,
-        .products-actions button {
-            font-size: 0.6rem !important;
-        }
-        .toast {
-            font-size: 0.75rem !important;
-            padding: 0.5rem 1rem !important;
-            bottom: 1rem !important;
-            right: 1rem !important;
-        }
-    }
-    
-    @media (max-width: 768px) {
-        .products-table-wrapper {
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-        }
-        .products-table {
-            min-width: 550px;
-        }
-    }
-</style>
-{% endblock %}
-
 {% block admin_content %}
-<div class="products-container max-w-7xl mx-auto px-2 sm:px-4">
-    <div class="products-header mb-6 sm:mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+<div class="max-w-7xl mx-auto">
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 sm:mb-8">
         <div>
-            <h1 class="products-title text-2xl sm:text-3xl font-bold text-white mb-1">Products</h1>
-            <p class="products-subtitle text-white/50 text-xs sm:text-sm">Manage inventory and product details.</p>
+            <h1 class="text-2xl sm:text-3xl font-bold text-white mb-1">Products</h1>
+            <p class="text-white/50 text-xs sm:text-sm">Manage inventory and product details.</p>
         </div>
-        <a href="{{ url_for('admin_add_product') }}" class="products-add-btn btn-primary px-4 sm:px-5 py-2 sm:py-2.5 rounded-lg text-xs sm:text-sm flex items-center justify-center gap-2">
+        <a href="{{ url_for('admin_add_product') }}" class="btn-primary px-4 sm:px-5 py-2 sm:py-2.5 rounded-lg text-xs sm:text-sm flex items-center justify-center gap-2 w-full sm:w-auto">
             <i class="fas fa-plus"></i>New Product
         </a>
     </div>
 
     <div class="bg-[#1a1625] border border-white/5 rounded-xl sm:rounded-2xl overflow-hidden shadow-xl">
-        <div class="products-table-wrapper overflow-x-auto">
-            <table class="products-table w-full text-left border-collapse min-w-[550px]">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse min-w-[550px]">
                 <thead>
                     <tr class="bg-white/5 text-white/40 text-[7px] sm:text-xs uppercase tracking-wider">
                         <th class="px-2 sm:px-6 py-3 sm:py-4 font-medium">Product</th>
@@ -166,24 +30,24 @@
                 <tbody class="divide-y divide-white/5 text-[8px] sm:text-sm">
                     {% for product in products %}
                         <tr class="hover:bg-white/[0.02] transition" data-product-id="{{ product.id }}">
-                            <td class="products-name px-2 sm:px-6 py-3 sm:py-4 font-medium text-white truncate max-w-[60px] sm:max-w-none">{{ product.name }}</td>
-                            <td class="products-category px-2 sm:px-6 py-3 sm:py-4 text-white/60 truncate max-w-[50px] sm:max-w-none hidden sm:table-cell">{{ product.category }}</td>
+                            <td class="px-2 sm:px-6 py-3 sm:py-4 font-medium text-white truncate max-w-[60px] sm:max-w-none">{{ product.name }}</td>
+                            <td class="px-2 sm:px-6 py-3 sm:py-4 text-white/60 truncate max-w-[50px] sm:max-w-none hidden sm:table-cell">{{ product.category }}</td>
                             <td class="px-2 sm:px-6 py-3 sm:py-4">
                                 <div class="flex items-center gap-1 sm:gap-2">
                                     <input type="number" 
-                                           class="products-stock-input stock-input" 
+                                           class="w-10 sm:w-16 bg-[#0f0c17] border border-white/10 text-white rounded px-1 sm:px-2 py-1 text-center text-xs sm:text-sm outline-none focus:border-[#d4a94b] focus:shadow-[0_0_0_2px_rgba(212,169,75,0.2)]" 
                                            value="{{ product.stock }}" 
                                            min="0"
                                            data-product-id="{{ product.id }}"
                                            onchange="updateStock(this)"
                                            id="stock-input-{{ product.id }}">
-                                    <button class="products-stock-btn stock-update-btn" onclick="updateStock(document.getElementById('stock-input-{{ product.id }}'))">
+                                    <button class="text-[#d4a94b] hover:bg-[#d4a94b]/10 p-1 rounded transition text-xs" onclick="updateStock(document.getElementById('stock-input-{{ product.id }}'))">
                                         <i class="fas fa-sync-alt"></i>
                                     </button>
                                 </div>
                             </td>
                             <td class="px-2 sm:px-6 py-3 sm:py-4">
-                                <span class="products-status px-1.5 sm:px-2.5 py-0.5 sm:py-1 rounded-full text-[6px] sm:text-[10px] font-bold uppercase tracking-wider border 
+                                <span class="px-1.5 sm:px-2.5 py-0.5 sm:py-1 rounded-full text-[6px] sm:text-[10px] font-bold uppercase tracking-wider border 
                                     {% if product.status == 'Active' %}border-green-400/20 text-green-400 bg-green-400/10
                                     {% elif product.status == 'Low Stock' %}border-yellow-400/20 text-yellow-400 bg-yellow-400/10
                                     {% else %}border-red-400/20 text-red-400 bg-red-400/10{% endif %}"
@@ -191,8 +55,8 @@
                                     {{ product.status }}
                                 </span>
                             </td>
-                            <td class="products-price px-2 sm:px-6 py-3 sm:py-4 font-medium text-[#d4a94b] text-[8px] sm:text-sm hidden sm:table-cell">{{ format_currency(product.price) }}</td>
-                            <td class="products-actions px-2 sm:px-6 py-3 sm:py-4 text-right space-x-1 sm:space-x-2 whitespace-nowrap">
+                            <td class="px-2 sm:px-6 py-3 sm:py-4 font-medium text-[#d4a94b] text-[8px] sm:text-sm hidden sm:table-cell">{{ format_currency(product.price) }}</td>
+                            <td class="px-2 sm:px-6 py-3 sm:py-4 text-right space-x-1 sm:space-x-2 whitespace-nowrap">
                                 <a href="{{ url_for('admin_edit_product', product_id=product.id) }}" class="text-white/40 hover:text-white transition text-[8px] sm:text-sm">
                                     <i class="fas fa-edit"></i>
                                 </a>
@@ -212,31 +76,26 @@
 </div>
 
 <!-- Toast Notification -->
-<div id="toast" class="toast"></div>
+<div id="toast" class="fixed bottom-4 right-4 px-4 py-3 rounded-lg text-white font-semibold text-sm transform translate-y-24 opacity-0 transition-all duration-300 z-50 max-w-[90%]"></div>
 
 <script>
     function updateStock(input) {
         const productId = input.dataset.productId;
         const stock = parseInt(input.value);
-        const btn = input.parentElement.querySelector('.stock-update-btn');
+        const btn = input.parentElement.querySelector('button');
         
         if (isNaN(stock) || stock < 0) {
             showToast('Please enter a valid stock number.', 'error');
             return;
         }
         
-        btn.classList.add('saving');
+        btn.disabled = true;
         btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
         
         fetch('/admin/products/update-stock', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                product_id: productId,
-                stock: stock
-            })
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ product_id: productId, stock: stock })
         })
         .then(response => response.json())
         .then(data => {
@@ -255,11 +114,9 @@
                 showToast('Failed to update stock: ' + data.message, 'error');
             }
         })
-        .catch(error => {
-            showToast('An error occurred. Please try again.', 'error');
-        })
+        .catch(() => showToast('An error occurred. Please try again.', 'error'))
         .finally(() => {
-            btn.classList.remove('saving');
+            btn.disabled = false;
             btn.innerHTML = '<i class="fas fa-sync-alt"></i>';
         });
     }
@@ -267,10 +124,13 @@
     function showToast(message, type = 'success') {
         const toast = document.getElementById('toast');
         toast.textContent = message;
-        toast.className = `toast ${type} show`;
+        toast.className = `fixed bottom-4 right-4 px-4 py-3 rounded-lg text-white font-semibold text-sm z-50 max-w-[90%] ${type === 'success' ? 'bg-green-500' : 'bg-red-500'}`;
+        toast.style.transform = 'translateY(0)';
+        toast.style.opacity = '1';
         
         setTimeout(() => {
-            toast.classList.remove('show');
+            toast.style.transform = 'translateY(24px)';
+            toast.style.opacity = '0';
         }, 3000);
     }
 </script>

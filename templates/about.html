@@ -2,113 +2,41 @@
 
 {% block title %}About · STBM{% endblock %}
 
-{% block extra_css %}
-<style>
-    .about-hero {
-        position: relative;
-        overflow: hidden;
-    }
-    .about-hero::before {
-        content: '';
-        position: absolute;
-        top: -50%;
-        right: -50%;
-        width: 100%;
-        height: 100%;
-        background: radial-gradient(circle, rgba(212, 169, 75, 0.03) 0%, transparent 70%);
-        pointer-events: none;
-    }
-    .about-card {
-        transition: all 0.3s ease;
-    }
-    .about-card:hover {
-        transform: translateY(-4px);
-        border-color: rgba(212, 169, 75, 0.2);
-        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
-    }
-    .about-card-icon {
-        transition: all 0.3s ease;
-    }
-    .about-card:hover .about-card-icon {
-        transform: scale(1.1);
-    }
-    
-    @media (max-width: 480px) {
-        .about-title {
-            font-size: 2rem !important;
-        }
-        .about-subtitle {
-            font-size: 0.7rem !important;
-        }
-        .about-text {
-            font-size: 0.9rem !important;
-        }
-        .about-card {
-            padding: 1rem !important;
-        }
-        .about-card-icon {
-            font-size: 1.5rem !important;
-        }
-        .about-card-title {
-            font-size: 0.9rem !important;
-        }
-    }
-    
-    @media (max-width: 640px) {
-        .about-grid {
-            grid-template-columns: 1fr;
-            gap: 1rem;
-        }
-        .about-container {
-            padding: 2rem 1rem !important;
-        }
-        .about-quote {
-            font-size: 1.5rem !important;
-        }
-    }
-    
-    @media (min-width: 641px) and (max-width: 1024px) {
-        .about-grid {
-            grid-template-columns: repeat(2, 1fr);
-        }
-    }
-</style>
-{% endblock %}
-
 {% block content %}
-<div class="about-container max-w-3xl mx-auto px-4 py-12 sm:py-20 text-center about-hero">
-    <span class="about-subtitle text-[#d4a94b] text-[10px] sm:text-xs tracking-[0.2em] font-semibold uppercase">The manifesto</span>
-    <h1 class="about-title text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mt-3 sm:mt-4 mb-6 sm:mb-8">
+<div class="max-w-3xl mx-auto px-4 py-12 sm:py-20 text-center relative overflow-hidden">
+    <div class="absolute top-[-50%] right-[-50%] w-full h-full bg-[radial-gradient(circle,rgba(212,169,75,0.03)_0%,transparent_70%)] pointer-events-none"></div>
+    <span class="text-[#d4a94b] text-[10px] sm:text-xs tracking-[0.2em] font-semibold uppercase">The manifesto</span>
+    <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mt-3 sm:mt-4 mb-6 sm:mb-8">
         <span class="text-white">“Wear your story.</span>
         <br>
         <span class="text-[#d4a94b] glow-text">Forge your myth.”</span>
     </h1>
     
     <div class="space-y-4 sm:space-y-6">
-        <p class="about-text text-base sm:text-lg text-white/60 leading-relaxed">
+        <p class="text-base sm:text-lg text-white/60 leading-relaxed">
             Born from the heart of Kumasi, STBM bridges the gap between ancestral royalty and contemporary street culture. 
             We do not just make clothes; we forge armor for the modern soul.
         </p>
-        <p class="about-text text-base sm:text-lg text-white/60 leading-relaxed">
+        <p class="text-base sm:text-lg text-white/60 leading-relaxed">
             Every silhouette, every stitch, and every fabric is carefully curated to empower the wearer. 
             Be bold. Be undeniable.
         </p>
     </div>
     
-    <div class="about-grid grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 mt-12 sm:mt-16">
-        <div class="about-card bg-[#1a1625] p-4 sm:p-6 rounded-xl border border-white/5 transition-all">
-            <i class="about-card-icon fas fa-crown text-2xl sm:text-3xl text-[#d4a94b] mb-2 sm:mb-3"></i>
-            <h3 class="about-card-title font-bold text-white text-sm sm:text-base">Premium Quality</h3>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 mt-12 sm:mt-16">
+        <div class="bg-[#1a1625] p-4 sm:p-6 rounded-xl border border-white/5 transition-all hover:translate-y-[-4px] hover:border-[#d4a94b]/30 hover:shadow-xl">
+            <i class="fas fa-crown text-2xl sm:text-3xl text-[#d4a94b] mb-2 sm:mb-3 transition-transform hover:scale-110"></i>
+            <h3 class="font-bold text-white text-sm sm:text-base">Premium Quality</h3>
             <p class="text-white/40 text-xs sm:text-sm mt-1">Only the finest materials</p>
         </div>
-        <div class="about-card bg-[#1a1625] p-4 sm:p-6 rounded-xl border border-white/5 transition-all">
-            <i class="about-card-icon fas fa-hand-sparkles text-2xl sm:text-3xl text-[#d4a94b] mb-2 sm:mb-3"></i>
-            <h3 class="about-card-title font-bold text-white text-sm sm:text-base">Handcrafted</h3>
+        <div class="bg-[#1a1625] p-4 sm:p-6 rounded-xl border border-white/5 transition-all hover:translate-y-[-4px] hover:border-[#d4a94b]/30 hover:shadow-xl">
+            <i class="fas fa-hand-sparkles text-2xl sm:text-3xl text-[#d4a94b] mb-2 sm:mb-3 transition-transform hover:scale-110"></i>
+            <h3 class="font-bold text-white text-sm sm:text-base">Handcrafted</h3>
             <p class="text-white/40 text-xs sm:text-sm mt-1">Made with care and precision</p>
         </div>
-        <div class="about-card bg-[#1a1625] p-4 sm:p-6 rounded-xl border border-white/5 transition-all">
-            <i class="about-card-icon fas fa-flag text-2xl sm:text-3xl text-[#d4a94b] mb-2 sm:mb-3"></i>
-            <h3 class="about-card-title font-bold text-white text-sm sm:text-base">Proudly Ghanaian</h3>
+        <div class="bg-[#1a1625] p-4 sm:p-6 rounded-xl border border-white/5 transition-all hover:translate-y-[-4px] hover:border-[#d4a94b]/30 hover:shadow-xl">
+            <i class="fas fa-flag text-2xl sm:text-3xl text-[#d4a94b] mb-2 sm:mb-3 transition-transform hover:scale-110"></i>
+            <h3 class="font-bold text-white text-sm sm:text-base">Proudly Ghanaian</h3>
             <p class="text-white/40 text-xs sm:text-sm mt-1">Rooted in heritage</p>
         </div>
     </div>

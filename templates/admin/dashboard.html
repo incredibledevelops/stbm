@@ -2,141 +2,57 @@
 
 {% block admin_title %}Dashboard{% endblock %}
 
-{% block extra_css %}
-<style>
-    @media (max-width: 480px) {
-        .dashboard-title {
-            font-size: 1.5rem !important;
-        }
-        .dashboard-subtitle {
-            font-size: 0.75rem !important;
-        }
-        .dashboard-header {
-            flex-direction: column !important;
-            align-items: stretch !important;
-            gap: 0.75rem !important;
-        }
-        .dashboard-export-btn {
-            font-size: 0.8rem !important;
-            padding: 0.5rem 1rem !important;
-            width: 100%;
-            justify-content: center;
-        }
-        .stats-grid {
-            grid-template-columns: 1fr 1fr !important;
-            gap: 0.75rem !important;
-        }
-        .stat-card {
-            padding: 0.75rem !important;
-            border-radius: 0.75rem !important;
-        }
-        .stat-icon {
-            padding: 0.5rem !important;
-            border-radius: 0.5rem !important;
-        }
-        .stat-icon i {
-            font-size: 0.9rem !important;
-        }
-        .stat-label {
-            font-size: 0.6rem !important;
-        }
-        .stat-value {
-            font-size: 1.1rem !important;
-        }
-        .stat-percentage {
-            font-size: 0.6rem !important;
-        }
-        .recent-orders-title {
-            font-size: 1rem !important;
-        }
-        .recent-orders-table th,
-        .recent-orders-table td {
-            padding: 0.4rem 0.5rem !important;
-            font-size: 0.6rem !important;
-        }
-        .recent-orders-table th {
-            font-size: 0.5rem !important;
-        }
-        .recent-orders-id {
-            font-size: 0.55rem !important;
-        }
-        .recent-orders-status {
-            font-size: 0.5rem !important;
-            padding: 0.1rem 0.3rem !important;
-        }
-        .recent-orders-total {
-            font-size: 0.65rem !important;
-        }
-        .recent-orders-view-btn {
-            font-size: 0.6rem !important;
-        }
-    }
-    
-    @media (max-width: 768px) {
-        .stats-grid {
-            grid-template-columns: 1fr 1fr !important;
-        }
-    }
-    
-    @media (min-width: 769px) {
-        .stats-grid {
-            grid-template-columns: repeat(4, 1fr);
-        }
-    }
-</style>
-{% endblock %}
-
 {% block admin_content %}
-<div class="dashboard-container max-w-7xl mx-auto px-2 sm:px-4">
-    <div class="dashboard-header mb-6 sm:mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
+<div class="max-w-7xl mx-auto">
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 mb-6 sm:mb-8">
         <div>
-            <h1 class="dashboard-title text-2xl sm:text-3xl font-bold text-white mb-1">Dashboard</h1>
-            <p class="dashboard-subtitle text-white/50 text-xs sm:text-sm">Welcome back. Here's what's happening today.</p>
+            <h1 class="text-2xl sm:text-3xl font-bold text-white mb-1">Dashboard</h1>
+            <p class="text-white/50 text-xs sm:text-sm">Welcome back. Here's what's happening today.</p>
         </div>
-        <a href="{{ url_for('admin_backup') }}" class="dashboard-export-btn btn-primary px-4 sm:px-5 py-2 sm:py-2.5 rounded-lg text-xs sm:text-sm flex items-center justify-center gap-2">
+        <a href="{{ url_for('admin_backup') }}" class="btn-primary px-4 sm:px-5 py-2 sm:py-2.5 rounded-lg text-xs sm:text-sm flex items-center justify-center gap-2 w-full sm:w-auto">
             <i class="fas fa-download"></i>Export Data
         </a>
     </div>
 
-    <div class="stats-grid grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 mb-6 sm:mb-8">
-        <div class="stat-card bg-[#1a1625] border border-white/5 p-4 sm:p-6 rounded-xl sm:rounded-2xl">
+    <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 mb-6 sm:mb-8">
+        <div class="bg-[#1a1625] border border-white/5 p-4 sm:p-6 rounded-xl sm:rounded-2xl hover:border-[#d4a94b]/30 transition">
             <div class="flex justify-between items-start mb-2 sm:mb-4">
-                <div class="stat-icon bg-[#d4a94b]/20 p-2 sm:p-3 rounded-lg sm:rounded-xl"><i class="fas fa-wallet text-[#d4a94b] text-sm sm:text-xl"></i></div>
-                <span class="stat-percentage text-green-400 text-[8px] sm:text-xs font-bold flex items-center"><i class="fas fa-arrow-up mr-0.5 sm:mr-1"></i> 12%</span>
+                <div class="bg-[#d4a94b]/20 p-2 sm:p-3 rounded-lg"><i class="fas fa-wallet text-[#d4a94b] text-sm sm:text-xl"></i></div>
+                <span class="text-green-400 text-[8px] sm:text-xs font-bold flex items-center"><i class="fas fa-arrow-up mr-0.5"></i> 12%</span>
             </div>
-            <p class="stat-label text-white/50 text-[8px] sm:text-sm font-medium">Total Revenue</p>
-            <h3 class="stat-value text-base sm:text-2xl font-bold text-white mt-0.5 sm:mt-1">{{ format_currency(total_revenue) }}</h3>
+            <p class="text-white/50 text-[8px] sm:text-sm font-medium">Total Revenue</p>
+            <h3 class="text-base sm:text-2xl font-bold text-white mt-0.5">{{ format_currency(total_revenue) }}</h3>
         </div>
-        <div class="stat-card bg-[#1a1625] border border-white/5 p-4 sm:p-6 rounded-xl sm:rounded-2xl">
+        <div class="bg-[#1a1625] border border-white/5 p-4 sm:p-6 rounded-xl sm:rounded-2xl hover:border-[#d4a94b]/30 transition">
             <div class="flex justify-between items-start mb-2 sm:mb-4">
-                <div class="stat-icon bg-blue-500/20 p-2 sm:p-3 rounded-lg sm:rounded-xl"><i class="fas fa-shopping-bag text-blue-400 text-sm sm:text-xl"></i></div>
+                <div class="bg-blue-500/20 p-2 sm:p-3 rounded-lg"><i class="fas fa-shopping-bag text-blue-400 text-sm sm:text-xl"></i></div>
             </div>
-            <p class="stat-label text-white/50 text-[8px] sm:text-sm font-medium">Total Orders</p>
-            <h3 class="stat-value text-base sm:text-2xl font-bold text-white mt-0.5 sm:mt-1">{{ total_orders }}</h3>
+            <p class="text-white/50 text-[8px] sm:text-sm font-medium">Total Orders</p>
+            <h3 class="text-base sm:text-2xl font-bold text-white mt-0.5">{{ total_orders }}</h3>
         </div>
-        <div class="stat-card bg-[#1a1625] border border-white/5 p-4 sm:p-6 rounded-xl sm:rounded-2xl">
+        <div class="bg-[#1a1625] border border-white/5 p-4 sm:p-6 rounded-xl sm:rounded-2xl hover:border-[#d4a94b]/30 transition">
             <div class="flex justify-between items-start mb-2 sm:mb-4">
-                <div class="stat-icon bg-purple-500/20 p-2 sm:p-3 rounded-lg sm:rounded-xl"><i class="fas fa-users text-purple-400 text-sm sm:text-xl"></i></div>
+                <div class="bg-purple-500/20 p-2 sm:p-3 rounded-lg"><i class="fas fa-users text-purple-400 text-sm sm:text-xl"></i></div>
             </div>
-            <p class="stat-label text-white/50 text-[8px] sm:text-sm font-medium">Total Users</p>
-            <h3 class="stat-value text-base sm:text-2xl font-bold text-white mt-0.5 sm:mt-1">{{ total_users }}</h3>
+            <p class="text-white/50 text-[8px] sm:text-sm font-medium">Total Users</p>
+            <h3 class="text-base sm:text-2xl font-bold text-white mt-0.5">{{ total_users }}</h3>
         </div>
-        <div class="stat-card bg-[#1a1625] border border-white/5 p-4 sm:p-6 rounded-xl sm:rounded-2xl">
+        <div class="bg-[#1a1625] border border-white/5 p-4 sm:p-6 rounded-xl sm:rounded-2xl hover:border-[#d4a94b]/30 transition">
             <div class="flex justify-between items-start mb-2 sm:mb-4">
-                <div class="stat-icon bg-red-500/20 p-2 sm:p-3 rounded-lg sm:rounded-xl"><i class="fas fa-box-open text-red-400 text-sm sm:text-xl"></i></div>
+                <div class="bg-red-500/20 p-2 sm:p-3 rounded-lg"><i class="fas fa-box-open text-red-400 text-sm sm:text-xl"></i></div>
             </div>
-            <p class="stat-label text-white/50 text-[8px] sm:text-sm font-medium">Low Stock Items</p>
-            <h3 class="stat-value text-base sm:text-2xl font-bold text-white mt-0.5 sm:mt-1">{{ low_stock_products|length }}</h3>
+            <p class="text-white/50 text-[8px] sm:text-sm font-medium">Low Stock Items</p>
+            <h3 class="text-base sm:text-2xl font-bold text-white mt-0.5">{{ low_stock_products|length }}</h3>
         </div>
     </div>
 
     <div class="bg-[#1a1625] border border-white/5 rounded-xl sm:rounded-2xl overflow-hidden">
-        <div class="p-4 sm:p-6 border-b border-white/5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-0">
-            <h2 class="recent-orders-title text-base sm:text-lg font-bold text-white">Recent Orders</h2>
-            <a href="{{ url_for('admin_orders') }}" class="recent-orders-view-btn text-xs sm:text-sm text-[#d4a94b] hover:underline">View All</a>
+        <div class="p-4 sm:p-6 border-b border-white/5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+            <h2 class="text-base sm:text-lg font-bold text-white">Recent Orders</h2>
+            <a href="{{ url_for('admin_orders') }}" class="text-xs sm:text-sm text-[#d4a94b] hover:underline">View All</a>
         </div>
         <div class="overflow-x-auto">
-            <table class="recent-orders-table w-full text-left border-collapse">
+            <table class="w-full text-left border-collapse">
                 <thead>
                     <tr class="bg-white/5 text-white/40 text-[8px] sm:text-xs uppercase tracking-wider">
                         <th class="px-3 sm:px-6 py-3 sm:py-4 font-medium">Order ID</th>
@@ -149,11 +65,11 @@
                 <tbody class="divide-y divide-white/5 text-[10px] sm:text-sm">
                     {% for order in recent_orders %}
                         <tr class="hover:bg-white/[0.02] transition">
-                            <td class="recent-orders-id px-3 sm:px-6 py-3 sm:py-4 font-medium text-white font-mono text-[8px] sm:text-sm">{{ order.order_number }}</td>
+                            <td class="px-3 sm:px-6 py-3 sm:py-4 font-medium text-white font-mono text-[8px] sm:text-sm">{{ order.order_number }}</td>
                             <td class="px-3 sm:px-6 py-3 sm:py-4 truncate max-w-[60px] sm:max-w-none">{{ order.customer.name }}</td>
                             <td class="px-3 sm:px-6 py-3 sm:py-4 text-white/50 text-[8px] sm:text-sm hidden sm:table-cell">{{ order.created_at.strftime('%b %d, %Y') }}</td>
                             <td class="px-3 sm:px-6 py-3 sm:py-4">
-                                <span class="recent-orders-status px-1.5 sm:px-2.5 py-0.5 sm:py-1 rounded-full text-[6px] sm:text-xs font-semibold border 
+                                <span class="px-1.5 sm:px-2.5 py-0.5 sm:py-1 rounded-full text-[6px] sm:text-xs font-semibold border 
                                     {% if order.status == 'Processing' %}border-blue-400/20 text-blue-400 bg-blue-400/10
                                     {% elif order.status == 'Shipped' %}border-purple-400/20 text-purple-400 bg-purple-400/10
                                     {% elif order.status == 'Delivered' %}border-green-400/20 text-green-400 bg-green-400/10
@@ -161,7 +77,7 @@
                                     {{ order.status }}
                                 </span>
                             </td>
-                            <td class="recent-orders-total px-3 sm:px-6 py-3 sm:py-4 text-right font-medium text-[#d4a94b] text-[9px] sm:text-sm">{{ format_currency(order.total_amount) }}</td>
+                            <td class="px-3 sm:px-6 py-3 sm:py-4 text-right font-medium text-[#d4a94b] text-[9px] sm:text-sm">{{ format_currency(order.total_amount) }}</td>
                         </tr>
                     {% endfor %}
                 </tbody>

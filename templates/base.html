@@ -9,104 +9,40 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * { font-family: 'Inter', sans-serif; }
-        .hero-gradient { background: radial-gradient(circle at 80% 20%, #1e1a2b 0%, #0d0b14 100%); }
-        .card-hover { transition: all 0.25s ease; }
-        .card-hover:hover { transform: translateY(-6px); box-shadow: 0 25px 40px -12px rgba(0,0,0,0.5); }
         .glow-text { text-shadow: 0 0 12px rgba(224, 175, 76, 0.3); }
         .btn-primary { background: #d4a94b; transition: 0.2s; color: black; font-weight: 600; }
         .btn-primary:hover { background: #b88d3a; box-shadow: 0 0 16px #d4a94b66; }
-        .badge-gold { background: #d4a94b22; border: 1px solid #d4a94b55; color: #d4a94b; }
-        .footer-bg { background: #0b0912; }
-        .nav-link-custom { position: relative; font-weight: 500; letter-spacing: 0.3px; cursor: pointer; }
-        .nav-link-custom::after { content: ''; position: absolute; width: 0; height: 2px; bottom: -4px; left: 0; background: #d4a94b; transition: 0.25s; }
-        .nav-link-custom:hover::after { width: 100%; }
-        .input-custom { background: #1a1625; border: 1px solid rgba(255,255,255,0.1); color: white; width: 100%; padding: 0.75rem 1rem; border-radius: 0.5rem; outline: none; transition: 0.2s; }
-        .input-custom:focus { border-color: #d4a94b; box-shadow: 0 0 0 3px #d4a94b33; }
-        
-        /* Flash messages */
-        .alert { padding: 1rem; border-radius: 0.5rem; margin-bottom: 1rem; }
-        .alert-success { background: #10b98122; border: 1px solid #10b981; color: #34d399; }
-        .alert-danger { background: #ef444422; border: 1px solid #ef4444; color: #f87171; }
-        .alert-warning { background: #f59e0b22; border: 1px solid #f59e0b; color: #fbbf24; }
-        .alert-info { background: #3b82f622; border: 1px solid #3b82f6; color: #60a5fa; }
-        
-        /* Responsive search input */
-        @media (max-width: 768px) {
-            .search-input:focus {
-                width: 120px !important;
-            }
-        }
-        @media (max-width: 480px) {
-            .search-input {
-                width: 80px !important;
-            }
-            .search-input:focus {
-                width: 100px !important;
-            }
-        }
-        
-        /* Mobile bottom nav improvements */
-        @media (max-width: 640px) {
-            .mobile-nav-text {
-                font-size: 0.6rem;
-            }
-            .mobile-nav-icon {
-                font-size: 1.1rem;
-            }
-        }
-        
-        /* Footer responsiveness */
-        @media (max-width: 640px) {
-            .footer-grid {
-                grid-template-columns: 1fr 1fr;
-                gap: 1.5rem;
-            }
-            .footer-brand {
-                grid-column: span 2;
-            }
-        }
-        @media (max-width: 400px) {
-            .footer-grid {
-                grid-template-columns: 1fr;
-                gap: 1rem;
-            }
-            .footer-brand {
-                grid-column: span 1;
-            }
-        }
-        
-        /* Active mobile nav item */
-        .mobile-nav-active {
-            color: #d4a94b !important;
-        }
+        .mobile-nav-active { color: #d4a94b !important; }
+        .card-hover { transition: all 0.25s ease; }
+        .card-hover:hover { transform: translateY(-6px); box-shadow: 0 25px 40px -12px rgba(0,0,0,0.5); }
     </style>
     {% block extra_css %}{% endblock %}
 </head>
 <body class="bg-[#0f0c17] text-[#ece7e1] flex flex-col min-h-screen">
 
     <!-- Top Bar -->
-    <div class="bg-[#1a1525] text-[#b9b0c9] text-sm py-2 px-4 border-b border-white/5 hidden md:block">
+    <div class="bg-[#1a1525] text-[#b9b0c9] text-xs sm:text-sm py-2 px-3 sm:px-4 border-b border-white/5 hidden md:block">
         <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center">
-            <div class="flex items-center gap-3 lg:gap-5 flex-wrap">
-                <span class="text-xs lg:text-sm"><i class="fas fa-shipping-fast mr-1 lg:mr-2 text-[#d4a94b]"></i>Free shipping over GH₵ 1000</span>
+            <div class="flex items-center gap-2 sm:gap-3 lg:gap-5 flex-wrap">
+                <span><i class="fas fa-shipping-fast mr-1 lg:mr-2 text-[#d4a94b]"></i>Free shipping over GH₵ 1000</span>
                 <span class="hidden lg:inline"><i class="far fa-clock mr-2 text-[#d4a94b]"></i>24/7 support</span>
             </div>
-            <div class="flex items-center gap-3 lg:gap-4 cursor-pointer">
-                <a href="#" class="hover:text-[#d4a94b] transition text-sm"><i class="fab fa-instagram"></i></a>
-                <a href="#" class="hover:text-[#d4a94b] transition text-sm"><i class="fab fa-x-twitter"></i></a>
+            <div class="flex items-center gap-2 sm:gap-3 lg:gap-4">
+                <a href="#" class="hover:text-[#d4a94b] transition"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="hover:text-[#d4a94b] transition"><i class="fab fa-x-twitter"></i></a>
                 <span class="h-4 w-px bg-white/10"></span>
                 {% if current_user.is_authenticated %}
                     {% if current_user.is_admin() and request.path.startswith('/admin') %}
-                        <span class="text-xs lg:text-sm text-[#d4a94b]"><i class="fas fa-crown mr-1"></i>Admin</span>
+                        <span class="text-[#d4a94b]"><i class="fas fa-crown mr-1"></i>Admin</span>
                     {% endif %}
-                    <a href="{{ url_for('profile') }}" class="hover:text-[#d4a94b] transition text-xs lg:text-sm truncate max-w-[100px]">
+                    <a href="{{ url_for('profile') }}" class="hover:text-[#d4a94b] transition truncate max-w-[80px] sm:max-w-[100px]">
                         <i class="far fa-user mr-1"></i>{{ current_user.name }}
                     </a>
-                    <a href="{{ url_for('logout') }}" class="hover:text-[#d4a94b] transition text-xs lg:text-sm">
+                    <a href="{{ url_for('logout') }}" class="hover:text-[#d4a94b] transition">
                         <i class="fas fa-sign-out-alt mr-1"></i>Logout
                     </a>
                 {% else %}
-                    <a href="{{ url_for('login') }}" class="hover:text-[#d4a94b] transition text-xs lg:text-sm">
+                    <a href="{{ url_for('login') }}" class="hover:text-[#d4a94b] transition">
                         <i class="far fa-user mr-1"></i>Sign in
                     </a>
                 {% endif %}
@@ -120,29 +56,27 @@
             <div class="flex items-center gap-2 cursor-pointer" onclick="window.location.href='{{ url_for('index') }}'">
                 <span class="text-xl sm:text-2xl font-extrabold tracking-tight text-[#d4a94b]">STBM</span>
                 {% if request.path.startswith('/admin') and current_user.is_authenticated and current_user.is_admin() %}
-                    <span class="text-[10px] sm:text-xs bg-[#d4a94b]/20 text-[#d4a94b] px-2 py-0.5 rounded-full font-semibold">Admin</span>
+                    <span class="text-[8px] sm:text-xs bg-[#d4a94b]/20 text-[#d4a94b] px-2 py-0.5 rounded-full font-semibold">Admin</span>
                 {% endif %}
             </div>
 
-            <nav class="hidden lg:flex items-center gap-6 xl:gap-10 text-sm font-medium">
+            <nav class="hidden lg:flex items-center gap-4 xl:gap-10 text-sm font-medium">
                 {% if request.path.startswith('/admin') and current_user.is_authenticated and current_user.is_admin() %}
-                    <!-- Admin Navigation -->
-                    <a href="{{ url_for('admin_dashboard') }}" class="nav-link-custom text-white/70 hover:text-white">Dashboard</a>
-                    <a href="{{ url_for('admin_products') }}" class="nav-link-custom text-white/70 hover:text-white">Products</a>
-                    <a href="{{ url_for('admin_orders') }}" class="nav-link-custom text-white/70 hover:text-white">Orders</a>
-                    <a href="{{ url_for('admin_users') }}" class="nav-link-custom text-white/70 hover:text-white">Users</a>
-                    <a href="{{ url_for('admin_settings') }}" class="nav-link-custom text-white/70 hover:text-white">Settings</a>
-                    <a href="{{ url_for('index') }}" class="nav-link-custom text-[#d4a94b] hover:text-[#d4a94b]">
+                    <a href="{{ url_for('admin_dashboard') }}" class="relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:bottom-[-4px] after:left-0 after:bg-[#d4a94b] after:transition-[width] after:duration-200 hover:after:w-full text-white/70 hover:text-white">Dashboard</a>
+                    <a href="{{ url_for('admin_products') }}" class="relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:bottom-[-4px] after:left-0 after:bg-[#d4a94b] after:transition-[width] after:duration-200 hover:after:w-full text-white/70 hover:text-white">Products</a>
+                    <a href="{{ url_for('admin_orders') }}" class="relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:bottom-[-4px] after:left-0 after:bg-[#d4a94b] after:transition-[width] after:duration-200 hover:after:w-full text-white/70 hover:text-white">Orders</a>
+                    <a href="{{ url_for('admin_users') }}" class="relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:bottom-[-4px] after:left-0 after:bg-[#d4a94b] after:transition-[width] after:duration-200 hover:after:w-full text-white/70 hover:text-white">Users</a>
+                    <a href="{{ url_for('admin_settings') }}" class="relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:bottom-[-4px] after:left-0 after:bg-[#d4a94b] after:transition-[width] after:duration-200 hover:after:w-full text-white/70 hover:text-white">Settings</a>
+                    <a href="{{ url_for('index') }}" class="relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:bottom-[-4px] after:left-0 after:bg-[#d4a94b] after:transition-[width] after:duration-200 hover:after:w-full text-[#d4a94b] hover:text-[#d4a94b]">
                         <i class="fas fa-store"></i> Store
                     </a>
                 {% else %}
-                    <!-- Regular Navigation -->
-                    <a href="{{ url_for('index') }}" class="nav-link-custom text-white/90 hover:text-white">Home</a>
-                    <a href="{{ url_for('store') }}" class="nav-link-custom text-white/70 hover:text-white">Store</a>
-                    <a href="{{ url_for('about') }}" class="nav-link-custom text-white/70 hover:text-white">About</a>
-                    <a href="{{ url_for('contact') }}" class="nav-link-custom text-white/70 hover:text-white">Contact</a>
+                    <a href="{{ url_for('index') }}" class="relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:bottom-[-4px] after:left-0 after:bg-[#d4a94b] after:transition-[width] after:duration-200 hover:after:w-full text-white/90 hover:text-white">Home</a>
+                    <a href="{{ url_for('store') }}" class="relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:bottom-[-4px] after:left-0 after:bg-[#d4a94b] after:transition-[width] after:duration-200 hover:after:w-full text-white/70 hover:text-white">Store</a>
+                    <a href="{{ url_for('about') }}" class="relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:bottom-[-4px] after:left-0 after:bg-[#d4a94b] after:transition-[width] after:duration-200 hover:after:w-full text-white/70 hover:text-white">About</a>
+                    <a href="{{ url_for('contact') }}" class="relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:bottom-[-4px] after:left-0 after:bg-[#d4a94b] after:transition-[width] after:duration-200 hover:after:w-full text-white/70 hover:text-white">Contact</a>
                     {% if current_user.is_authenticated and current_user.is_admin() %}
-                        <a href="{{ url_for('admin_dashboard') }}" class="nav-link-custom text-[#d4a94b] hover:text-[#d4a94b]">
+                        <a href="{{ url_for('admin_dashboard') }}" class="relative after:content-[''] after:absolute after:w-0 after:h-0.5 after:bottom-[-4px] after:left-0 after:bg-[#d4a94b] after:transition-[width] after:duration-200 hover:after:w-full text-[#d4a94b] hover:text-[#d4a94b]">
                             <i class="fas fa-crown"></i> Admin
                         </a>
                     {% endif %}
@@ -152,14 +86,14 @@
             <div class="flex items-center gap-2 sm:gap-4">
                 <div class="hidden md:flex items-center bg-[#1a1625] rounded-full px-2 sm:px-3 py-1 border border-white/10">
                     <form action="{% if request.path.startswith('/admin') %}{{ url_for('admin_products') }}{% else %}{{ url_for('search') }}{% endif %}" method="GET" class="flex items-center">
-                        <input type="text" name="q" placeholder="Search..." class="search-input bg-transparent text-white text-sm outline-none w-24 sm:w-32 focus:w-32 sm:focus:w-48 transition-all">
+                        <input type="text" name="q" placeholder="Search..." class="bg-transparent text-white text-sm outline-none w-20 sm:w-24 lg:w-32 focus:w-28 sm:focus:w-32 lg:focus:w-48 transition-all">
                         <button type="submit" class="text-white/70 hover:text-[#d4a94b]"><i class="fas fa-search text-xs sm:text-sm"></i></button>
                     </form>
                 </div>
                 {% if not request.path.startswith('/admin') %}
                     <a href="{{ url_for('cart') }}" class="text-white/70 hover:text-white transition text-base sm:text-lg relative">
                         <i class="fas fa-shopping-bag"></i>
-                        <span id="cart-count" class="absolute -top-1 -right-2 bg-[#d4a94b] text-[10px] text-black font-bold rounded-full w-4 h-4 flex items-center justify-center text-xs">{{ cart_count() }}</span>
+                        <span class="absolute -top-1 -right-2 bg-[#d4a94b] text-[8px] sm:text-[10px] text-black font-bold rounded-full w-4 h-4 flex items-center justify-center">{{ cart_count() }}</span>
                     </a>
                 {% endif %}
             </div>
@@ -171,7 +105,13 @@
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 {% for category, message in messages %}
-                    <div class="alert alert-{{ category }} text-sm sm:text-base">{{ message }}</div>
+                    <div class="p-3 sm:p-4 rounded-lg mb-3 sm:mb-4 text-sm sm:text-base 
+                        {% if category == 'success' %}bg-green-400/10 border border-green-400/20 text-green-400
+                        {% elif category == 'danger' %}bg-red-400/10 border border-red-400/20 text-red-400
+                        {% elif category == 'warning' %}bg-yellow-400/10 border border-yellow-400/20 text-yellow-400
+                        {% else %}bg-blue-400/10 border border-blue-400/20 text-blue-400{% endif %}">
+                        {{ message }}
+                    </div>
                 {% endfor %}
             {% endif %}
         {% endwith %}
@@ -183,93 +123,91 @@
     </main>
 
     <!-- Footer -->
-    <footer class="footer-bg border-t border-white/5 mt-auto px-3 sm:px-6">
-        <div class="max-w-7xl mx-auto py-8 sm:py-12 footer-grid grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
-            <div class="col-span-2 md:col-span-1 footer-brand">
+    <footer class="bg-[#0b0912] border-t border-white/5 mt-auto px-3 sm:px-6">
+        <div class="max-w-7xl mx-auto py-8 sm:py-12 grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
+            <div class="col-span-2 md:col-span-1">
                 <span class="text-xl sm:text-2xl font-extrabold text-[#d4a94b]">STBM</span>
-                <p class="text-white/30 text-xs sm:text-sm mt-2 sm:mt-3 max-w-xs">The black messiah. Premium streetwear & tailoring for the fearless.</p>
+                <p class="text-white/30 text-xs sm:text-sm mt-2 max-w-xs">The black messiah. Premium streetwear & tailoring for the fearless.</p>
             </div>
             <div>
                 <h5 class="text-white font-semibold text-xs sm:text-sm uppercase tracking-wider">Shop</h5>
-                <ul class="mt-3 sm:mt-4 space-y-1.5 sm:space-y-2 text-white/40 text-xs sm:text-sm">
+                <ul class="mt-3 space-y-1.5 text-white/40 text-xs sm:text-sm">
                     <li><a href="{{ url_for('store') }}" class="hover:text-white transition">All Products</a></li>
                     <li><a href="{{ url_for('cart') }}" class="hover:text-white transition">Cart</a></li>
                 </ul>
             </div>
             <div>
                 <h5 class="text-white font-semibold text-xs sm:text-sm uppercase tracking-wider">Info</h5>
-                <ul class="mt-3 sm:mt-4 space-y-1.5 sm:space-y-2 text-white/40 text-xs sm:text-sm">
+                <ul class="mt-3 space-y-1.5 text-white/40 text-xs sm:text-sm">
                     <li><a href="{{ url_for('about') }}" class="hover:text-white transition">About Us</a></li>
                     <li><a href="{{ url_for('signup') }}" class="hover:text-white transition">Create Account</a></li>
                 </ul>
             </div>
             <div>
                 <h5 class="text-white font-semibold text-xs sm:text-sm uppercase tracking-wider">Support</h5>
-                <ul class="mt-3 sm:mt-4 space-y-1.5 sm:space-y-2 text-white/40 text-xs sm:text-sm">
+                <ul class="mt-3 space-y-1.5 text-white/40 text-xs sm:text-sm">
                     <li><a href="{{ url_for('contact') }}" class="hover:text-white transition">Contact</a></li>
                     <li><a href="#" class="hover:text-white transition">FAQs</a></li>
                 </ul>
             </div>
         </div>
-        <div class="border-t border-white/5 py-4 sm:py-6 text-center text-white/30 text-xs sm:text-sm">
+        <div class="border-t border-white/5 py-4 text-center text-white/30 text-xs sm:text-sm">
             <span>© 2026 Safo The Black Messiah. All rights reserved.</span>
         </div>
     </footer>
 
     <!-- Mobile Bottom Nav -->
-    <div class="lg:hidden fixed bottom-0 left-0 w-full bg-[#0f0c17]/90 backdrop-blur-md border-t border-white/10 px-3 py-2 sm:px-4 sm:py-3 flex justify-around text-white/60 text-xs sm:text-sm z-50">
+    <div class="lg:hidden fixed bottom-0 left-0 w-full bg-[#0f0c17]/90 backdrop-blur-md border-t border-white/10 px-2 sm:px-4 py-2 flex justify-around text-white/60 text-[10px] sm:text-xs z-50">
         {% if request.path.startswith('/admin') and current_user.is_authenticated and current_user.is_admin() %}
-            <!-- Admin Mobile Navigation -->
-            <a href="{{ url_for('admin_dashboard') }}" class="flex flex-col items-center gap-0.5 sm:gap-1 hover:text-[#d4a94b] {% if request.endpoint == 'admin_dashboard' %}mobile-nav-active{% endif %}">
-                <i class="fas fa-chart-pie mobile-nav-icon text-sm sm:text-base"></i>
-                <span class="mobile-nav-text">Dashboard</span>
+            <a href="{{ url_for('admin_dashboard') }}" class="flex flex-col items-center gap-0.5 hover:text-[#d4a94b] {% if request.endpoint == 'admin_dashboard' %}mobile-nav-active{% endif %}">
+                <i class="fas fa-chart-pie text-sm sm:text-base"></i>
+                <span>Dashboard</span>
             </a>
-            <a href="{{ url_for('admin_products') }}" class="flex flex-col items-center gap-0.5 sm:gap-1 hover:text-[#d4a94b] {% if request.endpoint in ['admin_products', 'admin_add_product', 'admin_edit_product'] %}mobile-nav-active{% endif %}">
-                <i class="fas fa-tshirt mobile-nav-icon text-sm sm:text-base"></i>
-                <span class="mobile-nav-text">Products</span>
+            <a href="{{ url_for('admin_products') }}" class="flex flex-col items-center gap-0.5 hover:text-[#d4a94b] {% if request.endpoint in ['admin_products', 'admin_add_product', 'admin_edit_product'] %}mobile-nav-active{% endif %}">
+                <i class="fas fa-tshirt text-sm sm:text-base"></i>
+                <span>Products</span>
             </a>
-            <a href="{{ url_for('admin_orders') }}" class="flex flex-col items-center gap-0.5 sm:gap-1 hover:text-[#d4a94b] {% if request.endpoint == 'admin_orders' %}mobile-nav-active{% endif %}">
-                <i class="fas fa-shopping-cart mobile-nav-icon text-sm sm:text-base"></i>
-                <span class="mobile-nav-text">Orders</span>
+            <a href="{{ url_for('admin_orders') }}" class="flex flex-col items-center gap-0.5 hover:text-[#d4a94b] {% if request.endpoint == 'admin_orders' %}mobile-nav-active{% endif %}">
+                <i class="fas fa-shopping-cart text-sm sm:text-base"></i>
+                <span>Orders</span>
             </a>
-            <a href="{{ url_for('admin_users') }}" class="flex flex-col items-center gap-0.5 sm:gap-1 hover:text-[#d4a94b] {% if request.endpoint in ['admin_users', 'admin_add_user', 'admin_edit_user_page'] %}mobile-nav-active{% endif %}">
-                <i class="fas fa-users mobile-nav-icon text-sm sm:text-base"></i>
-                <span class="mobile-nav-text">Users</span>
+            <a href="{{ url_for('admin_users') }}" class="flex flex-col items-center gap-0.5 hover:text-[#d4a94b] {% if request.endpoint in ['admin_users', 'admin_add_user', 'admin_edit_user_page'] %}mobile-nav-active{% endif %}">
+                <i class="fas fa-users text-sm sm:text-base"></i>
+                <span>Users</span>
             </a>
-            <a href="{{ url_for('admin_settings') }}" class="flex flex-col items-center gap-0.5 sm:gap-1 hover:text-[#d4a94b] {% if request.endpoint == 'admin_settings' %}mobile-nav-active{% endif %}">
-                <i class="fas fa-cog mobile-nav-icon text-sm sm:text-base"></i>
-                <span class="mobile-nav-text">Settings</span>
+            <a href="{{ url_for('admin_settings') }}" class="flex flex-col items-center gap-0.5 hover:text-[#d4a94b] {% if request.endpoint == 'admin_settings' %}mobile-nav-active{% endif %}">
+                <i class="fas fa-cog text-sm sm:text-base"></i>
+                <span>Settings</span>
             </a>
         {% else %}
-            <!-- Regular Mobile Navigation -->
-            <a href="{{ url_for('index') }}" class="flex flex-col items-center gap-0.5 sm:gap-1 hover:text-[#d4a94b] {% if request.endpoint == 'index' %}mobile-nav-active{% endif %}">
-                <i class="fas fa-home mobile-nav-icon text-sm sm:text-base"></i>
-                <span class="mobile-nav-text">Home</span>
+            <a href="{{ url_for('index') }}" class="flex flex-col items-center gap-0.5 hover:text-[#d4a94b] {% if request.endpoint == 'index' %}mobile-nav-active{% endif %}">
+                <i class="fas fa-home text-sm sm:text-base"></i>
+                <span>Home</span>
             </a>
-            <a href="{{ url_for('store') }}" class="flex flex-col items-center gap-0.5 sm:gap-1 hover:text-[#d4a94b] {% if request.endpoint == 'store' %}mobile-nav-active{% endif %}">
-                <i class="fas fa-th-large mobile-nav-icon text-sm sm:text-base"></i>
-                <span class="mobile-nav-text">Store</span>
+            <a href="{{ url_for('store') }}" class="flex flex-col items-center gap-0.5 hover:text-[#d4a94b] {% if request.endpoint == 'store' %}mobile-nav-active{% endif %}">
+                <i class="fas fa-th-large text-sm sm:text-base"></i>
+                <span>Store</span>
             </a>
-            <a href="{{ url_for('cart') }}" class="flex flex-col items-center gap-0.5 sm:gap-1 hover:text-[#d4a94b] {% if request.endpoint == 'cart' %}mobile-nav-active{% endif %} relative">
-                <i class="fas fa-shopping-bag mobile-nav-icon text-sm sm:text-base"></i>
-                <span class="mobile-nav-text">Cart</span>
-                <span class="absolute -top-0.5 -right-2 bg-[#d4a94b] text-black text-[8px] font-bold rounded-full w-3.5 h-3.5 flex items-center justify-center">{{ cart_count() }}</span>
+            <a href="{{ url_for('cart') }}" class="flex flex-col items-center gap-0.5 hover:text-[#d4a94b] {% if request.endpoint == 'cart' %}mobile-nav-active{% endif %} relative">
+                <i class="fas fa-shopping-bag text-sm sm:text-base"></i>
+                <span>Cart</span>
+                <span class="absolute -top-0.5 -right-2 bg-[#d4a94b] text-black text-[6px] font-bold rounded-full w-3.5 h-3.5 flex items-center justify-center">{{ cart_count() }}</span>
             </a>
             {% if current_user.is_authenticated %}
-                <a href="{{ url_for('profile') }}" class="flex flex-col items-center gap-0.5 sm:gap-1 hover:text-[#d4a94b] {% if request.endpoint == 'profile' %}mobile-nav-active{% endif %}">
-                    <i class="fas fa-user mobile-nav-icon text-sm sm:text-base"></i>
-                    <span class="mobile-nav-text">Profile</span>
+                <a href="{{ url_for('profile') }}" class="flex flex-col items-center gap-0.5 hover:text-[#d4a94b] {% if request.endpoint == 'profile' %}mobile-nav-active{% endif %}">
+                    <i class="fas fa-user text-sm sm:text-base"></i>
+                    <span>Profile</span>
                 </a>
                 {% if current_user.is_admin() %}
-                    <a href="{{ url_for('admin_dashboard') }}" class="flex flex-col items-center gap-0.5 sm:gap-1 hover:text-[#d4a94b] text-[#d4a94b]">
-                        <i class="fas fa-crown mobile-nav-icon text-sm sm:text-base"></i>
-                        <span class="mobile-nav-text">Admin</span>
+                    <a href="{{ url_for('admin_dashboard') }}" class="flex flex-col items-center gap-0.5 text-[#d4a94b]">
+                        <i class="fas fa-crown text-sm sm:text-base"></i>
+                        <span>Admin</span>
                     </a>
                 {% endif %}
             {% else %}
-                <a href="{{ url_for('login') }}" class="flex flex-col items-center gap-0.5 sm:gap-1 hover:text-[#d4a94b] {% if request.endpoint == 'login' %}mobile-nav-active{% endif %}">
-                    <i class="fas fa-user mobile-nav-icon text-sm sm:text-base"></i>
-                    <span class="mobile-nav-text">Login</span>
+                <a href="{{ url_for('login') }}" class="flex flex-col items-center gap-0.5 hover:text-[#d4a94b] {% if request.endpoint == 'login' %}mobile-nav-active{% endif %}">
+                    <i class="fas fa-user text-sm sm:text-base"></i>
+                    <span>Login</span>
                 </a>
             {% endif %}
         {% endif %}

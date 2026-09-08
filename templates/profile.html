@@ -2,166 +2,23 @@
 
 {% block title %}My Profile · STBM{% endblock %}
 
-{% block extra_css %}
-<style>
-    .profile-container {
-        padding: 1rem 0.75rem 2rem;
-    }
-    .profile-card {
-        padding: 1.25rem;
-        border-radius: 0.75rem;
-    }
-    .profile-avatar {
-        width: 5rem;
-        height: 5rem;
-    }
-    .order-card {
-        cursor: pointer;
-        transition: all 0.25s ease;
-        padding: 0.75rem;
-    }
-    .order-card:hover {
-        border-color: #d4a94b44;
-        transform: translateX(4px);
-    }
-    .detail-modal {
-        background: rgba(0,0,0,0.8);
-        backdrop-filter: blur(8px);
-    }
-    .detail-item {
-        background: rgba(255,255,255,0.02);
-        border-radius: 0.5rem;
-        padding: 0.75rem;
-        margin-bottom: 0.5rem;
-    }
-    .detail-item:last-child {
-        margin-bottom: 0;
-    }
-    
-    @media (max-width: 480px) {
-        .profile-container {
-            padding: 0.5rem 0.5rem 1.5rem;
-        }
-        .profile-title {
-            font-size: 1.5rem !important;
-            margin-bottom: 1.5rem !important;
-        }
-        .profile-card {
-            padding: 1rem;
-            border-radius: 0.5rem;
-        }
-        .profile-avatar {
-            width: 4rem;
-            height: 4rem;
-        }
-        .profile-name {
-            font-size: 1rem !important;
-        }
-        .profile-email {
-            font-size: 0.75rem !important;
-        }
-        .profile-role {
-            font-size: 0.6rem !important;
-        }
-        .order-card {
-            padding: 0.75rem;
-        }
-        .order-number {
-            font-size: 0.75rem !important;
-        }
-        .order-date {
-            font-size: 0.6rem !important;
-        }
-        .order-items {
-            font-size: 0.6rem !important;
-        }
-        .order-total {
-            font-size: 0.8rem !important;
-        }
-        .order-status {
-            font-size: 0.6rem !important;
-            padding: 0.15rem 0.5rem !important;
-        }
-        .order-click-hint {
-            font-size: 0.5rem !important;
-        }
-        .orders-title {
-            font-size: 1rem !important;
-        }
-        .logout-btn {
-            font-size: 0.75rem !important;
-        }
-    }
-    
-    @media (max-width: 768px) {
-        .profile-grid {
-            grid-template-columns: 1fr;
-            gap: 1.5rem;
-        }
-    }
-    
-    @media (min-width: 769px) {
-        .profile-grid {
-            grid-template-columns: 1fr 2fr;
-            gap: 2rem;
-        }
-    }
-    
-    .modal-content {
-        max-width: 640px;
-        width: 100%;
-        max-height: 90vh;
-        overflow-y: auto;
-        padding: 0.75rem;
-    }
-    @media (max-width: 480px) {
-        .modal-content {
-            padding: 0.5rem;
-            border-radius: 1rem !important;
-        }
-        .modal-header {
-            padding: 0.75rem !important;
-        }
-        .modal-title {
-            font-size: 1rem !important;
-        }
-        .modal-body {
-            padding: 1rem !important;
-        }
-        .modal-detail-label {
-            font-size: 0.65rem !important;
-        }
-        .modal-detail-value {
-            font-size: 0.75rem !important;
-        }
-        .modal-item {
-            font-size: 0.7rem !important;
-            padding: 0.5rem !important;
-        }
-        .modal-total {
-            font-size: 1.25rem !important;
-        }
-    }
-</style>
-{% endblock %}
-
 {% block content %}
-<div class="profile-container max-w-4xl mx-auto px-3 sm:px-4 py-6 sm:py-12">
-    <h1 class="profile-title text-2xl sm:text-3xl font-bold mb-4 sm:mb-8">My Profile</h1>
+<div class="max-w-4xl mx-auto px-3 sm:px-4 py-6 sm:py-12">
+    <h1 class="text-2xl sm:text-3xl font-bold mb-4 sm:mb-8">My Profile</h1>
     
-    <div class="profile-grid grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
         <div class="md:col-span-1">
-            <div class="profile-card bg-[#1a1625] p-4 sm:p-6 rounded-xl border border-white/5 text-center">
+            <div class="bg-[#1a1625] p-4 sm:p-6 rounded-xl border border-white/5 text-center">
                 <img src="https://ui-avatars.com/api/?name={{ current_user.name|urlencode }}&background=d4a94b&color=000" 
-                     class="profile-avatar w-20 sm:w-24 h-20 sm:h-24 rounded-full mx-auto border-2 border-[#d4a94b]">
-                <h3 class="profile-name text-base sm:text-lg font-bold mt-2 sm:mt-3">{{ current_user.name }}</h3>
-                <p class="profile-email text-white/40 text-xs sm:text-sm">{{ current_user.email }}</p>
-                <p class="profile-role text-[10px] sm:text-xs text-white/30 mt-1">
+                     class="w-20 sm:w-24 h-20 sm:h-24 rounded-full mx-auto border-2 border-[#d4a94b]">
+                <h3 class="text-base sm:text-lg font-bold mt-2 sm:mt-3">{{ current_user.name }}</h3>
+                <p class="text-white/40 text-xs sm:text-sm">{{ current_user.email }}</p>
+                <p class="text-[10px] sm:text-xs text-white/30 mt-1">
                     <span class="inline-block px-2 py-0.5 rounded-full bg-[#d4a94b]/20 text-[#d4a94b]">
                         {{ current_user.role }}
                     </span>
                 </p>
-                <a href="{{ url_for('logout') }}" class="logout-btn mt-3 sm:mt-4 inline-block text-red-400 hover:text-red-300 text-xs sm:text-sm transition">
+                <a href="{{ url_for('logout') }}" class="mt-3 sm:mt-4 inline-block text-red-400 hover:text-red-300 text-xs sm:text-sm transition">
                     <i class="fas fa-sign-out-alt mr-1"></i> Logout
                 </a>
             </div>
@@ -169,30 +26,30 @@
         
         <div class="md:col-span-2">
             <div class="bg-[#1a1625] p-4 sm:p-6 rounded-xl border border-white/5">
-                <h3 class="orders-title font-bold text-base sm:text-lg mb-3 sm:mb-4">Order History</h3>
+                <h3 class="font-bold text-base sm:text-lg mb-3 sm:mb-4">Order History</h3>
                 {% if orders %}
                     <div class="space-y-2 sm:space-y-3">
                         {% for order in orders %}
-                            <div class="order-card bg-[#0f0c17] p-3 sm:p-4 rounded-lg border border-white/5" 
+                            <div class="bg-[#0f0c17] p-3 sm:p-4 rounded-lg border border-white/5 cursor-pointer hover:border-[#d4a94b]/30 hover:translate-x-1 transition" 
                                  onclick="openOrderDetail({{ order.id }})">
-                                <div class="flex flex-col sm:flex-row justify-between items-start gap-2 sm:gap-0">
-                                    <div class="w-full sm:w-auto">
-                                        <span class="order-number text-[#d4a94b] font-mono text-xs sm:text-sm">{{ order.order_number }}</span>
-                                        <p class="order-date text-white/40 text-[10px] sm:text-xs">{{ order.created_at.strftime('%B %d, %Y at %I:%M %p') }}</p>
-                                        <span class="order-items text-[10px] sm:text-xs text-white/30 mt-1 block">
+                                <div class="flex flex-col sm:flex-row justify-between items-start gap-2">
+                                    <div>
+                                        <span class="text-[#d4a94b] font-mono text-xs sm:text-sm">{{ order.order_number }}</span>
+                                        <p class="text-white/40 text-[10px] sm:text-xs">{{ order.created_at.strftime('%B %d, %Y at %I:%M %p') }}</p>
+                                        <span class="text-[10px] sm:text-xs text-white/30 mt-1 block">
                                             {{ order.items|length }} item{% if order.items|length > 1 %}s{% endif %}
                                         </span>
                                     </div>
-                                    <div class="text-right w-full sm:w-auto">
-                                        <span class="order-total font-bold text-[#d4a94b] text-sm sm:text-base">{{ format_currency(order.total_amount) }}</span>
-                                        <span class="order-status block text-[8px] sm:text-xs px-1.5 sm:px-2 py-0.5 rounded-full inline-block mt-0.5 sm:mt-1 
+                                    <div class="text-right">
+                                        <span class="font-bold text-[#d4a94b] text-sm sm:text-base">{{ format_currency(order.total_amount) }}</span>
+                                        <span class="block text-[8px] sm:text-xs px-1.5 sm:px-2 py-0.5 rounded-full inline-block mt-1 
                                             {% if order.status == 'Delivered' %}bg-green-400/20 text-green-400
                                             {% elif order.status == 'Processing' %}bg-blue-400/20 text-blue-400
                                             {% elif order.status == 'Shipped' %}bg-purple-400/20 text-purple-400
                                             {% else %}bg-white/10 text-white/40{% endif %}">
                                             {{ order.status }}
                                         </span>
-                                        <span class="order-click-hint text-[8px] sm:text-[10px] text-white/20 mt-0.5 sm:mt-1 block">
+                                        <span class="text-[8px] sm:text-[10px] text-white/20 mt-0.5 block">
                                             <i class="fas fa-chevron-right"></i> Click for details
                                         </span>
                                     </div>
@@ -202,9 +59,9 @@
                     </div>
                 {% else %}
                     <div class="text-center py-8 sm:py-12">
-                        <i class="fas fa-shopping-bag text-3xl sm:text-4xl text-white/10 mb-3 sm:mb-4"></i>
+                        <i class="fas fa-shopping-bag text-3xl sm:text-4xl text-white/10 mb-3"></i>
                         <p class="text-white/40 text-sm sm:text-base">No orders yet. Start shopping!</p>
-                        <a href="{{ url_for('store') }}" class="mt-3 sm:mt-4 text-[#d4a94b] hover:underline inline-block text-sm">Browse Products →</a>
+                        <a href="{{ url_for('store') }}" class="mt-3 text-[#d4a94b] hover:underline inline-block text-sm">Browse Products →</a>
                     </div>
                 {% endif %}
             </div>
@@ -213,15 +70,15 @@
 </div>
 
 <!-- Order Detail Modal -->
-<div id="orderDetailModal" class="fixed inset-0 z-50 hidden items-center justify-center p-3 sm:p-4" style="background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); display: none;">
-    <div class="modal-content bg-[#1a1625] rounded-2xl border border-white/10 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-        <div class="modal-header sticky top-0 bg-[#1a1625] p-3 sm:p-4 border-b border-white/5 flex justify-between items-center">
-            <h3 class="modal-title text-base sm:text-lg font-bold">Order Details</h3>
+<div id="orderDetailModal" class="fixed inset-0 z-50 hidden items-center justify-center p-3 sm:p-4" style="background: rgba(0,0,0,0.8); backdrop-filter: blur(8px);">
+    <div class="bg-[#1a1625] rounded-2xl border border-white/10 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+        <div class="sticky top-0 bg-[#1a1625] p-3 sm:p-4 border-b border-white/5 flex justify-between items-center">
+            <h3 class="text-base sm:text-lg font-bold">Order Details</h3>
             <button onclick="closeOrderDetail()" class="text-white/40 hover:text-white transition">
                 <i class="fas fa-times text-lg sm:text-xl"></i>
             </button>
         </div>
-        <div id="orderDetailContent" class="modal-body p-4 sm:p-6">
+        <div id="orderDetailContent" class="p-4 sm:p-6">
             <div class="flex items-center justify-center py-8">
                 <i class="fas fa-spinner fa-spin text-2xl text-[#d4a94b]"></i>
             </div>
@@ -240,14 +97,14 @@
             .then(data => {
                 document.getElementById('orderDetailContent').innerHTML = `
                     <div class="space-y-3 sm:space-y-4">
-                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-white/5 pb-3 sm:pb-4 gap-2 sm:gap-0">
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-white/5 pb-3 sm:pb-4">
                             <div>
-                                <span class="modal-detail-label text-white/50 text-[10px] sm:text-sm">Order Number</span>
-                                <p class="modal-detail-value font-mono font-bold text-[#d4a94b] text-xs sm:text-sm">${data.order_number}</p>
+                                <span class="text-white/50 text-[10px] sm:text-sm">Order Number</span>
+                                <p class="font-mono font-bold text-[#d4a94b] text-xs sm:text-sm">${data.order_number}</p>
                             </div>
-                            <div class="text-left sm:text-right w-full sm:w-auto">
-                                <span class="modal-detail-label text-white/50 text-[10px] sm:text-sm">Status</span>
-                                <p class="modal-detail-value px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-[8px] sm:text-xs font-semibold border inline-block 
+                            <div class="text-left sm:text-right">
+                                <span class="text-white/50 text-[10px] sm:text-sm">Status</span>
+                                <p class="px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-[8px] sm:text-xs font-semibold border inline-block 
                                     ${data.status === 'Delivered' ? 'border-green-400/20 text-green-400 bg-green-400/10' :
                                       data.status === 'Processing' ? 'border-blue-400/20 text-blue-400 bg-blue-400/10' :
                                       data.status === 'Shipped' ? 'border-purple-400/20 text-purple-400 bg-purple-400/10' :
@@ -258,8 +115,8 @@
                         </div>
                         
                         <div class="border-b border-white/5 pb-3 sm:pb-4">
-                            <span class="modal-detail-label text-white/50 text-[10px] sm:text-sm">Order Date</span>
-                            <p class="modal-detail-value text-white/70 text-xs sm:text-sm">${new Date(data.created_at).toLocaleDateString('en-US', { 
+                            <span class="text-white/50 text-[10px] sm:text-sm">Order Date</span>
+                            <p class="text-white/70 text-xs sm:text-sm">${new Date(data.created_at).toLocaleDateString('en-US', { 
                                 weekday: 'long', 
                                 year: 'numeric', 
                                 month: 'long', 
@@ -271,31 +128,31 @@
                         
                         ${data.shipping_address ? `
                         <div class="border-b border-white/5 pb-3 sm:pb-4">
-                            <span class="modal-detail-label text-white/50 text-[10px] sm:text-sm">Shipping Address</span>
-                            <p class="modal-detail-value text-white/70 text-xs sm:text-sm mt-1">${data.shipping_address}</p>
+                            <span class="text-white/50 text-[10px] sm:text-sm">Shipping Address</span>
+                            <p class="text-white/70 text-xs sm:text-sm mt-1">${data.shipping_address}</p>
                         </div>
                         ` : ''}
                         
                         <div>
-                            <span class="modal-detail-label text-white/50 text-[10px] sm:text-sm block mb-2">Items</span>
+                            <span class="text-white/50 text-[10px] sm:text-sm block mb-2">Items</span>
                             ${data.items.map(item => `
-                                <div class="modal-item detail-item flex justify-between items-center text-xs sm:text-sm">
+                                <div class="bg-white/5 rounded-lg p-2 sm:p-3 mb-2 last:mb-0 flex justify-between items-center text-xs sm:text-sm">
                                     <div>
-                                        <p class="text-white font-medium text-xs sm:text-sm">${item.product_name}</p>
+                                        <p class="text-white font-medium">${item.product_name}</p>
                                         <span class="text-white/40 text-[8px] sm:text-xs">Quantity: ${item.quantity}</span>
                                     </div>
-                                    <span class="text-[#d4a94b] font-bold text-xs sm:text-sm">${formatCurrency(item.subtotal)}</span>
+                                    <span class="text-[#d4a94b] font-bold">${formatCurrency(item.subtotal)}</span>
                                 </div>
                             `).join('')}
                         </div>
                         
                         <div class="border-t border-white/5 pt-3 sm:pt-4 flex justify-between items-center">
-                            <span class="modal-detail-label text-white/50 text-[10px] sm:text-sm">Total</span>
-                            <span class="modal-total text-xl sm:text-2xl font-bold text-[#d4a94b]">${formatCurrency(data.total_amount)}</span>
+                            <span class="text-white/50 text-[10px] sm:text-sm">Total</span>
+                            <span class="text-xl sm:text-2xl font-bold text-[#d4a94b]">${formatCurrency(data.total_amount)}</span>
                         </div>
                         
                         ${data.delivery_notes ? `
-                        <div class="bg-[#d4a94b]/10 border border-[#d4a94b]/20 rounded-lg p-3 sm:p-4 mt-3 sm:mt-4">
+                        <div class="bg-[#d4a94b]/10 border border-[#d4a94b]/20 rounded-lg p-3 sm:p-4 mt-3">
                             <span class="text-[#d4a94b] text-[8px] sm:text-xs font-bold uppercase tracking-wider">Delivery Notes</span>
                             <p class="text-white/70 text-xs sm:text-sm mt-1">${data.delivery_notes}</p>
                         </div>
@@ -319,7 +176,6 @@
         document.body.style.overflow = '';
     }
     
-    // Close modal on outside click
     document.getElementById('orderDetailModal').addEventListener('click', function(e) {
         if (e.target === this) closeOrderDetail();
     });

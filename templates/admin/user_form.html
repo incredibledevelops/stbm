@@ -2,101 +2,43 @@
 
 {% block admin_title %}{{ title }}{% endblock %}
 
-{% block extra_css %}
-<style>
-    .user-form-container {
-        max-width: 640px;
-        margin: 0 auto;
-    }
-    
-    @media (max-width: 480px) {
-        .user-form-title {
-            font-size: 1.5rem !important;
-        }
-        .user-form-subtitle {
-            font-size: 0.8rem !important;
-        }
-        .user-form-card {
-            padding: 1rem !important;
-            border-radius: 0.75rem !important;
-        }
-        .user-form-label {
-            font-size: 0.75rem !important;
-        }
-        .user-form-input {
-            font-size: 0.85rem !important;
-            padding: 0.5rem 0.75rem !important;
-        }
-        .user-form-grid {
-            grid-template-columns: 1fr !important;
-            gap: 0.75rem !important;
-        }
-        .user-form-btn {
-            font-size: 0.85rem !important;
-            padding: 0.6rem 1rem !important;
-            width: 100%;
-            justify-content: center;
-        }
-        .user-form-actions {
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-        .user-form-hint {
-            font-size: 0.6rem !important;
-        }
-    }
-    
-    @media (max-width: 768px) {
-        .user-form-grid {
-            grid-template-columns: 1fr !important;
-        }
-    }
-    
-    @media (min-width: 769px) {
-        .user-form-grid {
-            grid-template-columns: 1fr 1fr;
-        }
-    }
-</style>
-{% endblock %}
-
 {% block admin_content %}
-<div class="user-form-container px-3 sm:px-4">
+<div class="max-w-2xl mx-auto">
     <div class="mb-6 sm:mb-8">
-        <h1 class="user-form-title text-2xl sm:text-3xl font-bold text-white mb-1">{{ title }}</h1>
-        <p class="user-form-subtitle text-white/50 text-xs sm:text-sm">{% if mode == 'add' %}Create a new user account{% else %}Edit user details{% endif %}</p>
+        <h1 class="text-2xl sm:text-3xl font-bold text-white mb-1">{{ title }}</h1>
+        <p class="text-white/50 text-xs sm:text-sm">{% if mode == 'add' %}Create a new user account{% else %}Edit user details{% endif %}</p>
     </div>
 
-    <div class="user-form-card bg-[#1a1625] border border-white/5 p-4 sm:p-6 rounded-xl sm:rounded-2xl">
+    <div class="bg-[#1a1625] border border-white/5 p-4 sm:p-6 rounded-xl sm:rounded-2xl">
         <form method="POST">
             <div class="space-y-3 sm:space-y-4">
                 <div>
-                    <label class="user-form-label block text-xs sm:text-sm font-medium text-white/70 mb-1">Full Name</label>
-                    <input type="text" name="name" class="user-form-input input-custom text-sm sm:text-base" value="{{ user.name if user else '' }}" required>
+                    <label class="block text-xs sm:text-sm font-medium text-white/70 mb-1">Full Name</label>
+                    <input type="text" name="name" class="w-full bg-[#1a1625] border border-white/10 text-white rounded-lg px-3 sm:px-4 py-2 sm:py-3 outline-none focus:border-[#d4a94b] focus:shadow-[0_0_0_3px_rgba(212,169,75,0.2)] text-sm sm:text-base" value="{{ user.name if user else '' }}" required>
                 </div>
                 
                 <div>
-                    <label class="user-form-label block text-xs sm:text-sm font-medium text-white/70 mb-1">Email Address</label>
-                    <input type="email" name="email" class="user-form-input input-custom text-sm sm:text-base" value="{{ user.email if user else '' }}" required>
+                    <label class="block text-xs sm:text-sm font-medium text-white/70 mb-1">Email Address</label>
+                    <input type="email" name="email" class="w-full bg-[#1a1625] border border-white/10 text-white rounded-lg px-3 sm:px-4 py-2 sm:py-3 outline-none focus:border-[#d4a94b] focus:shadow-[0_0_0_3px_rgba(212,169,75,0.2)] text-sm sm:text-base" value="{{ user.email if user else '' }}" required>
                 </div>
                 
                 <div>
-                    <label class="user-form-label block text-xs sm:text-sm font-medium text-white/70 mb-1">Password {% if mode == 'edit' %}(Leave blank to keep current){% endif %}</label>
-                    <input type="password" name="password" class="user-form-input input-custom text-sm sm:text-base" {% if mode == 'add' %}required{% endif %} minlength="6">
-                    {% if mode == 'add' %}<p class="user-form-hint text-[10px] sm:text-xs text-white/30 mt-1">Minimum 6 characters</p>{% endif %}
+                    <label class="block text-xs sm:text-sm font-medium text-white/70 mb-1">Password {% if mode == 'edit' %}(Leave blank to keep current){% endif %}</label>
+                    <input type="password" name="password" class="w-full bg-[#1a1625] border border-white/10 text-white rounded-lg px-3 sm:px-4 py-2 sm:py-3 outline-none focus:border-[#d4a94b] focus:shadow-[0_0_0_3px_rgba(212,169,75,0.2)] text-sm sm:text-base" {% if mode == 'add' %}required{% endif %} minlength="6">
+                    {% if mode == 'add' %}<p class="text-[10px] sm:text-xs text-white/30 mt-1">Minimum 6 characters</p>{% endif %}
                 </div>
                 
-                <div class="user-form-grid grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                     <div>
-                        <label class="user-form-label block text-xs sm:text-sm font-medium text-white/70 mb-1">Role</label>
-                        <select name="role" class="user-form-input input-custom text-sm sm:text-base">
+                        <label class="block text-xs sm:text-sm font-medium text-white/70 mb-1">Role</label>
+                        <select name="role" class="w-full bg-[#1a1625] border border-white/10 text-white rounded-lg px-3 sm:px-4 py-2 sm:py-3 outline-none focus:border-[#d4a94b] focus:shadow-[0_0_0_3px_rgba(212,169,75,0.2)] text-sm sm:text-base">
                             <option value="Customer" {% if user and user.role == 'Customer' %}selected{% endif %}>Customer</option>
                             <option value="Admin" {% if user and user.role == 'Admin' %}selected{% endif %}>Admin</option>
                         </select>
                     </div>
                     <div>
-                        <label class="user-form-label block text-xs sm:text-sm font-medium text-white/70 mb-1">Status</label>
-                        <select name="status" class="user-form-input input-custom text-sm sm:text-base">
+                        <label class="block text-xs sm:text-sm font-medium text-white/70 mb-1">Status</label>
+                        <select name="status" class="w-full bg-[#1a1625] border border-white/10 text-white rounded-lg px-3 sm:px-4 py-2 sm:py-3 outline-none focus:border-[#d4a94b] focus:shadow-[0_0_0_3px_rgba(212,169,75,0.2)] text-sm sm:text-base">
                             <option value="Active" {% if user and user.status == 'Active' %}selected{% endif %}>Active</option>
                             <option value="Inactive" {% if user and user.status == 'Inactive' %}selected{% endif %}>Inactive</option>
                         </select>
@@ -104,11 +46,11 @@
                 </div>
             </div>
             
-            <div class="user-form-actions flex flex-col sm:flex-row gap-3 sm:gap-4 mt-6 pt-6 border-t border-white/5">
-                <button type="submit" class="user-form-btn btn-primary px-6 sm:px-8 py-2.5 sm:py-3 rounded-lg text-sm sm:text-base flex items-center justify-center gap-2">
+            <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-6 pt-6 border-t border-white/5">
+                <button type="submit" class="btn-primary px-6 sm:px-8 py-2.5 sm:py-3 rounded-lg text-sm sm:text-base flex items-center justify-center gap-2 w-full sm:w-auto">
                     {% if mode == 'add' %}<i class="fas fa-user-plus"></i>Create User{% else %}<i class="fas fa-save"></i>Update User{% endif %}
                 </button>
-                <a href="{{ url_for('admin_users') }}" class="user-form-btn bg-white/10 hover:bg-white/20 text-white px-6 sm:px-8 py-2.5 sm:py-3 rounded-lg transition text-center text-sm sm:text-base flex items-center justify-center gap-2">
+                <a href="{{ url_for('admin_users') }}" class="bg-white/10 hover:bg-white/20 text-white px-6 sm:px-8 py-2.5 sm:py-3 rounded-lg transition text-center text-sm sm:text-base flex items-center justify-center gap-2 w-full sm:w-auto">
                     <i class="fas fa-times"></i> Cancel
                 </a>
             </div>

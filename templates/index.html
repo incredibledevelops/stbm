@@ -2,132 +2,37 @@
 
 {% block title %}STBM · The Black Messiah{% endblock %}
 
-{% block extra_css %}
-<style>
-    .hero-section {
-        min-height: auto;
-        padding: 2rem 1rem 3rem;
-    }
-    .hero-image {
-        max-width: 100%;
-        height: auto;
-        aspect-ratio: 1/1;
-        object-fit: cover;
-    }
-    .featured-grid {
-        display: grid;
-        gap: 1rem;
-        grid-template-columns: repeat(2, 1fr);
-    }
-    
-    @media (max-width: 480px) {
-        .hero-title {
-            font-size: 2rem !important;
-            line-height: 1.2 !important;
-        }
-        .hero-subtitle {
-            font-size: 0.9rem !important;
-        }
-        .hero-badge {
-            font-size: 0.6rem !important;
-            padding: 0.25rem 0.75rem !important;
-        }
-        .featured-grid {
-            gap: 0.75rem;
-        }
-        .product-card {
-            border-radius: 1rem !important;
-        }
-        .product-image {
-            aspect-ratio: 1/1;
-        }
-        .product-title {
-            font-size: 0.8rem !important;
-        }
-        .product-price {
-            font-size: 0.85rem !important;
-        }
-        .product-category {
-            font-size: 0.6rem !important;
-        }
-    }
-    
-    @media (min-width: 481px) and (max-width: 768px) {
-        .hero-title {
-            font-size: 2.5rem !important;
-        }
-        .featured-grid {
-            gap: 1rem;
-        }
-    }
-    
-    @media (min-width: 769px) and (max-width: 1024px) {
-        .featured-grid {
-            grid-template-columns: repeat(3, 1fr);
-        }
-    }
-    
-    @media (min-width: 1025px) {
-        .featured-grid {
-            grid-template-columns: repeat(4, 1fr);
-        }
-    }
-    
-    .btn-explore {
-        padding: 0.75rem 1.5rem;
-        font-size: 0.9rem;
-    }
-    
-    @media (max-width: 480px) {
-        .btn-explore {
-            padding: 0.6rem 1.2rem;
-            font-size: 0.8rem;
-            width: 100%;
-            justify-content: center;
-        }
-        .hero-actions {
-            flex-direction: column;
-            width: 100%;
-        }
-        .hero-actions a {
-            width: 100%;
-            justify-content: center;
-        }
-    }
-</style>
-{% endblock %}
-
 {% block content %}
-<section class="hero-section hero-gradient pt-6 sm:pt-8 pb-10 sm:pb-16 px-3 sm:px-6">
+<section class="bg-gradient-to-br from-[#1e1a2b] to-[#0d0b14] pt-6 sm:pt-8 pb-10 sm:pb-16 px-3 sm:px-6">
     <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
         <div class="space-y-4 sm:space-y-6 order-2 lg:order-1">
             <div class="flex items-center gap-2 sm:gap-3">
-                <span class="hero-badge badge-gold text-[10px] sm:text-xs font-bold px-3 sm:px-4 py-1 sm:py-1.5 rounded-full uppercase tracking-widest">Spring '26</span>
+                <span class="bg-[#d4a94b]/10 border border-[#d4a94b]/30 text-[#d4a94b] text-[10px] sm:text-xs font-bold px-3 sm:px-4 py-1 sm:py-1.5 rounded-full uppercase tracking-widest">Spring '26</span>
             </div>
-            <h1 class="hero-title text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold leading-[1.1]">
+            <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold leading-[1.1]">
                 <span class="text-white">The </span><span class="text-[#d4a94b] glow-text">Black Messiah</span><span class="text-white"> edit</span>
             </h1>
-            <p class="hero-subtitle text-white/60 text-base sm:text-lg max-w-md">Where bold silhouettes meet sacred craftsmanship. Every piece tells a story of rebellion, grace, and identity.</p>
-            <div class="hero-actions flex flex-col sm:flex-row gap-3 sm:gap-4 pt-1 sm:pt-2">
-                <a href="{{ url_for('store') }}" class="btn-explore btn-primary px-6 sm:px-8 py-3 sm:py-3.5 rounded-full shadow-lg flex items-center gap-2 text-center justify-center">
+            <p class="text-white/60 text-base sm:text-lg max-w-md">Where bold silhouettes meet sacred craftsmanship. Every piece tells a story of rebellion, grace, and identity.</p>
+            <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-1 sm:pt-2">
+                <a href="{{ url_for('store') }}" class="btn-primary px-6 sm:px-8 py-3 sm:py-3.5 rounded-full shadow-lg flex items-center justify-center gap-2 text-sm sm:text-base">
                     Explore <i class="fas fa-arrow-right text-xs sm:text-sm"></i>
                 </a>
             </div>
         </div>
         <div class="order-1 lg:order-2 flex justify-center">
             <img src="https://images.unsplash.com/photo-1594385208974-2e75f8d7bb48?w=600&q=80" 
-                 class="hero-image rounded-2xl sm:rounded-3xl border border-white/10 shadow-2xl max-w-sm sm:max-w-md w-full object-cover aspect-square">
+                 class="rounded-2xl sm:rounded-3xl border border-white/10 shadow-2xl max-w-sm sm:max-w-md w-full object-cover aspect-square">
         </div>
     </div>
 </section>
 
 <section class="py-8 sm:py-12 px-3 sm:px-4 max-w-7xl mx-auto">
     <h2 class="text-2xl sm:text-3xl font-bold text-white mb-6 sm:mb-8">Featured Drops</h2>
-    <div class="featured-grid">
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-5">
         {% for product in products %}
-            <div class="product-card bg-[#14101e] rounded-xl sm:rounded-2xl overflow-hidden border border-white/5 card-hover cursor-pointer" 
+            <div class="bg-[#14101e] rounded-xl sm:rounded-2xl overflow-hidden border border-white/5 card-hover cursor-pointer" 
                  onclick="window.location.href='{{ url_for('product_detail', product_id=product.id) }}'">
-                <div class="product-image relative aspect-square overflow-hidden bg-[#1f1a2c]">
+                <div class="relative aspect-square overflow-hidden bg-[#1f1a2c]">
                     {% if product.image_url %}
                         <img src="{{ product.image_url }}" class="w-full h-full object-cover hover:scale-105 transition duration-500">
                     {% else %}
@@ -136,14 +41,14 @@
                         </div>
                     {% endif %}
                     {% if product.badge %}
-                        <span class="absolute top-2 sm:top-3 left-2 sm:left-3 bg-[#d4a94b] text-black text-[8px] sm:text-[10px] font-bold px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full">{{ product.badge }}</span>
+                        <span class="absolute top-2 sm:top-3 left-2 sm:left-3 bg-[#d4a94b] text-black text-[8px] sm:text-[10px] font-bold px-1.5 sm:px-2 py-0.5 rounded-full">{{ product.badge }}</span>
                     {% endif %}
                 </div>
                 <div class="p-3 sm:p-4">
-                    <span class="product-category text-[10px] sm:text-xs text-white/30 uppercase tracking-wider">{{ product.category }}</span>
-                    <h3 class="product-title text-white font-semibold mt-0.5 sm:mt-1 truncate text-sm sm:text-base">{{ product.name }}</h3>
+                    <span class="text-[10px] sm:text-xs text-white/30 uppercase tracking-wider">{{ product.category }}</span>
+                    <h3 class="text-white font-semibold mt-0.5 sm:mt-1 truncate text-sm sm:text-base">{{ product.name }}</h3>
                     <div class="flex items-center justify-between mt-1.5 sm:mt-2">
-                        <span class="product-price text-[#d4a94b] font-bold text-sm sm:text-base">{{ format_currency(product.price) }}</span>
+                        <span class="text-[#d4a94b] font-bold text-sm sm:text-base">{{ format_currency(product.price) }}</span>
                         <form action="{{ url_for('add_to_cart', product_id=product.id) }}" method="POST" class="inline" onclick="event.stopPropagation();">
                             <button type="submit" class="text-white/50 hover:text-[#d4a94b] transition text-sm sm:text-base">
                                 <i class="fas fa-cart-plus"></i>

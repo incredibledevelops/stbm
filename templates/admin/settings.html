@@ -2,145 +2,34 @@
 
 {% block admin_title %}Settings{% endblock %}
 
-{% block extra_css %}
-<style>
-    .status-dot {
-        width: 10px;
-        height: 10px;
-        border-radius: 50%;
-        display: inline-block;
-        margin-right: 0.5rem;
-        transition: all 0.3s ease;
-    }
-    .status-dot.healthy { background: #10b981; }
-    .status-dot.error { background: #ef4444; }
-    .status-dot.unconfigured { background: #f59e0b; }
-    .status-dot.checking { background: #3b82f6; animation: pulse 1s infinite; }
-    
-    @keyframes pulse {
-        0%, 100% { opacity: 1; }
-        50% { opacity: 0.5; }
-    }
-    
-    .webhook-card {
-        transition: all 0.3s ease;
-    }
-    .webhook-card:hover {
-        border-color: rgba(212, 169, 75, 0.3);
-    }
-    
-    .auto-save-indicator {
-        position: fixed;
-        top: 1rem;
-        right: 1rem;
-        padding: 0.5rem 1rem;
-        border-radius: 0.5rem;
-        background: #10b981;
-        color: white;
-        font-size: 0.875rem;
-        font-weight: 600;
-        opacity: 0;
-        transform: translateY(-20px);
-        transition: all 0.3s ease;
-        z-index: 1000;
-    }
-    .auto-save-indicator.show {
-        opacity: 1;
-        transform: translateY(0);
-    }
-    
-    @media (max-width: 480px) {
-        .settings-title {
-            font-size: 1.5rem !important;
-        }
-        .settings-subtitle {
-            font-size: 0.8rem !important;
-        }
-        .settings-card {
-            padding: 1rem !important;
-            border-radius: 0.75rem !important;
-        }
-        .settings-card-title {
-            font-size: 1rem !important;
-        }
-        .settings-label {
-            font-size: 0.6rem !important;
-        }
-        .settings-input {
-            font-size: 0.8rem !important;
-            padding: 0.5rem 0.75rem !important;
-        }
-        .webhook-card {
-            padding: 0.75rem !important;
-        }
-        .webhook-title {
-            font-size: 0.8rem !important;
-        }
-        .webhook-status-text {
-            font-size: 0.7rem !important;
-        }
-        .webhook-details {
-            font-size: 0.6rem !important;
-        }
-        .save-btn {
-            font-size: 0.85rem !important;
-            padding: 0.6rem 1.5rem !important;
-            width: 100%;
-        }
-        .settings-grid {
-            grid-template-columns: 1fr !important;
-            gap: 0.75rem !important;
-        }
-    }
-    
-    @media (max-width: 768px) {
-        .settings-grid {
-            grid-template-columns: 1fr !important;
-        }
-        .webhook-grid {
-            grid-template-columns: 1fr !important;
-        }
-    }
-    
-    @media (min-width: 769px) {
-        .settings-grid {
-            grid-template-columns: 1fr 1fr;
-        }
-        .webhook-grid {
-            grid-template-columns: 1fr 1fr;
-        }
-    }
-</style>
-{% endblock %}
-
 {% block admin_content %}
-<div class="settings-container max-w-3xl mx-auto px-3 sm:px-4">
+<div class="max-w-3xl mx-auto">
     <div class="mb-6 sm:mb-8">
-        <h1 class="settings-title text-2xl sm:text-3xl font-bold text-white mb-1">Store Settings & Integrations</h1>
-        <p class="settings-subtitle text-white/50 text-xs sm:text-sm">Configure page info, payment gateway, and email credentials.</p>
+        <h1 class="text-2xl sm:text-3xl font-bold text-white mb-1">Store Settings & Integrations</h1>
+        <p class="text-white/50 text-xs sm:text-sm">Configure page info, payment gateway, and email credentials.</p>
     </div>
 
     <form method="POST" class="space-y-6 sm:space-y-8">
         {{ form.hidden_tag() }}
         
         <!-- Store Info -->
-        <div class="settings-card bg-[#1a1625] border border-white/5 p-4 sm:p-6 rounded-xl sm:rounded-2xl space-y-3 sm:space-y-4">
-            <h3 class="settings-card-title text-base sm:text-lg font-bold text-[#d4a94b]">Page & Store Information</h3>
+        <div class="bg-[#1a1625] border border-white/5 p-4 sm:p-6 rounded-xl sm:rounded-2xl space-y-3 sm:space-y-4">
+            <h3 class="text-base sm:text-lg font-bold text-[#d4a94b]">Page & Store Information</h3>
             <div class="space-y-3 sm:space-y-4">
                 <div>
-                    {{ form.store_name.label(class="settings-label block text-[10px] sm:text-xs text-white/50 uppercase mb-1 sm:mb-2 font-medium") }}
-                    {{ form.store_name(class="settings-input input-custom text-sm sm:text-base") }}
+                    {{ form.store_name.label(class="block text-[10px] sm:text-xs text-white/50 uppercase mb-1 sm:mb-2 font-medium") }}
+                    {{ form.store_name(class="w-full bg-[#1a1625] border border-white/10 text-white rounded-lg px-3 sm:px-4 py-2 sm:py-3 outline-none focus:border-[#d4a94b] focus:shadow-[0_0_0_3px_rgba(212,169,75,0.2)] text-sm sm:text-base") }}
                 </div>
                 <div>
-                    {{ form.support_email.label(class="settings-label block text-[10px] sm:text-xs text-white/50 uppercase mb-1 sm:mb-2 font-medium") }}
-                    {{ form.support_email(class="settings-input input-custom text-sm sm:text-base") }}
+                    {{ form.support_email.label(class="block text-[10px] sm:text-xs text-white/50 uppercase mb-1 sm:mb-2 font-medium") }}
+                    {{ form.support_email(class="w-full bg-[#1a1625] border border-white/10 text-white rounded-lg px-3 sm:px-4 py-2 sm:py-3 outline-none focus:border-[#d4a94b] focus:shadow-[0_0_0_3px_rgba(212,169,75,0.2)] text-sm sm:text-base") }}
                     {% for error in form.support_email.errors %}
                         <span class="text-red-400 text-xs sm:text-sm">{{ error }}</span>
                     {% endfor %}
                 </div>
                 <div>
-                    {{ form.free_shipping_threshold.label(class="settings-label block text-[10px] sm:text-xs text-white/50 uppercase mb-1 sm:mb-2 font-medium") }}
-                    {{ form.free_shipping_threshold(class="settings-input input-custom text-sm sm:text-base", type="number", step="0.01") }}
+                    {{ form.free_shipping_threshold.label(class="block text-[10px] sm:text-xs text-white/50 uppercase mb-1 sm:mb-2 font-medium") }}
+                    {{ form.free_shipping_threshold(class="w-full bg-[#1a1625] border border-white/10 text-white rounded-lg px-3 sm:px-4 py-2 sm:py-3 outline-none focus:border-[#d4a94b] focus:shadow-[0_0_0_3px_rgba(212,169,75,0.2)] text-sm sm:text-base", type="number", step="0.01") }}
                     {% for error in form.free_shipping_threshold.errors %}
                         <span class="text-red-400 text-xs sm:text-sm">{{ error }}</span>
                     {% endfor %}
@@ -149,12 +38,12 @@
         </div>
         
         <!-- Currency & Regional Parameters -->
-        <div class="settings-card bg-[#1a1625] border border-white/5 p-4 sm:p-6 rounded-xl sm:rounded-2xl space-y-3 sm:space-y-4">
-            <h3 class="settings-card-title text-base sm:text-lg font-bold text-[#d4a94b]">Currency & Regional Settings</h3>
-            <div class="settings-grid grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+        <div class="bg-[#1a1625] border border-white/5 p-4 sm:p-6 rounded-xl sm:rounded-2xl space-y-3 sm:space-y-4">
+            <h3 class="text-base sm:text-lg font-bold text-[#d4a94b]">Currency & Regional Settings</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <div>
-                    <label class="settings-label block text-[10px] sm:text-xs text-white/50 uppercase mb-1 sm:mb-2 font-medium">Currency Symbol</label>
-                    <select id="currencySymbol" class="settings-input input-custom text-sm sm:text-base" onchange="updateConfig('currency_symbol', this.value)">
+                    <label class="block text-[10px] sm:text-xs text-white/50 uppercase mb-1 sm:mb-2 font-medium">Currency Symbol</label>
+                    <select id="currencySymbol" class="w-full bg-[#1a1625] border border-white/10 text-white rounded-lg px-3 sm:px-4 py-2 sm:py-3 outline-none focus:border-[#d4a94b] focus:shadow-[0_0_0_3px_rgba(212,169,75,0.2)] text-sm sm:text-base" onchange="updateConfig('currency_symbol', this.value)">
                         <option value="GH₵" {% if get_setting('currency_symbol') == 'GH₵' %}selected{% endif %}>GH₵ (Ghana Cedis)</option>
                         <option value="$" {% if get_setting('currency_symbol') == '$' %}selected{% endif %}>$ (US Dollar)</option>
                         <option value="€" {% if get_setting('currency_symbol') == '€' %}selected{% endif %}>€ (Euro)</option>
@@ -163,21 +52,21 @@
                     </select>
                 </div>
                 <div>
-                    <label class="settings-label block text-[10px] sm:text-xs text-white/50 uppercase mb-1 sm:mb-2 font-medium">Tax Rate (%)</label>
-                    <input type="number" id="taxRate" class="settings-input input-custom text-sm sm:text-base" step="0.01" min="0" max="100"
+                    <label class="block text-[10px] sm:text-xs text-white/50 uppercase mb-1 sm:mb-2 font-medium">Tax Rate (%)</label>
+                    <input type="number" id="taxRate" class="w-full bg-[#1a1625] border border-white/10 text-white rounded-lg px-3 sm:px-4 py-2 sm:py-3 outline-none focus:border-[#d4a94b] focus:shadow-[0_0_0_3px_rgba(212,169,75,0.2)] text-sm sm:text-base" step="0.01" min="0" max="100"
                            value="{{ get_setting('tax_rate') or '0' }}"
                            onchange="updateConfig('tax_rate', this.value)">
                 </div>
                 <div>
-                    <label class="settings-label block text-[10px] sm:text-xs text-white/50 uppercase mb-1 sm:mb-2 font-medium">Tax Calculation</label>
-                    <select id="taxCalculation" class="settings-input input-custom text-sm sm:text-base" onchange="updateConfig('tax_calculation', this.value)">
+                    <label class="block text-[10px] sm:text-xs text-white/50 uppercase mb-1 sm:mb-2 font-medium">Tax Calculation</label>
+                    <select id="taxCalculation" class="w-full bg-[#1a1625] border border-white/10 text-white rounded-lg px-3 sm:px-4 py-2 sm:py-3 outline-none focus:border-[#d4a94b] focus:shadow-[0_0_0_3px_rgba(212,169,75,0.2)] text-sm sm:text-base" onchange="updateConfig('tax_calculation', this.value)">
                         <option value="exclusive" {% if get_setting('tax_calculation') == 'exclusive' %}selected{% endif %}>Exclusive (Added at checkout)</option>
                         <option value="inclusive" {% if get_setting('tax_calculation') == 'inclusive' %}selected{% endif %}>Inclusive (Included in price)</option>
                     </select>
                 </div>
                 <div>
-                    <label class="settings-label block text-[10px] sm:text-xs text-white/50 uppercase mb-1 sm:mb-2 font-medium">Decimal Places</label>
-                    <select id="decimalPlaces" class="settings-input input-custom text-sm sm:text-base" onchange="updateConfig('decimal_places', this.value)">
+                    <label class="block text-[10px] sm:text-xs text-white/50 uppercase mb-1 sm:mb-2 font-medium">Decimal Places</label>
+                    <select id="decimalPlaces" class="w-full bg-[#1a1625] border border-white/10 text-white rounded-lg px-3 sm:px-4 py-2 sm:py-3 outline-none focus:border-[#d4a94b] focus:shadow-[0_0_0_3px_rgba(212,169,75,0.2)] text-sm sm:text-base" onchange="updateConfig('decimal_places', this.value)">
                         <option value="0" {% if get_setting('decimal_places') == '0' %}selected{% endif %}>0 (Whole numbers)</option>
                         <option value="2" {% if get_setting('decimal_places') != '0' %}selected{% endif %}>2 (Default)</option>
                     </select>
@@ -186,66 +75,66 @@
         </div>
         
         <!-- Integrations -->
-        <div class="settings-card bg-[#1a1625] border border-white/5 p-4 sm:p-6 rounded-xl sm:rounded-2xl space-y-3 sm:space-y-4">
-            <h3 class="settings-card-title text-base sm:text-lg font-bold text-[#d4a94b]">Payment & Email Integrations</h3>
+        <div class="bg-[#1a1625] border border-white/5 p-4 sm:p-6 rounded-xl sm:rounded-2xl space-y-3 sm:space-y-4">
+            <h3 class="text-base sm:text-lg font-bold text-[#d4a94b]">Payment & Email Integrations</h3>
             <div class="space-y-3 sm:space-y-4">
                 <div>
-                    {{ form.paystack_public_key.label(class="settings-label block text-[10px] sm:text-xs text-white/50 uppercase mb-1 sm:mb-2 font-medium") }}
-                    {{ form.paystack_public_key(class="settings-input input-custom font-mono text-xs sm:text-sm", placeholder="pk_live_...") }}
+                    {{ form.paystack_public_key.label(class="block text-[10px] sm:text-xs text-white/50 uppercase mb-1 sm:mb-2 font-medium") }}
+                    {{ form.paystack_public_key(class="w-full bg-[#1a1625] border border-white/10 text-white rounded-lg px-3 sm:px-4 py-2 sm:py-3 outline-none focus:border-[#d4a94b] focus:shadow-[0_0_0_3px_rgba(212,169,75,0.2)] font-mono text-xs sm:text-sm", placeholder="pk_live_...") }}
                 </div>
                 <div>
-                    {{ form.paystack_secret_key.label(class="settings-label block text-[10px] sm:text-xs text-white/50 uppercase mb-1 sm:mb-2 font-medium") }}
-                    {{ form.paystack_secret_key(class="settings-input input-custom font-mono text-xs sm:text-sm", type="password", placeholder="sk_live_...") }}
+                    {{ form.paystack_secret_key.label(class="block text-[10px] sm:text-xs text-white/50 uppercase mb-1 sm:mb-2 font-medium") }}
+                    {{ form.paystack_secret_key(class="w-full bg-[#1a1625] border border-white/10 text-white rounded-lg px-3 sm:px-4 py-2 sm:py-3 outline-none focus:border-[#d4a94b] focus:shadow-[0_0_0_3px_rgba(212,169,75,0.2)] font-mono text-xs sm:text-sm", type="password", placeholder="sk_live_...") }}
                 </div>
                 <div>
-                    {{ form.email_app_password.label(class="settings-label block text-[10px] sm:text-xs text-white/50 uppercase mb-1 sm:mb-2 font-medium") }}
-                    {{ form.email_app_password(class="settings-input input-custom font-mono text-xs sm:text-sm", type="password", placeholder="Email app password") }}
+                    {{ form.email_app_password.label(class="block text-[10px] sm:text-xs text-white/50 uppercase mb-1 sm:mb-2 font-medium") }}
+                    {{ form.email_app_password(class="w-full bg-[#1a1625] border border-white/10 text-white rounded-lg px-3 sm:px-4 py-2 sm:py-3 outline-none focus:border-[#d4a94b] focus:shadow-[0_0_0_3px_rgba(212,169,75,0.2)] font-mono text-xs sm:text-sm", type="password", placeholder="Email app password") }}
                     <p class="text-[10px] sm:text-[11px] text-white/40 mt-1">Used for authenticating order notification emails sent via custom SMTP configuration.</p>
                 </div>
             </div>
         </div>
         
         <!-- Webhook Health Monitors -->
-        <div class="settings-card bg-[#1a1625] border border-white/5 p-4 sm:p-6 rounded-xl sm:rounded-2xl space-y-3 sm:space-y-4">
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 sm:gap-0">
-                <h3 class="settings-card-title text-base sm:text-lg font-bold text-[#d4a94b]">Service Health Monitor</h3>
+        <div class="bg-[#1a1625] border border-white/5 p-4 sm:p-6 rounded-xl sm:rounded-2xl space-y-3 sm:space-y-4">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+                <h3 class="text-base sm:text-lg font-bold text-[#d4a94b]">Service Health Monitor</h3>
                 <button type="button" onclick="checkServiceHealth()" class="text-xs sm:text-sm text-[#d4a94b] hover:underline">
                     <i class="fas fa-sync-alt mr-1"></i> Refresh Status
                 </button>
             </div>
             
-            <div class="webhook-grid grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <!-- Paystack Webhook Status -->
-                <div class="webhook-card bg-[#0f0c17] p-3 sm:p-4 rounded-xl border border-white/5">
+                <div class="bg-[#0f0c17] p-3 sm:p-4 rounded-xl border border-white/5 hover:border-[#d4a94b]/30 transition">
                     <div class="flex items-center justify-between">
                         <div>
-                            <span class="webhook-title text-xs sm:text-sm font-medium text-white">Paystack Webhook</span>
-                            <div class="flex items-center mt-0.5 sm:mt-1">
-                                <span id="paystack-status-dot" class="status-dot checking"></span>
-                                <span id="paystack-status-text" class="webhook-status-text text-xs sm:text-sm text-white/50">Checking...</span>
+                            <span class="text-xs sm:text-sm font-medium text-white">Paystack Webhook</span>
+                            <div class="flex items-center mt-0.5">
+                                <span id="paystack-status-dot" class="w-2 h-2 rounded-full inline-block mr-2 bg-blue-400 animate-pulse"></span>
+                                <span id="paystack-status-text" class="text-xs sm:text-sm text-white/50">Checking...</span>
                             </div>
                         </div>
                         <i class="fas fa-credit-card text-xl sm:text-2xl text-white/20"></i>
                     </div>
-                    <div id="paystack-details" class="webhook-details mt-1.5 sm:mt-2 text-[10px] sm:text-xs text-white/30">
+                    <div id="paystack-details" class="mt-1.5 text-[10px] sm:text-xs text-white/30">
                         <p>Endpoint: /webhook/paystack</p>
                         <p id="paystack-ping-time">Last ping: Checking...</p>
                     </div>
                 </div>
                 
                 <!-- SMTP Status -->
-                <div class="webhook-card bg-[#0f0c17] p-3 sm:p-4 rounded-xl border border-white/5">
+                <div class="bg-[#0f0c17] p-3 sm:p-4 rounded-xl border border-white/5 hover:border-[#d4a94b]/30 transition">
                     <div class="flex items-center justify-between">
                         <div>
-                            <span class="webhook-title text-xs sm:text-sm font-medium text-white">SMTP Server</span>
-                            <div class="flex items-center mt-0.5 sm:mt-1">
-                                <span id="smtp-status-dot" class="status-dot checking"></span>
-                                <span id="smtp-status-text" class="webhook-status-text text-xs sm:text-sm text-white/50">Checking...</span>
+                            <span class="text-xs sm:text-sm font-medium text-white">SMTP Server</span>
+                            <div class="flex items-center mt-0.5">
+                                <span id="smtp-status-dot" class="w-2 h-2 rounded-full inline-block mr-2 bg-blue-400 animate-pulse"></span>
+                                <span id="smtp-status-text" class="text-xs sm:text-sm text-white/50">Checking...</span>
                             </div>
                         </div>
                         <i class="fas fa-envelope text-xl sm:text-2xl text-white/20"></i>
                     </div>
-                    <div id="smtp-details" class="webhook-details mt-1.5 sm:mt-2 text-[10px] sm:text-xs text-white/30">
+                    <div id="smtp-details" class="mt-1.5 text-[10px] sm:text-xs text-white/30">
                         <p id="smtp-server">Server: Checking...</p>
                         <p id="smtp-last-test">Last test: Checking...</p>
                     </div>
@@ -253,8 +142,8 @@
             </div>
         </div>
         
-        <div class="flex flex-col sm:flex-row gap-3 sm:gap-4">
-            <button type="submit" class="save-btn btn-primary px-6 sm:px-8 py-2.5 sm:py-3 rounded-xl font-semibold text-sm sm:text-base w-full sm:w-auto">
+        <div class="flex flex-col sm:flex-row gap-3">
+            <button type="submit" class="btn-primary px-6 sm:px-8 py-2.5 sm:py-3 rounded-xl font-semibold text-sm sm:text-base w-full sm:w-auto">
                 <i class="fas fa-save mr-2"></i> Save All Changes
             </button>
         </div>
@@ -262,12 +151,11 @@
 </div>
 
 <!-- Auto-save indicator -->
-<div id="autoSaveIndicator" class="auto-save-indicator">
+<div id="autoSaveIndicator" class="fixed top-4 right-4 px-4 py-2 rounded-lg bg-green-500 text-white text-sm font-semibold opacity-0 translate-y-[-20px] transition-all duration-300 z-50">
     <i class="fas fa-check-circle mr-2"></i> Settings saved
 </div>
 
 <script>
-    // Check service health on page load
     document.addEventListener('DOMContentLoaded', function() {
         checkServiceHealth();
     });
@@ -278,16 +166,9 @@
         
         fetch('/admin/settings/webhook-status', {
             method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            }
+            headers: { 'Content-Type': 'application/json' }
         })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
+        .then(response => response.json())
         .then(data => {
             if (data.paystack) {
                 setStatus('paystack', data.paystack.status, 
@@ -319,16 +200,11 @@
         const detailsDiv = document.getElementById(`${service}-details`);
         
         if (dot) {
-            dot.className = `status-dot ${status}`;
+            dot.className = `w-2 h-2 rounded-full inline-block mr-2 ${status === 'healthy' ? 'bg-green-400' : status === 'error' ? 'bg-red-400' : status === 'unconfigured' ? 'bg-yellow-400' : 'bg-blue-400 animate-pulse'}`;
         }
         if (statusText) {
             statusText.textContent = text;
-            statusText.className = `text-xs sm:text-sm ${
-                status === 'healthy' ? 'text-green-400' : 
-                status === 'error' ? 'text-red-400' : 
-                status === 'unconfigured' ? 'text-yellow-400' : 
-                'text-white/50'
-            }`;
+            statusText.className = `text-xs sm:text-sm ${status === 'healthy' ? 'text-green-400' : status === 'error' ? 'text-red-400' : status === 'unconfigured' ? 'text-yellow-400' : 'text-white/50'}`;
         }
         
         if (detailsDiv && details) {
@@ -348,17 +224,10 @@
         
         fetch('/admin/settings/update-config', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
         })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
+        .then(response => response.json())
         .then(data => {
             if (data.success) {
                 showAutoSaveIndicator('Settings saved successfully!');
@@ -366,29 +235,26 @@
                 inputs.forEach(input => {
                     if (input.id === key || input.id === key.replace('_', '')) {
                         input.style.borderColor = '#10b981';
-                        setTimeout(() => {
-                            input.style.borderColor = '';
-                        }, 1500);
+                        setTimeout(() => { input.style.borderColor = ''; }, 1500);
                     }
                 });
             } else {
                 showAutoSaveIndicator('Error: ' + data.message, true);
             }
         })
-        .catch(error => {
-            console.error('Failed to update config:', error);
-            showAutoSaveIndicator('Failed to save settings', true);
-        });
+        .catch(() => showAutoSaveIndicator('Failed to save settings', true));
     }
     
     function showAutoSaveIndicator(message, isError = false) {
         const indicator = document.getElementById('autoSaveIndicator');
         indicator.textContent = message;
-        indicator.style.background = isError ? '#ef4444' : '#10b981';
-        indicator.classList.add('show');
+        indicator.className = `fixed top-4 right-4 px-4 py-2 rounded-lg text-white text-sm font-semibold transition-all duration-300 z-50 ${isError ? 'bg-red-500' : 'bg-green-500'}`;
+        indicator.style.opacity = '1';
+        indicator.style.transform = 'translateY(0)';
         
         setTimeout(() => {
-            indicator.classList.remove('show');
+            indicator.style.opacity = '0';
+            indicator.style.transform = 'translateY(-20px)';
         }, 3000);
     }
     

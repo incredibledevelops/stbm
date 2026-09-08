@@ -2,107 +2,36 @@
 
 {% block title %}Sign In · STBM{% endblock %}
 
-{% block extra_css %}
-<style>
-    .login-container {
-        min-height: calc(100vh - 300px);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 2rem 1rem;
-    }
-    .login-card {
-        max-width: 440px;
-        width: 100%;
-        padding: 2rem 1.5rem;
-        border-radius: 1.5rem;
-    }
-    .login-title {
-        font-size: 1.5rem;
-    }
-    
-    @media (max-width: 480px) {
-        .login-container {
-            padding: 1rem 0.75rem;
-            min-height: calc(100vh - 250px);
-        }
-        .login-card {
-            padding: 1.5rem 1rem;
-            border-radius: 1rem;
-        }
-        .login-title {
-            font-size: 1.25rem;
-        }
-        .login-input {
-            padding: 0.6rem 0.75rem !important;
-            font-size: 0.875rem !important;
-        }
-        .login-label {
-            font-size: 0.75rem !important;
-        }
-        .login-btn {
-            padding: 0.7rem !important;
-            font-size: 0.875rem !important;
-        }
-        .login-footer {
-            font-size: 0.8rem !important;
-        }
-    }
-    
-    @media (min-width: 481px) and (max-width: 768px) {
-        .login-card {
-            padding: 2rem 1.5rem;
-        }
-    }
-    
-    .login-input-custom {
-        background: #1a1625;
-        border: 1px solid rgba(255,255,255,0.1);
-        color: white;
-        width: 100%;
-        padding: 0.75rem 1rem;
-        border-radius: 0.5rem;
-        outline: none;
-        transition: 0.2s;
-        font-size: 1rem;
-    }
-    .login-input-custom:focus {
-        border-color: #d4a94b;
-        box-shadow: 0 0 0 3px rgba(212, 169, 75, 0.2);
-    }
-</style>
-{% endblock %}
-
 {% block content %}
-<div class="login-container">
-    <div class="login-card bg-[#1a1625] border border-white/5 shadow-2xl">
-        <h1 class="login-title font-bold mb-6 text-center text-white">Welcome Back</h1>
+<div class="min-h-[calc(100vh-300px)] flex items-center justify-center px-3 sm:px-4 py-8 sm:py-12">
+    <div class="max-w-md w-full bg-[#1a1625] p-6 sm:p-8 rounded-xl sm:rounded-2xl border border-white/5 shadow-2xl">
+        <h1 class="text-xl sm:text-2xl font-bold mb-6 text-center text-white">Welcome Back</h1>
         
         <form method="POST" class="space-y-4">
             {{ form.hidden_tag() }}
             
             <div>
-                {{ form.email.label(class="login-label block text-xs sm:text-sm font-medium text-white/70 mb-1") }}
-                {{ form.email(class="login-input-custom login-input", placeholder="Email Address") }}
+                {{ form.email.label(class="block text-xs sm:text-sm font-medium text-white/70 mb-1") }}
+                {{ form.email(class="w-full bg-[#1a1625] border border-white/10 text-white rounded-lg px-3 sm:px-4 py-2 sm:py-3 outline-none focus:border-[#d4a94b] focus:shadow-[0_0_0_3px_rgba(212,169,75,0.2)] text-sm sm:text-base", placeholder="Email Address") }}
                 {% for error in form.email.errors %}
                     <span class="text-red-400 text-xs sm:text-sm">{{ error }}</span>
                 {% endfor %}
             </div>
             
             <div>
-                {{ form.password.label(class="login-label block text-xs sm:text-sm font-medium text-white/70 mb-1") }}
-                {{ form.password(class="login-input-custom login-input", placeholder="Password") }}
+                {{ form.password.label(class="block text-xs sm:text-sm font-medium text-white/70 mb-1") }}
+                {{ form.password(class="w-full bg-[#1a1625] border border-white/10 text-white rounded-lg px-3 sm:px-4 py-2 sm:py-3 outline-none focus:border-[#d4a94b] focus:shadow-[0_0_0_3px_rgba(212,169,75,0.2)] text-sm sm:text-base", placeholder="Password") }}
                 {% for error in form.password.errors %}
                     <span class="text-red-400 text-xs sm:text-sm">{{ error }}</span>
                 {% endfor %}
             </div>
             
-            <button type="submit" class="login-btn btn-primary w-full py-3 rounded-lg mt-2 font-semibold text-sm sm:text-base">
+            <button type="submit" class="btn-primary w-full py-2.5 sm:py-3 rounded-lg mt-2 font-semibold text-sm sm:text-base">
                 Sign In
             </button>
         </form>
         
-        <p class="login-footer text-center text-white/50 text-xs sm:text-sm mt-6">
+        <p class="text-center text-white/50 text-xs sm:text-sm mt-6">
             New here? <a href="{{ url_for('signup') }}" class="text-[#d4a94b] hover:underline">Create an account</a>
         </p>
     </div>
