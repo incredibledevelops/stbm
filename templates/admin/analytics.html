@@ -1,0 +1,215 @@
+{% extends "admin/base_admin.html" %}
+
+{% block admin_title %}Analytics{% endblock %}
+
+{% block extra_css %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+    .stat-card {
+        transition: all 0.3s ease;
+    }
+    .stat-card:hover {
+        transform: translateY(-4px);
+        border-color: rgba(212, 169, 75, 0.3);
+    }
+</style>
+{% endblock %}
+
+{% block admin_content %}
+<div class="mb-8">
+    <h1 class="text-3xl font-bold text-white mb-1">Analytics Dashboard</h1>
+    <p class="text-white/50 text-sm">Track page visits and user engagement.</p>
+</div>
+
+<!-- Stats Cards -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <div class="stat-card bg-[#1a1625] border border-white/5 p-6 rounded-2xl">
+        <div class="flex items-center gap-4">
+            <div class="bg-blue-500/20 p-3 rounded-xl">
+                <i class="fas fa-eye text-blue-400 text-xl"></i>
+            </div>
+            <div>
+                <p class="text-white/50 text-sm font-medium">Total Visits</p>
+                <h3 class="text-2xl font-bold text-white">{{ total_visits }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="stat-card bg-[#1a1625] border border-white/5 p-6 rounded-2xl">
+        <div class="flex items-center gap-4">
+            <div class="bg-purple-500/20 p-3 rounded-xl">
+                <i class="fas fa-users text-purple-400 text-xl"></i>
+            </div>
+            <div>
+                <p class="text-white/50 text-sm font-medium">Unique Visitors</p>
+                <h3 class="text-2xl font-bold text-white">{{ unique_visitors }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="stat-card bg-[#1a1625] border border-white/5 p-6 rounded-2xl">
+        <div class="flex items-center gap-4">
+            <div class="bg-green-500/20 p-3 rounded-xl">
+                <i class="fas fa-calendar-day text-green-400 text-xl"></i>
+            </div>
+            <div>
+                <p class="text-white/50 text-sm font-medium">Today's Visits</p>
+                <h3 class="text-2xl font-bold text-white">{{ today_visits }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="stat-card bg-[#1a1625] border border-white/5 p-6 rounded-2xl">
+        <div class="flex items-center gap-4">
+            <div class="bg-[#d4a94b]/20 p-3 rounded-xl">
+                <i class="fas fa-clock text-[#d4a94b] text-xl"></i>
+            </div>
+            <div>
+                <p class="text-white/50 text-sm font-medium">Avg. Session</p>
+                <h3 class="text-2xl font-bold text-white">--</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Charts -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+    <!-- Daily Visits Chart -->
+    <div class="bg-[#1a1625] border border-white/5 p-6 rounded-2xl">
+        <h3 class="font-bold text-lg mb-4 text-white">Last 7 Days</h3>
+        <canvas id="dailyChart" height="200"></canvas>
+    </div>
+    
+    <!-- Hourly Visits Chart -->
+    <div class="bg-[#1a1625] border border-white/5 p-6 rounded-2xl">
+        <h3 class="font-bold text-lg mb-4 text-white">Last 24 Hours</h3>
+        <canvas id="hourlyChart" height="200"></canvas>
+    </div>
+</div>
+
+<!-- Top Pages -->
+<div class="bg-[#1a1625] border border-white/5 rounded-2xl overflow-hidden">
+    <div class="p-6 border-b border-white/5">
+        <h3 class="font-bold text-lg text-white">Most Visited Pages</h3>
+    </div>
+    <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+            <thead>
+                <tr class="bg-white/5 text-white/40 text-xs uppercase tracking-wider">
+                    <th class="px-6 py-4 font-medium">Page</th>
+                    <th class="px-6 py-4 font-medium">URL</th>
+                    <th class="px-6 py-4 font-medium text-right">Visits</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-white/5 text-sm">
+                {% for page in top_pages %}
+                    <tr class="hover:bg-white/[0.02] transition">
+                        <td class="px-6 py-4 font-medium text-white">{{ page.name }}</td>
+                        <td class="px-6 py-4 text-white/50 font-mono text-xs">{{ page.url }}</td>
+                        <td class="px-6 py-4 text-right font-bold text-[#d4a94b]">{{ page.visits }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Daily Chart
+    const dailyCtx = document.getElementById('dailyChart').getContext('2d');
+    const dailyData = {{ daily_visits|tojson|safe }};
+    
+    new Chart(dailyCtx, {
+        type: 'line',
+        data: {
+            labels: dailyData.map(d => d.date),
+            datasets: [{
+                label: 'Visits',
+                data: dailyData.map(d => d.count),
+                borderColor: '#d4a94b',
+                backgroundColor: 'rgba(212, 169, 75, 0.1)',
+                fill: true,
+                tension: 0.4
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    labels: {
+                        color: 'rgba(255,255,255,0.5)'
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        color: 'rgba(255,255,255,0.3)',
+                        stepSize: 1
+                    },
+                    grid: {
+                        color: 'rgba(255,255,255,0.05)'
+                    }
+                },
+                x: {
+                    ticks: {
+                        color: 'rgba(255,255,255,0.3)'
+                    },
+                    grid: {
+                        color: 'rgba(255,255,255,0.05)'
+                    }
+                }
+            }
+        }
+    });
+    
+    // Hourly Chart
+    const hourlyCtx = document.getElementById('hourlyChart').getContext('2d');
+    const hourlyData = {{ hourly_visits|tojson|safe }};
+    
+    new Chart(hourlyCtx, {
+        type: 'bar',
+        data: {
+            labels: hourlyData.map(d => d.hour + ':00'),
+            datasets: [{
+                label: 'Visits',
+                data: hourlyData.map(d => d.count),
+                backgroundColor: 'rgba(212, 169, 75, 0.6)',
+                borderColor: '#d4a94b',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    labels: {
+                        color: 'rgba(255,255,255,0.5)'
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        color: 'rgba(255,255,255,0.3)',
+                        stepSize: 1
+                    },
+                    grid: {
+                        color: 'rgba(255,255,255,0.05)'
+                    }
+                },
+                x: {
+                    ticks: {
+                        color: 'rgba(255,255,255,0.3)',
+                        maxTicksLimit: 12
+                    },
+                    grid: {
+                        color: 'rgba(255,255,255,0.05)'
+                    }
+                }
+            }
+        }
+    });
+});
+</script>
+{% endblock %}

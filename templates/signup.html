@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}Sign Up · STBM{% endblock %}
+
+{% block content %}
+<div class="max-w-md mx-auto px-4 py-20">
+    <div class="bg-[#1a1625] p-8 rounded-2xl border border-white/5 shadow-2xl">
+        <h1 class="text-2xl font-bold mb-6 text-center">Join The Movement</h1>
+        
+        <form method="POST" class="space-y-4">
+            {{ form.hidden_tag() }}
+            
+            <div>
+                {{ form.name.label(class="block text-sm font-medium text-white/70 mb-1") }}
+                {{ form.name(class="input-custom", placeholder="Full Name") }}
+                {% for error in form.name.errors %}
+                    <span class="text-red-400 text-sm">{{ error }}</span>
+                {% endfor %}
+            </div>
+            
+            <div>
+                {{ form.email.label(class="block text-sm font-medium text-white/70 mb-1") }}
+                {{ form.email(class="input-custom", placeholder="Email Address") }}
+                {% for error in form.email.errors %}
+                    <span class="text-red-400 text-sm">{{ error }}</span>
+                {% endfor %}
+            </div>
+            
+            <div>
+                {{ form.password.label(class="block text-sm font-medium text-white/70 mb-1") }}
+                {{ form.password(class="input-custom", placeholder="Password (min 6 characters)") }}
+                {% for error in form.password.errors %}
+                    <span class="text-red-400 text-sm">{{ error }}</span>
+                {% endfor %}
+            </div>
+            
+            <button type="submit" class="btn-primary w-full py-3 rounded-lg mt-2 font-semibold">
+                Create Account
+            </button>
+        </form>
+        
+        <p class="text-center text-white/50 text-sm mt-6">
+            Already have an account? <a href="{{ url_for('login') }}" class="text-[#d4a94b] hover:underline">Sign in</a>
+        </p>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Contact · STBM{% endblock %}
+
+{% block content %}
+<div class="max-w-xl mx-auto px-4 py-16">
+    <h1 class="text-3xl font-bold mb-2">Get in Touch</h1>
+    <p class="text-white/50 mb-8">Have a question about an order or want to collaborate? Drop us a line.</p>
+    
+    <form method="POST" class="space-y-4">
+        {{ form.hidden_tag() }}
+        
+        <div>
+            {{ form.name.label(class="block text-sm font-medium text-white/70 mb-1") }}
+            {{ form.name(class="input-custom", placeholder="Your Name") }}
+            {% for error in form.name.errors %}
+                <span class="text-red-400 text-sm">{{ error }}</span>
+            {% endfor %}
+        </div>
+        
+        <div>
+            {{ form.email.label(class="block text-sm font-medium text-white/70 mb-1") }}
+            {{ form.email(class="input-custom", placeholder="Your Email") }}
+            {% for error in form.email.errors %}
+                <span class="text-red-400 text-sm">{{ error }}</span>
+            {% endfor %}
+        </div>
+        
+        <div>
+            {{ form.message.label(class="block text-sm font-medium text-white/70 mb-1") }}
+            {{ form.message(class="input-custom", rows="5", placeholder="Your Message") }}
+            {% for error in form.message.errors %}
+                <span class="text-red-400 text-sm">{{ error }}</span>
+            {% endfor %}
+        </div>
+        
+        <button type="submit" class="btn-primary w-full py-3 rounded-lg mt-2 font-semibold">
+            <i class="fas fa-paper-plane mr-2"></i> Send Message
+        </button>
+    </form>
+</div>
+{% endblock %}

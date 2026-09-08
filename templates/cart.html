@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}Shopping Cart · STBM{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-4 py-12">
+    <h1 class="text-3xl font-bold mb-8">Your Cart</h1>
+    
+    {% if cart_items %}
+        <div class="space-y-4 mb-8">
+            {% for item in cart_items %}
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between bg-[#1a1625] p-4 rounded-xl border border-white/5 gap-4">
+                    <div class="flex items-center gap-4 w-full sm:w-auto">
+                        <div class="w-20 h-20 rounded-lg overflow-hidden bg-[#0f0c17] flex-shrink-0">
+                            {% if item.product.image_url %}
+                                <img src="{{ item.product.image_url }}" class="w-full h-full object-cover">
+                            {% else %}
+                                <div class="w-full h-full flex items-center justify-center text-white/20">
+                                    <i class="fas fa-tshirt text-3xl"></i>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div>
+                            <h3 class="font-bold">{{ item.product.name }}</h3>
+                            <span class="text-white/50 text-sm">{{ format_currency(item.product.price) }} each</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4 w-full sm:w-auto justify-between sm:justify-end">
+                        <form action="{{ url_for('update_cart', item_id=item.id) }}" method="POST" class="flex items-center gap-2">
+                            <input type="number" name="quantity" value="{{ item.quantity }}" min="1" max="{{ item.product.stock }}" 
+                                   class="w-16 bg-[#0f0c17] text-white border border-white/10 rounded px-2 py-1 text-center">
+                            <button type="submit" class="text-[#d4a94b] hover:text-[#b88d3a] transition">
+                                <i class="fas fa-sync-alt text-sm"></i>
+                            </button>
+                        </form>
+                        <span class="font-bold text-[#d4a94b] min-w-[80px] text-right">
+                            {{ format_currency(item.product.price * item.quantity) }}
+                        </span>
+                        <form action="{{ url_for('remove_from_cart', item_id=item.id) }}" method="POST" class="inline">
+                            <button type="submit" class="text-red-400 hover:text-red-300 transition">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        
+        <div class="bg-[#1a1625] p-6 rounded-xl border border-white/5">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div>
+                    <span class="text-lg text-white/70">Subtotal:</span>
+                    <span class="text-3xl font-bold text-[#d4a94b]">{{ format_currency(total) }}</span>
+                </div>
+                <a href="{{ url_for('checkout') }}" class="w-full sm:w-auto btn-primary px-10 py-3 rounded-full text-center">
+                    Proceed to Checkout
+                </a>
+            </div>
+            <div class="mt-4 text-sm text-white/40">
+                <i class="fas fa-truck"></i> Free shipping on orders over GH₵ 1000
+            </div>
+        </div>
+    {% else %}
+        <div class="text-center py-32">
+            <i class="fas fa-shopping-cart text-6xl text-white/10 mb-6"></i>
+            <h2 class="text-2xl text-white/50">Your cart is empty</h2>
+            <a href="{{ url_for('store') }}" class="mt-6 text-[#d4a94b] underline inline-block">Continue Shopping</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}About · STBM{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto px-4 py-20 text-center">
+    <span class="text-[#d4a94b] text-xs tracking-[0.2em] font-semibold uppercase">The manifesto</span>
+    <h1 class="text-4xl md:text-6xl font-bold leading-tight mt-4 mb-8">“Wear your story. <br>Forge your myth.”</h1>
+    <p class="text-lg text-white/60 leading-relaxed mb-6">
+        Born from the heart of Kumasi, STBM bridges the gap between ancestral royalty and contemporary street culture. 
+        We do not just make clothes; we forge armor for the modern soul.
+    </p>
+    <p class="text-lg text-white/60 leading-relaxed">
+        Every silhouette, every stitch, and every fabric is carefully curated to empower the wearer. 
+        Be bold. Be undeniable.
+    </p>
+    
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16">
+        <div class="bg-[#1a1625] p-6 rounded-xl border border-white/5">
+            <i class="fas fa-crown text-3xl text-[#d4a94b] mb-3"></i>
+            <h3 class="font-bold text-white">Premium Quality</h3>
+            <p class="text-white/40 text-sm mt-1">Only the finest materials</p>
+        </div>
+        <div class="bg-[#1a1625] p-6 rounded-xl border border-white/5">
+            <i class="fas fa-hand-sparkles text-3xl text-[#d4a94b] mb-3"></i>
+            <h3 class="font-bold text-white">Handcrafted</h3>
+            <p class="text-white/40 text-sm mt-1">Made with care and precision</p>
+        </div>
+        <div class="bg-[#1a1625] p-6 rounded-xl border border-white/5">
+            <i class="fas fa-flag text-3xl text-[#d4a94b] mb-3"></i>
+            <h3 class="font-bold text-white">Proudly Ghanaian</h3>
+            <p class="text-white/40 text-sm mt-1">Rooted in heritage</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

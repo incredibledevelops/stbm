@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block title %}Admin · {% block admin_title %}{% endblock %} · STBM{% endblock %}
+
+{% block content %}
+<div class="flex gap-6 max-w-7xl mx-auto px-4 py-8">
+    <!-- Admin Sidebar -->
+    <aside class="w-64 bg-[#1a1625] border border-white/5 rounded-2xl p-4 hidden lg:block h-[calc(100vh-12rem)] sticky top-24 overflow-y-auto">
+        <div class="border-b border-white/5 pb-4 mb-4">
+            <span class="text-xs text-white/30 uppercase tracking-wider font-bold">Admin Panel</span>
+        </div>
+        <nav class="space-y-1.5 text-sm">
+            <a href="{{ url_for('admin_dashboard') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 hover:bg-white/5 transition {% if request.endpoint == 'admin_dashboard' %}bg-[#d4a94b]/20 text-[#d4a94b]{% endif %}">
+                <i class="fas fa-chart-pie w-5 text-center"></i> Dashboard
+            </a>
+            <a href="{{ url_for('admin_products') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 hover:bg-white/5 transition {% if request.endpoint in ['admin_products', 'admin_add_product', 'admin_edit_product'] %}bg-[#d4a94b]/20 text-[#d4a94b]{% endif %}">
+                <i class="fas fa-tshirt w-5 text-center"></i> Products
+            </a>
+            <a href="{{ url_for('admin_orders') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 hover:bg-white/5 transition {% if request.endpoint == 'admin_orders' %}bg-[#d4a94b]/20 text-[#d4a94b]{% endif %}">
+                <i class="fas fa-shopping-cart w-5 text-center"></i> Orders
+            </a>
+            <a href="{{ url_for('admin_users') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 hover:bg-white/5 transition {% if request.endpoint in ['admin_users', 'admin_add_user', 'admin_edit_user_page'] %}bg-[#d4a94b]/20 text-[#d4a94b]{% endif %}">
+                <i class="fas fa-users w-5 text-center"></i> Users
+            </a>
+            <!-- Messages Link -->
+            <a href="{{ url_for('admin_messages') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 hover:bg-white/5 transition {% if request.endpoint in ['admin_messages', 'admin_message_detail'] %}bg-[#d4a94b]/20 text-[#d4a94b]{% endif %}">
+                <i class="fas fa-envelope w-5 text-center"></i> Messages
+                {% set unread_count = get_unread_messages_count() %}
+                {% if unread_count > 0 %}
+                    <span class="ml-auto bg-[#d4a94b] text-black text-[10px] font-bold px-2 py-0.5 rounded-full messages-badge">{{ unread_count }}</span>
+                {% else %}
+                    <span class="ml-auto messages-badge" style="display: none;">0</span>
+                {% endif %}
+            </a>
+            <!-- Analytics Link -->
+            <a href="{{ url_for('admin_analytics') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 hover:bg-white/5 transition {% if request.endpoint == 'admin_analytics' %}bg-[#d4a94b]/20 text-[#d4a94b]{% endif %}">
+                <i class="fas fa-chart-line w-5 text-center"></i> Analytics
+            </a>
+            <a href="{{ url_for('admin_settings') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 hover:bg-white/5 transition {% if request.endpoint == 'admin_settings' %}bg-[#d4a94b]/20 text-[#d4a94b]{% endif %}">
+                <i class="fas fa-cog w-5 text-center"></i> Settings
+            </a>
+        </nav>
+        <div class="border-t border-white/5 pt-4 mt-4">
+            <a href="{{ url_for('index') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-white/40 hover:text-white transition text-sm">
+                <i class="fas fa-arrow-left"></i> Back to Store
+            </a>
+        </div>
+    </aside>
+    
+    <!-- Main Content -->
+    <div class="flex-1">
+        {% block admin_content %}{% endblock %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Auto-refresh unread message count
+function updateUnreadCount() {
+    fetch('/api/unread-messages-count')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            const badges = document.querySelectorAll('.messages-badge');
+            badges.forEach(badge => {
+                if (data.count > 0) {
+                    badge.textContent = data.count;
+                    badge.style.display = 'inline';
+                } else {
+                    badge.style.display = 'none';
+                }
+            });
+        })
+        .catch(error => console.error('Failed to update unread count:', error));
+}
+
+// Update every 30 seconds if user is on admin page
+document.addEventListener('DOMContentLoaded', function() {
+    if (document.querySelector('.messages-badge')) {
+        setInterval(updateUnreadCount, 30000);
+    }
+});
+</script>
+{% endblock %}

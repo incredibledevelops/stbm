@@ -1,0 +1,58 @@
+{% extends "admin/base_admin.html" %}
+
+{% block admin_title %}{{ title }}{% endblock %}
+
+{% block admin_content %}
+<div class="mb-8">
+    <h1 class="text-3xl font-bold text-white mb-1">{{ title }}</h1>
+    <p class="text-white/50 text-sm">{% if mode == 'add' %}Create a new user account{% else %}Edit user details{% endif %}</p>
+</div>
+
+<div class="bg-[#1a1625] border border-white/5 p-6 rounded-2xl max-w-2xl">
+    <form method="POST">
+        <div class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium text-white/70 mb-1">Full Name</label>
+                <input type="text" name="name" class="input-custom" value="{{ user.name if user else '' }}" required>
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium text-white/70 mb-1">Email Address</label>
+                <input type="email" name="email" class="input-custom" value="{{ user.email if user else '' }}" required>
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium text-white/70 mb-1">Password {% if mode == 'edit' %}(Leave blank to keep current){% endif %}</label>
+                <input type="password" name="password" class="input-custom" {% if mode == 'add' %}required{% endif %} minlength="6">
+                {% if mode == 'add' %}<p class="text-xs text-white/30 mt-1">Minimum 6 characters</p>{% endif %}
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-white/70 mb-1">Role</label>
+                    <select name="role" class="input-custom">
+                        <option value="Customer" {% if user and user.role == 'Customer' %}selected{% endif %}>Customer</option>
+                        <option value="Admin" {% if user and user.role == 'Admin' %}selected{% endif %}>Admin</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-white/70 mb-1">Status</label>
+                    <select name="status" class="input-custom">
+                        <option value="Active" {% if user and user.status == 'Active' %}selected{% endif %}>Active</option>
+                        <option value="Inactive" {% if user and user.status == 'Inactive' %}selected{% endif %}>Inactive</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        
+        <div class="flex gap-4 mt-6 pt-6 border-t border-white/5">
+            <button type="submit" class="btn-primary px-8 py-3 rounded-lg">
+                {% if mode == 'add' %}<i class="fas fa-user-plus mr-2"></i>Create User{% else %}<i class="fas fa-save mr-2"></i>Update User{% endif %}
+            </button>
+            <a href="{{ url_for('admin_users') }}" class="bg-white/10 hover:bg-white/20 text-white px-8 py-3 rounded-lg transition text-center">
+                Cancel
+            </a>
+        </div>
+    </form>
+</div>
+{% endblock %}

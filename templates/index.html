@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}STBM · The Black Messiah{% endblock %}
+
+{% block content %}
+<section class="hero-gradient pt-8 pb-16 px-4 sm:px-6">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div class="space-y-6 order-2 lg:order-1">
+            <div class="flex items-center gap-3">
+                <span class="badge-gold text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-widest">Spring '26</span>
+            </div>
+            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-[1.1]">
+                <span class="text-white">The </span><span class="text-[#d4a94b] glow-text">Black Messiah</span><span class="text-white"> edit</span>
+            </h1>
+            <p class="text-white/60 text-lg max-w-md">Where bold silhouettes meet sacred craftsmanship. Every piece tells a story of rebellion, grace, and identity.</p>
+            <div class="flex gap-4 pt-2">
+                <a href="{{ url_for('store') }}" class="btn-primary px-8 py-3.5 rounded-full shadow-lg flex items-center gap-2">Explore <i class="fas fa-arrow-right text-sm"></i></a>
+            </div>
+        </div>
+        <div class="order-1 lg:order-2 flex justify-center">
+            <img src="https://images.unsplash.com/photo-1594385208974-2e75f8d7bb48?w=600&q=80" class="rounded-3xl border border-white/10 shadow-2xl max-w-md w-full object-cover aspect-square">
+        </div>
+    </div>
+</section>
+
+<section class="py-12 px-4 max-w-7xl mx-auto">
+    <h2 class="text-3xl font-bold text-white mb-8">Featured Drops</h2>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-5">
+        {% for product in products %}
+            <div class="bg-[#14101e] rounded-2xl overflow-hidden border border-white/5 card-hover cursor-pointer" onclick="window.location.href='{{ url_for('product_detail', product_id=product.id) }}'">
+                <div class="relative aspect-square overflow-hidden bg-[#1f1a2c]">
+                    {% if product.image_url %}
+                        <img src="{{ product.image_url }}" class="w-full h-full object-cover hover:scale-105 transition duration-500">
+                    {% else %}
+                        <div class="w-full h-full flex items-center justify-center text-white/20">
+                            <i class="fas fa-tshirt text-6xl"></i>
+                        </div>
+                    {% endif %}
+                    {% if product.badge %}
+                        <span class="absolute top-3 left-3 bg-[#d4a94b] text-black text-[10px] font-bold px-2 py-0.5 rounded-full">{{ product.badge }}</span>
+                    {% endif %}
+                </div>
+                <div class="p-4">
+                    <span class="text-xs text-white/30 uppercase tracking-wider">{{ product.category }}</span>
+                    <h3 class="text-white font-semibold mt-1 truncate">{{ product.name }}</h3>
+                    <div class="flex items-center justify-between mt-2">
+                        <span class="text-[#d4a94b] font-bold">{{ format_currency(product.price) }}</span>
+                        <form action="{{ url_for('add_to_cart', product_id=product.id) }}" method="POST" class="inline">
+                            <button type="submit" class="text-white/50 hover:text-[#d4a94b] transition">
+                                <i class="fas fa-cart-plus"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

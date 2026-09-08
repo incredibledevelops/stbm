@@ -1,0 +1,86 @@
+{% extends "admin/base_admin.html" %}
+
+{% block admin_title %}Dashboard{% endblock %}
+
+{% block admin_content %}
+<div class="mb-8 flex justify-between items-end">
+    <div>
+        <h1 class="text-3xl font-bold text-white mb-1">Dashboard</h1>
+        <p class="text-white/50 text-sm">Welcome back. Here's what's happening today.</p>
+    </div>
+    <a href="{{ url_for('admin_backup') }}" class="btn-primary px-5 py-2.5 rounded-lg text-sm">
+        <i class="fas fa-download mr-2"></i>Export Data
+    </a>
+</div>
+
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <div class="bg-[#1a1625] border border-white/5 p-6 rounded-2xl">
+        <div class="flex justify-between items-start mb-4">
+            <div class="bg-[#d4a94b]/20 p-3 rounded-xl"><i class="fas fa-wallet text-[#d4a94b] text-xl"></i></div>
+            <span class="text-green-400 text-xs font-bold flex items-center"><i class="fas fa-arrow-up mr-1"></i> 12%</span>
+        </div>
+        <p class="text-white/50 text-sm font-medium">Total Revenue</p>
+        <h3 class="text-2xl font-bold text-white mt-1">{{ format_currency(total_revenue) }}</h3>
+    </div>
+    <div class="bg-[#1a1625] border border-white/5 p-6 rounded-2xl">
+        <div class="flex justify-between items-start mb-4">
+            <div class="bg-blue-500/20 p-3 rounded-xl"><i class="fas fa-shopping-bag text-blue-400 text-xl"></i></div>
+        </div>
+        <p class="text-white/50 text-sm font-medium">Total Orders</p>
+        <h3 class="text-2xl font-bold text-white mt-1">{{ total_orders }}</h3>
+    </div>
+    <div class="bg-[#1a1625] border border-white/5 p-6 rounded-2xl">
+        <div class="flex justify-between items-start mb-4">
+            <div class="bg-purple-500/20 p-3 rounded-xl"><i class="fas fa-users text-purple-400 text-xl"></i></div>
+        </div>
+        <p class="text-white/50 text-sm font-medium">Total Users</p>
+        <h3 class="text-2xl font-bold text-white mt-1">{{ total_users }}</h3>
+    </div>
+    <div class="bg-[#1a1625] border border-white/5 p-6 rounded-2xl">
+        <div class="flex justify-between items-start mb-4">
+            <div class="bg-red-500/20 p-3 rounded-xl"><i class="fas fa-box-open text-red-400 text-xl"></i></div>
+        </div>
+        <p class="text-white/50 text-sm font-medium">Low Stock Items</p>
+        <h3 class="text-2xl font-bold text-white mt-1">{{ low_stock_products|length }}</h3>
+    </div>
+</div>
+
+<div class="bg-[#1a1625] border border-white/5 rounded-2xl overflow-hidden">
+    <div class="p-6 border-b border-white/5 flex justify-between items-center">
+        <h2 class="text-lg font-bold text-white">Recent Orders</h2>
+        <a href="{{ url_for('admin_orders') }}" class="text-sm text-[#d4a94b] hover:underline">View All</a>
+    </div>
+    <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+            <thead>
+                <tr class="bg-white/5 text-white/40 text-xs uppercase tracking-wider">
+                    <th class="px-6 py-4 font-medium">Order ID</th>
+                    <th class="px-6 py-4 font-medium">Customer</th>
+                    <th class="px-6 py-4 font-medium">Date</th>
+                    <th class="px-6 py-4 font-medium">Status</th>
+                    <th class="px-6 py-4 font-medium text-right">Total</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-white/5 text-sm">
+                {% for order in recent_orders %}
+                    <tr class="hover:bg-white/[0.02] transition">
+                        <td class="px-6 py-4 font-medium text-white">{{ order.order_number }}</td>
+                        <td class="px-6 py-4">{{ order.customer.name }}</td>
+                        <td class="px-6 py-4 text-white/50">{{ order.created_at.strftime('%b %d, %Y') }}</td>
+                        <td class="px-6 py-4">
+                            <span class="px-2.5 py-1 rounded-full text-xs font-semibold border 
+                                {% if order.status == 'Processing' %}border-blue-400/20 text-blue-400 bg-blue-400/10
+                                {% elif order.status == 'Shipped' %}border-purple-400/20 text-purple-400 bg-purple-400/10
+                                {% elif order.status == 'Delivered' %}border-green-400/20 text-green-400 bg-green-400/10
+                                {% else %}border-white/10 text-white/40 bg-white/5{% endif %}">
+                                {{ order.status }}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 text-right font-medium text-[#d4a94b]">{{ format_currency(order.total_amount) }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,337 @@
+{% extends "base.html" %}
+
+{% block title %}STBM · Store{% endblock %}
+
+{% block extra_css %}
+<style>
+    .filter-section {
+        background: #1a1625;
+        border: 1px solid rgba(255,255,255,0.05);
+        border-radius: 1rem;
+        padding: 1.25rem;
+        margin-bottom: 1.5rem;
+    }
+    .filter-label {
+        color: rgba(255,255,255,0.5);
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        font-weight: 600;
+        display: block;
+        margin-bottom: 0.25rem;
+    }
+    .filter-select {
+        background: #0f0c17;
+        border: 1px solid rgba(255,255,255,0.1);
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 0.5rem;
+        outline: none;
+        width: 100%;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+    .filter-select:focus {
+        border-color: #d4a94b;
+        box-shadow: 0 0 0 3px rgba(212, 169, 75, 0.2);
+    }
+    .filter-select option {
+        background: #1a1625;
+        color: white;
+    }
+    .price-range-input {
+        width: 100%;
+        accent-color: #d4a94b;
+        background: #0f0c17;
+        height: 4px;
+        border-radius: 2px;
+        cursor: pointer;
+    }
+    .price-range-input::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: #d4a94b;
+        cursor: pointer;
+        border: 2px solid #0f0c17;
+    }
+    .price-range-input::-moz-range-thumb {
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: #d4a94b;
+        cursor: pointer;
+        border: 2px solid #0f0c17;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 py-12">
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
+        <div>
+            <h1 class="text-4xl font-bold">The Collection</h1>
+            <p class="text-white/50 mt-1" id="product-count">{{ products|length }} products found</p>
+        </div>
+    </div>
+
+    <!-- Enhanced Filter Section -->
+    <div class="filter-section">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <!-- Category Filter -->
+            <div>
+                <label class="filter-label">Category</label>
+                <select id="categoryFilter" class="filter-select" onchange="applyFilters()">
+                    <option value="">All Categories</option>
+                    {% for category in categories %}
+                        <option value="{{ category }}" {% if selected_category == category %}selected{% endif %}>
+                            {{ category }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Sort Dropdown -->
+            <div>
+                <label class="filter-label">Sort By</label>
+                <select id="sortFilter" class="filter-select" onchange="applyFilters()">
+                    <option value="newest">Newest Arrivals</option>
+                    <option value="price_low">Price: Low to High</option>
+                    <option value="price_high">Price: High to Low</option>
+                    <option value="popular">Best Sellers</option>
+                    <option value="name_asc">Name: A to Z</option>
+                </select>
+            </div>
+
+            <!-- Price Range -->
+            <div>
+                <label class="filter-label">Max Price: <span id="priceDisplay">GH₵ 5000</span></label>
+                <input type="range" id="priceFilter" class="price-range-input" 
+                       min="0" max="5000" step="100" value="5000"
+                       oninput="updatePriceDisplay(this.value); applyFilters();">
+            </div>
+
+            <!-- Apply/Reset Button -->
+            <div class="flex items-end">
+                <button onclick="resetFilters()" class="bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg text-sm transition w-full">
+                    <i class="fas fa-undo mr-2"></i>Reset Filters
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Products Grid -->
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6" id="productGrid">
+        {% for product in products %}
+            <div class="product-card bg-[#14101e] rounded-2xl overflow-hidden border border-white/5 card-hover" 
+                 data-price="{{ product.price }}"
+                 data-name="{{ product.name }}"
+                 data-category="{{ product.category }}">
+                <div class="relative aspect-square overflow-hidden bg-[#1f1a2c] cursor-pointer" 
+                     onclick="window.location.href='{{ url_for('product_detail', product_id=product.id) }}'">
+                    {% if product.image_url %}
+                        <img src="{{ product.image_url }}" class="w-full h-full object-cover hover:scale-105 transition duration-500">
+                    {% else %}
+                        <div class="w-full h-full flex items-center justify-center text-white/20">
+                            <i class="fas fa-tshirt text-6xl"></i>
+                        </div>
+                    {% endif %}
+                    {% if product.badge %}
+                        <span class="absolute top-3 left-3 bg-[#d4a94b] text-black text-[10px] font-bold px-2 py-0.5 rounded-full">{{ product.badge }}</span>
+                    {% endif %}
+                    {% if product.stock == 0 %}
+                        <span class="absolute bottom-3 left-3 bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">Out of Stock</span>
+                    {% endif %}
+                    
+                    <!-- Quick View Button -->
+                    <button onclick="event.stopPropagation(); openQuickView({{ product.id }})" 
+                            class="absolute top-3 right-3 bg-[#0f0c17]/80 backdrop-blur-md text-white/70 hover:text-[#d4a94b] w-8 h-8 rounded-full flex items-center justify-center transition hover:scale-110">
+                        <i class="fas fa-eye text-sm"></i>
+                    </button>
+                </div>
+                <div class="p-4">
+                    <span class="text-xs text-white/30 uppercase tracking-wider">{{ product.category }}</span>
+                    <h3 class="text-white font-semibold mt-1 truncate">{{ product.name }}</h3>
+                    <div class="flex items-center justify-between mt-2">
+                        <span class="text-[#d4a94b] font-bold">{{ format_currency(product.price) }}</span>
+                        {% if product.is_in_stock %}
+                            <form action="{{ url_for('add_to_cart', product_id=product.id) }}" method="POST" class="inline" onsubmit="event.stopPropagation();">
+                                <button type="submit" class="text-white/50 hover:text-[#d4a94b] transition">
+                                    <i class="fas fa-cart-plus"></i>
+                                </button>
+                            </form>
+                        {% else %}
+                            <span class="text-white/20 text-sm">Unavailable</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="col-span-full text-center py-12">
+                <i class="fas fa-search text-4xl text-white/20 mb-4"></i>
+                <p class="text-white/50">No products found matching your criteria.</p>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Quick View Modal -->
+<div id="quickViewModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4" style="background: rgba(0,0,0,0.8); backdrop-filter: blur(8px);">
+    <div class="bg-[#1a1625] rounded-2xl border border-white/10 max-w-2xl w-full max-h-[90vh] overflow-y-auto relative">
+        <button onclick="closeQuickView()" class="absolute top-4 right-4 text-white/40 hover:text-white transition z-10">
+            <i class="fas fa-times text-xl"></i>
+        </button>
+        <div id="quickViewContent" class="p-6">
+            <div class="flex items-center justify-center py-8">
+                <i class="fas fa-spinner fa-spin text-2xl text-[#d4a94b]"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Filter Functions
+    function applyFilters() {
+        const category = document.getElementById('categoryFilter').value;
+        const sort = document.getElementById('sortFilter').value;
+        const maxPrice = parseInt(document.getElementById('priceFilter').value);
+        
+        const cards = document.querySelectorAll('.product-card');
+        let visibleCount = 0;
+        
+        // Filter and collect visible cards
+        const visibleCards = [];
+        cards.forEach(card => {
+            const cardCategory = card.dataset.category;
+            const cardPrice = parseInt(card.dataset.price);
+            
+            let show = true;
+            if (category && cardCategory !== category) show = false;
+            if (cardPrice > maxPrice) show = false;
+            
+            if (show) {
+                visibleCards.push(card);
+                visibleCount++;
+            }
+            card.style.display = show ? '' : 'none';
+        });
+        
+        // Sorting
+        if (sort && visibleCards.length > 1) {
+            const grid = document.getElementById('productGrid');
+            const sortedCards = visibleCards.sort((a, b) => {
+                const priceA = parseInt(a.dataset.price);
+                const priceB = parseInt(b.dataset.price);
+                const nameA = a.dataset.name.toLowerCase();
+                const nameB = b.dataset.name.toLowerCase();
+                
+                switch(sort) {
+                    case 'price_low': return priceA - priceB;
+                    case 'price_high': return priceB - priceA;
+                    case 'name_asc': return nameA.localeCompare(nameB);
+                    case 'newest': return 0; // Assuming newest first, you'd need a date field
+                    case 'popular': return 0; // Assuming popular first, you'd need a popularity field
+                    default: return 0;
+                }
+            });
+            
+            // Reorder DOM elements
+            sortedCards.forEach(card => grid.appendChild(card));
+        }
+        
+        // Update count
+        document.getElementById('product-count').textContent = visibleCount + ' products found';
+    }
+    
+    function updatePriceDisplay(value) {
+        document.getElementById('priceDisplay').textContent = 'GH₵ ' + parseInt(value).toLocaleString();
+    }
+    
+    function resetFilters() {
+        document.getElementById('categoryFilter').value = '';
+        document.getElementById('sortFilter').value = 'newest';
+        document.getElementById('priceFilter').value = '5000';
+        document.getElementById('priceDisplay').textContent = 'GH₵ 5,000';
+        applyFilters();
+    }
+    
+    // Quick View Functions
+    function openQuickView(productId) {
+        const modal = document.getElementById('quickViewModal');
+        modal.classList.remove('hidden');
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        
+        // Fetch product details
+        fetch(`/api/product/${productId}`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('quickViewContent').innerHTML = `
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="rounded-xl overflow-hidden bg-[#0f0c17]">
+                            ${data.image_url ? 
+                                `<img src="${data.image_url}" class="w-full h-auto object-cover">` :
+                                `<div class="aspect-square flex items-center justify-center text-white/20">
+                                    <i class="fas fa-tshirt text-6xl"></i>
+                                </div>`
+                            }
+                        </div>
+                        <div class="space-y-4">
+                            <span class="text-[#d4a94b] text-xs uppercase tracking-widest font-bold">${data.category}</span>
+                            <h2 class="text-2xl font-bold">${data.name}</h2>
+                            <p class="text-2xl font-light text-[#d4a94b]">${formatCurrency(data.price)}</p>
+                            ${data.description ? `<p class="text-white/60 text-sm">${data.description}</p>` : ''}
+                            <div class="flex items-center gap-2">
+                                <span class="text-sm text-white/50">Stock:</span>
+                                <span class="text-sm ${data.stock > 0 ? 'text-green-400' : 'text-red-400'}">
+                                    ${data.stock > 0 ? `${data.stock} available` : 'Out of Stock'}
+                                </span>
+                            </div>
+                            ${data.stock > 0 ? `
+                                <form action="/add-to-cart/${data.id}" method="POST" class="mt-4">
+                                    <button type="submit" class="w-full btn-primary py-3 rounded-lg flex justify-center items-center gap-2">
+                                        <i class="fas fa-shopping-bag"></i> Add to Cart
+                                    </button>
+                                </form>
+                            ` : `
+                                <button disabled class="w-full bg-white/10 text-white/40 py-3 rounded-lg cursor-not-allowed">
+                                    Out of Stock
+                                </button>
+                            `}
+                            <a href="/product/${data.id}" class="text-[#d4a94b] text-sm hover:underline inline-block mt-2">
+                                View Full Details →
+                            </a>
+                        </div>
+                    </div>
+                `;
+            })
+            .catch(error => {
+                document.getElementById('quickViewContent').innerHTML = `
+                    <div class="text-center py-8 text-white/50">
+                        <i class="fas fa-exclamation-triangle text-2xl text-yellow-400 mb-2"></i>
+                        <p>Failed to load product details.</p>
+                    </div>
+                `;
+            });
+    }
+    
+    function closeQuickView() {
+        const modal = document.getElementById('quickViewModal');
+        modal.classList.add('hidden');
+        modal.style.display = 'none';
+        document.body.style.overflow = '';
+    }
+    
+    // Close modal on outside click
+    document.getElementById('quickViewModal').addEventListener('click', function(e) {
+        if (e.target === this) closeQuickView();
+    });
+    
+    // Helper function for currency formatting in JS
+    function formatCurrency(amount) {
+        return 'GH₵ ' + Number(amount).toLocaleString(undefined, {minimumFractionDigits: 2});
+    }
+</script>
+{% endblock %}

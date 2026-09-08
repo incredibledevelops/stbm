@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}STBM · The Black Messiah{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Inter', sans-serif; }
+        .hero-gradient { background: radial-gradient(circle at 80% 20%, #1e1a2b 0%, #0d0b14 100%); }
+        .card-hover { transition: all 0.25s ease; }
+        .card-hover:hover { transform: translateY(-6px); box-shadow: 0 25px 40px -12px rgba(0,0,0,0.5); }
+        .glow-text { text-shadow: 0 0 12px rgba(224, 175, 76, 0.3); }
+        .btn-primary { background: #d4a94b; transition: 0.2s; color: black; font-weight: 600; }
+        .btn-primary:hover { background: #b88d3a; box-shadow: 0 0 16px #d4a94b66; }
+        .badge-gold { background: #d4a94b22; border: 1px solid #d4a94b55; color: #d4a94b; }
+        .footer-bg { background: #0b0912; }
+        .nav-link-custom { position: relative; font-weight: 500; letter-spacing: 0.3px; cursor: pointer; }
+        .nav-link-custom::after { content: ''; position: absolute; width: 0; height: 2px; bottom: -4px; left: 0; background: #d4a94b; transition: 0.25s; }
+        .nav-link-custom:hover::after { width: 100%; }
+        .input-custom { background: #1a1625; border: 1px solid rgba(255,255,255,0.1); color: white; width: 100%; padding: 0.75rem 1rem; border-radius: 0.5rem; outline: none; transition: 0.2s; }
+        .input-custom:focus { border-color: #d4a94b; box-shadow: 0 0 0 3px #d4a94b33; }
+        
+        /* Flash messages */
+        .alert { padding: 1rem; border-radius: 0.5rem; margin-bottom: 1rem; }
+        .alert-success { background: #10b98122; border: 1px solid #10b981; color: #34d399; }
+        .alert-danger { background: #ef444422; border: 1px solid #ef4444; color: #f87171; }
+        .alert-warning { background: #f59e0b22; border: 1px solid #f59e0b; color: #fbbf24; }
+        .alert-info { background: #3b82f622; border: 1px solid #3b82f6; color: #60a5fa; }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body class="bg-[#0f0c17] text-[#ece7e1] flex flex-col min-h-screen">
+
+    <!-- Top Bar -->
+    <div class="bg-[#1a1525] text-[#b9b0c9] text-sm py-2 px-4 border-b border-white/5 hidden md:block">
+        <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center">
+            <div class="flex items-center gap-5">
+                <span><i class="fas fa-shipping-fast mr-2 text-[#d4a94b]"></i>Free shipping over GH₵ 1000</span>
+                <span class="hidden lg:inline"><i class="far fa-clock mr-2 text-[#d4a94b]"></i>24/7 support</span>
+            </div>
+            <div class="flex items-center gap-4 cursor-pointer">
+                <a href="#" class="hover:text-[#d4a94b] transition"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="hover:text-[#d4a94b] transition"><i class="fab fa-x-twitter"></i></a>
+                <span class="h-5 w-px bg-white/10"></span>
+                {% if current_user.is_authenticated %}
+                    <a href="{{ url_for('profile') }}" class="hover:text-[#d4a94b] transition">
+                        <i class="far fa-user mr-1"></i>{{ current_user.name }}
+                    </a>
+                    <a href="{{ url_for('logout') }}" class="hover:text-[#d4a94b] transition">
+                        <i class="fas fa-sign-out-alt mr-1"></i>Logout
+                    </a>
+                {% else %}
+                    <a href="{{ url_for('login') }}" class="hover:text-[#d4a94b] transition">
+                        <i class="far fa-user mr-1"></i>Sign in
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="sticky top-0 z-50 bg-[#0f0c17]/90 backdrop-blur-md border-b border-white/5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-20">
+            <div class="flex items-center gap-2 cursor-pointer" onclick="window.location.href='{{ url_for('index') }}'">
+                <span class="text-2xl font-extrabold tracking-tight text-[#d4a94b]">STBM</span>
+            </div>
+
+            <nav class="hidden lg:flex items-center gap-10 text-sm font-medium">
+                <a href="{{ url_for('index') }}" class="nav-link-custom text-white/90 hover:text-white">Home</a>
+                <a href="{{ url_for('store') }}" class="nav-link-custom text-white/70 hover:text-white">Store</a>
+                <a href="{{ url_for('about') }}" class="nav-link-custom text-white/70 hover:text-white">About</a>
+                <a href="{{ url_for('contact') }}" class="nav-link-custom text-white/70 hover:text-white">Contact</a>
+                {% if current_user.is_authenticated and current_user.is_admin() %}
+                    <a href="{{ url_for('admin_dashboard') }}" class="nav-link-custom text-[#d4a94b] hover:text-[#d4a94b]">
+                        <i class="fas fa-crown"></i> Admin
+                    </a>
+                {% endif %}
+            </nav>
+
+            <div class="flex items-center gap-4">
+                <div class="hidden md:flex items-center bg-[#1a1625] rounded-full px-3 py-1 border border-white/10">
+                    <form action="{{ url_for('search') }}" method="GET" class="flex items-center">
+                        <input type="text" name="q" placeholder="Search..." class="bg-transparent text-white text-sm outline-none w-32 focus:w-48 transition-all">
+                        <button type="submit" class="text-white/70 hover:text-[#d4a94b]"><i class="fas fa-search"></i></button>
+                    </form>
+                </div>
+                <a href="{{ url_for('cart') }}" class="text-white/70 hover:text-white transition text-lg relative">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span id="cart-count" class="absolute -top-1 -right-2 bg-[#d4a94b] text-[10px] text-black font-bold rounded-full w-4 h-4 flex items-center justify-center">{{ cart_count() }}</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Flash Messages -->
+    <div class="max-w-7xl mx-auto px-4 pt-4">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+
+    <!-- Main Content -->
+    <main class="flex-grow">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer-bg border-t border-white/5 mt-auto px-4 sm:px-6">
+        <div class="max-w-7xl mx-auto py-12 grid grid-cols-2 md:grid-cols-4 gap-8">
+            <div class="col-span-2 md:col-span-1">
+                <span class="text-2xl font-extrabold text-[#d4a94b]">STBM</span>
+                <p class="text-white/30 text-sm mt-3 max-w-xs">The black messiah. Premium streetwear & tailoring for the fearless.</p>
+            </div>
+            <div>
+                <h5 class="text-white font-semibold text-sm uppercase tracking-wider">Shop</h5>
+                <ul class="mt-4 space-y-2 text-white/40 text-sm">
+                    <li><a href="{{ url_for('store') }}" class="hover:text-white transition">All Products</a></li>
+                    <li><a href="{{ url_for('cart') }}" class="hover:text-white transition">Cart</a></li>
+                </ul>
+            </div>
+            <div>
+                <h5 class="text-white font-semibold text-sm uppercase tracking-wider">Info</h5>
+                <ul class="mt-4 space-y-2 text-white/40 text-sm">
+                    <li><a href="{{ url_for('about') }}" class="hover:text-white transition">About Us</a></li>
+                    <li><a href="{{ url_for('signup') }}" class="hover:text-white transition">Create Account</a></li>
+                </ul>
+            </div>
+            <div>
+                <h5 class="text-white font-semibold text-sm uppercase tracking-wider">Support</h5>
+                <ul class="mt-4 space-y-2 text-white/40 text-sm">
+                    <li><a href="{{ url_for('contact') }}" class="hover:text-white transition">Contact</a></li>
+                    <li><a href="#" class="hover:text-white transition">FAQs</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="border-t border-white/5 py-6 text-center text-white/30 text-sm">
+            <span>© 2026 Safo The Black Messiah. All rights reserved.</span>
+        </div>
+    </footer>
+
+    <!-- Mobile Bottom Nav -->
+    <div class="lg:hidden fixed bottom-0 left-0 w-full bg-[#0f0c17]/90 backdrop-blur-md border-t border-white/10 p-4 flex justify-around text-white/60 text-sm z-50">
+        <a href="{{ url_for('index') }}" class="flex flex-col items-center gap-1 hover:text-[#d4a94b]"><i class="fas fa-home"></i><span>Home</span></a>
+        <a href="{{ url_for('store') }}" class="flex flex-col items-center gap-1 hover:text-[#d4a94b]"><i class="fas fa-th-large"></i><span>Store</span></a>
+        <a href="{{ url_for('cart') }}" class="flex flex-col items-center gap-1 hover:text-[#d4a94b] relative"><i class="fas fa-shopping-bag"></i><span>Cart</span></a>
+        {% if current_user.is_authenticated %}
+            <a href="{{ url_for('profile') }}" class="flex flex-col items-center gap-1 hover:text-[#d4a94b]"><i class="fas fa-user"></i><span>Profile</span></a>
+        {% else %}
+            <a href="{{ url_for('login') }}" class="flex flex-col items-center gap-1 hover:text-[#d4a94b]"><i class="fas fa-user"></i><span>Login</span></a>
+        {% endif %}
+    </div>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

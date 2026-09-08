@@ -1,0 +1,93 @@
+{% extends "admin/base_admin.html" %}
+
+{% block admin_title %}{{ title }}{% endblock %}
+
+{% block admin_content %}
+<div class="mb-8">
+    <h1 class="text-3xl font-bold text-white mb-1">{{ title }}</h1>
+    <p class="text-white/50 text-sm">{% if product %}Edit product details{% else %}Add a new product to the store{% endif %}</p>
+</div>
+
+<div class="bg-[#1a1625] border border-white/5 p-6 rounded-2xl max-w-2xl">
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        
+        <div class="space-y-4">
+            <div>
+                {{ form.name.label(class="block text-sm font-medium text-white/70 mb-1") }}
+                {{ form.name(class="input-custom") }}
+                {% for error in form.name.errors %}
+                    <span class="text-red-400 text-sm">{{ error }}</span>
+                {% endfor %}
+            </div>
+            
+            <div>
+                {{ form.description.label(class="block text-sm font-medium text-white/70 mb-1") }}
+                {{ form.description(class="input-custom", rows="4") }}
+                {% for error in form.description.errors %}
+                    <span class="text-red-400 text-sm">{{ error }}</span>
+                {% endfor %}
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    {{ form.price.label(class="block text-sm font-medium text-white/70 mb-1") }}
+                    {{ form.price(class="input-custom", type="number", step="0.01", min="0") }}
+                    {% for error in form.price.errors %}
+                        <span class="text-red-400 text-sm">{{ error }}</span>
+                    {% endfor %}
+                </div>
+                <div>
+                    {{ form.stock.label(class="block text-sm font-medium text-white/70 mb-1") }}
+                    {{ form.stock(class="input-custom", type="number", min="0") }}
+                    {% for error in form.stock.errors %}
+                        <span class="text-red-400 text-sm">{{ error }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    {{ form.category.label(class="block text-sm font-medium text-white/70 mb-1") }}
+                    {{ form.category(class="input-custom") }}
+                    {% for error in form.category.errors %}
+                        <span class="text-red-400 text-sm">{{ error }}</span>
+                    {% endfor %}
+                </div>
+                <div>
+                    {{ form.status.label(class="block text-sm font-medium text-white/70 mb-1") }}
+                    {{ form.status(class="input-custom") }}
+                    {% for error in form.status.errors %}
+                        <span class="text-red-400 text-sm">{{ error }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <div>
+                {{ form.image_url.label(class="block text-sm font-medium text-white/70 mb-1") }}
+                {{ form.image_url(class="input-custom", placeholder="https://example.com/image.jpg") }}
+                {% for error in form.image_url.errors %}
+                    <span class="text-red-400 text-sm">{{ error }}</span>
+                {% endfor %}
+            </div>
+            
+            <div>
+                {{ form.badge.label(class="block text-sm font-medium text-white/70 mb-1") }}
+                {{ form.badge(class="input-custom", placeholder="New, Best, Limited, etc.") }}
+                {% for error in form.badge.errors %}
+                    <span class="text-red-400 text-sm">{{ error }}</span>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <div class="flex gap-4 mt-6 pt-6 border-t border-white/5">
+            <button type="submit" class="btn-primary px-8 py-3 rounded-lg">
+                {% if product %}Update{% else %}Add{% endif %} Product
+            </button>
+            <a href="{{ url_for('admin_products') }}" class="bg-white/10 hover:bg-white/20 text-white px-8 py-3 rounded-lg transition text-center">
+                Cancel
+            </a>
+        </div>
+    </form>
+</div>
+{% endblock %}

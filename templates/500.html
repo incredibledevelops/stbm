@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}500 - Server Error{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto px-4 py-32 text-center">
+    <div class="text-6xl font-bold text-red-400 mb-6">500</div>
+    <h1 class="text-3xl font-bold mb-4">Internal Server Error</h1>
+    <p class="text-white/50 mb-8">Something went wrong on our end. Please try again later.</p>
+    <a href="{{ url_for('index') }}" class="btn-primary px-8 py-3 rounded-lg inline-block">Go Home</a>
+</div>
+{% endblock %}

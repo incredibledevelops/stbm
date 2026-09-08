@@ -1,0 +1,56 @@
+{% extends "admin/base_admin.html" %}
+
+{% block admin_title %}Orders{% endblock %}
+
+{% block admin_content %}
+<div class="mb-8">
+    <h1 class="text-3xl font-bold text-white mb-1">Orders</h1>
+    <p class="text-white/50 text-sm">Track and manage customer orders.</p>
+</div>
+
+<div class="bg-[#1a1625] border border-white/5 rounded-2xl overflow-hidden shadow-xl">
+    <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+            <thead>
+                <tr class="bg-white/5 text-white/40 text-xs uppercase tracking-wider">
+                    <th class="px-6 py-4 font-medium">Order ID</th>
+                    <th class="px-6 py-4 font-medium">Customer</th>
+                    <th class="px-6 py-4 font-medium">Date</th>
+                    <th class="px-6 py-4 font-medium">Status</th>
+                    <th class="px-6 py-4 font-medium">Total</th>
+                    <th class="px-6 py-4 font-medium text-right">Action</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-white/5 text-sm">
+                {% for order in orders %}
+                    <tr class="hover:bg-white/[0.02] transition">
+                        <td class="px-6 py-4 font-medium text-white font-mono">{{ order.order_number }}</td>
+                        <td class="px-6 py-4">{{ order.customer.name }}</td>
+                        <td class="px-6 py-4 text-white/50">{{ order.created_at.strftime('%b %d, %Y • %I:%M %p') }}</td>
+                        <td class="px-6 py-4">
+                            <span class="px-2.5 py-1 rounded-full text-xs font-semibold border 
+                                {% if order.status == 'Processing' %}border-blue-400/20 text-blue-400 bg-blue-400/10
+                                {% elif order.status == 'Shipped' %}border-purple-400/20 text-purple-400 bg-purple-400/10
+                                {% elif order.status == 'Delivered' %}border-green-400/20 text-green-400 bg-green-400/10
+                                {% else %}border-white/10 text-white/40 bg-white/5{% endif %}">
+                                {{ order.status }}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 font-medium text-[#d4a94b]">{{ format_currency(order.total_amount) }}</td>
+                        <td class="px-6 py-4 text-right">
+                            <form action="{{ url_for('admin_update_order_status', order_id=order.id) }}" method="POST" class="inline">
+                                <select name="status" class="bg-[#0f0c17] text-white text-xs border border-white/10 rounded px-2 py-1 outline-none focus:border-[#d4a94b]" onchange="this.form.submit()">
+                                    <option value="Processing" {% if order.status == 'Processing' %}selected{% endif %}>Processing</option>
+                                    <option value="Shipped" {% if order.status == 'Shipped' %}selected{% endif %}>Shipped</option>
+                                    <option value="Delivered" {% if order.status == 'Delivered' %}selected{% endif %}>Delivered</option>
+                                    <option value="Cancelled" {% if order.status == 'Cancelled' %}selected{% endif %}>Cancelled</option>
+                                </select>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

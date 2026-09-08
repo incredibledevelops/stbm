@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}Search Results · STBM{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 py-12">
+    <h1 class="text-2xl mb-8">
+        Search results for <span class="text-[#d4a94b]">"{{ query }}"</span>
+        <span class="text-white/40 text-sm font-normal ml-2">({{ products|length }} results)</span>
+    </h1>
+    
+    {% if products %}
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+            {% for product in products %}
+                <div class="bg-[#14101e] rounded-2xl overflow-hidden border border-white/5 card-hover cursor-pointer" onclick="window.location.href='{{ url_for('product_detail', product_id=product.id) }}'">
+                    <div class="relative aspect-square overflow-hidden bg-[#1f1a2c]">
+                        {% if product.image_url %}
+                            <img src="{{ product.image_url }}" class="w-full h-full object-cover hover:scale-105 transition duration-500">
+                        {% else %}
+                            <div class="w-full h-full flex items-center justify-center text-white/20">
+                                <i class="fas fa-tshirt text-6xl"></i>
+                            </div>
+                        {% endif %}
+                        {% if product.badge %}
+                            <span class="absolute top-3 left-3 bg-[#d4a94b] text-black text-[10px] font-bold px-2 py-0.5 rounded-full">{{ product.badge }}</span>
+                        {% endif %}
+                    </div>
+                    <div class="p-4">
+                        <span class="text-xs text-white/30 uppercase tracking-wider">{{ product.category }}</span>
+                        <h3 class="text-white font-semibold mt-1 truncate">{{ product.name }}</h3>
+                        <div class="flex items-center justify-between mt-2">
+                            <span class="text-[#d4a94b] font-bold">{{ format_currency(product.price) }}</span>
+                            {% if product.is_in_stock %}
+                                <form action="{{ url_for('add_to_cart', product_id=product.id) }}" method="POST" class="inline">
+                                    <button type="submit" class="text-white/50 hover:text-[#d4a94b] transition">
+                                        <i class="fas fa-cart-plus"></i>
+                                    </button>
+                                </form>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="text-center py-20">
+            <i class="fas fa-search text-4xl text-white/20 mb-4"></i>
+            <p class="text-white/50">No products found matching your search.</p>
+            <a href="{{ url_for('store') }}" class="mt-4 text-[#d4a94b] hover:underline inline-block">Browse all products</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

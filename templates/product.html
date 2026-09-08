@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block title %}{{ product.name }} · STBM{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 py-12 grid grid-cols-1 md:grid-cols-2 gap-12">
+    <div class="rounded-2xl overflow-hidden border border-white/10 bg-[#1a1625]">
+        {% if product.image_url %}
+            <img src="{{ product.image_url }}" class="w-full h-auto object-cover">
+        {% else %}
+            <div class="w-full aspect-square flex items-center justify-center text-white/20">
+                <i class="fas fa-tshirt text-8xl"></i>
+            </div>
+        {% endif %}
+    </div>
+    <div class="space-y-6 pt-4">
+        <span class="text-[#d4a94b] uppercase tracking-widest text-sm font-bold">{{ product.category }}</span>
+        <h1 class="text-4xl md:text-5xl font-bold">{{ product.name }}</h1>
+        <p class="text-3xl font-light text-white/90">{{ format_currency(product.price) }}</p>
+        
+        {% if product.is_in_stock %}
+            <span class="inline-block text-green-400 text-sm font-semibold">
+                <i class="fas fa-check-circle"></i> In Stock ({{ product.stock }} available)
+            </span>
+        {% else %}
+            <span class="inline-block text-red-400 text-sm font-semibold">
+                <i class="fas fa-times-circle"></i> Out of Stock
+            </span>
+        {% endif %}
+        
+        <p class="text-white/60 leading-relaxed">{{ product.description or 'Premium construction meets cultural heritage. Designed in Kumasi, crafted for the fearless.' }}</p>
+        
+        <div class="pt-6">
+            {% if product.is_in_stock %}
+                <form action="{{ url_for('add_to_cart', product_id=product.id) }}" method="POST" class="inline w-full">
+                    <button type="submit" class="w-full btn-primary py-4 rounded-xl text-lg flex justify-center items-center gap-2">
+                        <i class="fas fa-shopping-bag"></i> Add to Cart
+                    </button>
+                </form>
+            {% else %}
+                <button disabled class="w-full bg-white/10 text-white/40 py-4 rounded-xl text-lg cursor-not-allowed">
+                    Out of Stock
+                </button>
+            {% endif %}
+        </div>
+        
+        <div class="border-t border-white/5 pt-6 mt-6">
+            <div class="flex items-center gap-4 text-sm text-white/50">
+                <span><i class="fas fa-truck text-[#d4a94b]"></i> Free shipping over GH₵ 1000</span>
+                <span><i class="fas fa-undo text-[#d4a94b]"></i> 14-day returns</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if related_products %}
+<section class="py-12 px-4 max-w-7xl mx-auto border-t border-white/5">
+    <h2 class="text-3xl font-bold text-white mb-8">You May Also Like</h2>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-5">
+        {% for product in related_products %}
+            <div class="bg-[#14101e] rounded-2xl overflow-hidden border border-white/5 card-hover cursor-pointer" onclick="window.location.href='{{ url_for('product_detail', product_id=product.id) }}'">
+                <div class="relative aspect-square overflow-hidden bg-[#1f1a2c]">
+                    {% if product.image_url %}
+                        <img src="{{ product.image_url }}" class="w-full h-full object-cover hover:scale-105 transition duration-500">
+                    {% else %}
+                        <div class="w-full h-full flex items-center justify-center text-white/20">
+                            <i class="fas fa-tshirt text-6xl"></i>
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="p-4">
+                    <span class="text-xs text-white/30 uppercase tracking-wider">{{ product.category }}</span>
+                    <h3 class="text-white font-semibold mt-1 truncate">{{ product.name }}</h3>
+                    <div class="flex items-center justify-between mt-2">
+                        <span class="text-[#d4a94b] font-bold">{{ format_currency(product.price) }}</span>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+{% endblock %}
