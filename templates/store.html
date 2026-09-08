@@ -4,16 +4,19 @@
 
 {% block extra_css %}
 <style>
+    .store-container {
+        padding: 1rem 0.75rem 2rem;
+    }
     .filter-section {
         background: #1a1625;
         border: 1px solid rgba(255,255,255,0.05);
         border-radius: 1rem;
-        padding: 1.25rem;
+        padding: 1rem;
         margin-bottom: 1.5rem;
     }
     .filter-label {
         color: rgba(255,255,255,0.5);
-        font-size: 0.7rem;
+        font-size: 0.6rem;
         text-transform: uppercase;
         letter-spacing: 0.1em;
         font-weight: 600;
@@ -24,12 +27,13 @@
         background: #0f0c17;
         border: 1px solid rgba(255,255,255,0.1);
         color: white;
-        padding: 0.5rem 1rem;
+        padding: 0.4rem 0.75rem;
         border-radius: 0.5rem;
         outline: none;
         width: 100%;
         cursor: pointer;
         transition: 0.2s;
+        font-size: 0.8rem;
     }
     .filter-select:focus {
         border-color: #d4a94b;
@@ -65,21 +69,163 @@
         cursor: pointer;
         border: 2px solid #0f0c17;
     }
+    .products-grid {
+        display: grid;
+        gap: 1rem;
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    @media (max-width: 480px) {
+        .store-container {
+            padding: 0.75rem 0.5rem 1.5rem;
+        }
+        .store-title {
+            font-size: 1.5rem !important;
+        }
+        .store-count {
+            font-size: 0.75rem !important;
+        }
+        .filter-section {
+            padding: 0.75rem;
+            border-radius: 0.75rem;
+        }
+        .filter-label {
+            font-size: 0.5rem;
+        }
+        .filter-select {
+            font-size: 0.7rem;
+            padding: 0.3rem 0.5rem;
+        }
+        .price-range-input {
+            height: 3px;
+        }
+        .price-range-input::-webkit-slider-thumb {
+            width: 14px;
+            height: 14px;
+        }
+        .filter-grid {
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+        }
+        .filter-reset-btn {
+            font-size: 0.65rem !important;
+            padding: 0.3rem 0.5rem !important;
+        }
+        .products-grid {
+            gap: 0.75rem;
+        }
+        .product-card {
+            border-radius: 0.75rem !important;
+        }
+        .product-image {
+            aspect-ratio: 1/1;
+        }
+        .product-title {
+            font-size: 0.75rem !important;
+        }
+        .product-price {
+            font-size: 0.8rem !important;
+        }
+        .product-category {
+            font-size: 0.55rem !important;
+        }
+        .product-badge {
+            font-size: 0.55rem !important;
+            padding: 0.1rem 0.4rem !important;
+            top: 0.5rem !important;
+            left: 0.5rem !important;
+        }
+        .quick-view-btn {
+            width: 1.75rem !important;
+            height: 1.75rem !important;
+            font-size: 0.6rem !important;
+            top: 0.5rem !important;
+            right: 0.5rem !important;
+        }
+        .product-stock-badge {
+            font-size: 0.55rem !important;
+            padding: 0.1rem 0.4rem !important;
+            bottom: 0.5rem !important;
+            left: 0.5rem !important;
+        }
+    }
+    
+    @media (min-width: 481px) and (max-width: 768px) {
+        .products-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+        .filter-grid {
+            grid-template-columns: 1fr 1fr;
+        }
+    }
+    
+    @media (min-width: 769px) and (max-width: 1024px) {
+        .products-grid {
+            grid-template-columns: repeat(3, 1fr);
+        }
+        .filter-grid {
+            grid-template-columns: repeat(4, 1fr);
+        }
+    }
+    
+    @media (min-width: 1025px) {
+        .products-grid {
+            grid-template-columns: repeat(4, 1fr);
+        }
+        .filter-grid {
+            grid-template-columns: repeat(4, 1fr);
+        }
+    }
+    
+    .filter-grid {
+        display: grid;
+        gap: 0.75rem;
+    }
+    
+    /* Quick View Modal Responsive */
+    .quick-view-modal {
+        padding: 0.75rem;
+    }
+    @media (max-width: 480px) {
+        .quick-view-modal {
+            padding: 0.5rem;
+        }
+        .quick-view-content {
+            padding: 1rem !important;
+        }
+        .quick-view-title {
+            font-size: 1.25rem !important;
+        }
+        .quick-view-price {
+            font-size: 1.25rem !important;
+        }
+        .quick-view-grid {
+            grid-template-columns: 1fr !important;
+            gap: 1rem !important;
+        }
+    }
+    @media (max-width: 768px) {
+        .quick-view-grid {
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+    }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="max-w-7xl mx-auto px-4 py-12">
-    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
+<div class="store-container max-w-7xl mx-auto px-3 sm:px-4 py-6 sm:py-12">
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 sm:mb-8">
         <div>
-            <h1 class="text-4xl font-bold">The Collection</h1>
-            <p class="text-white/50 mt-1" id="product-count">{{ products|length }} products found</p>
+            <h1 class="store-title text-2xl sm:text-4xl font-bold">The Collection</h1>
+            <p class="store-count text-white/50 text-xs sm:text-sm mt-0.5 sm:mt-1" id="product-count">{{ products|length }} products found</p>
         </div>
     </div>
 
     <!-- Enhanced Filter Section -->
     <div class="filter-section">
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div class="filter-grid grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
             <!-- Category Filter -->
             <div>
                 <label class="filter-label">Category</label>
@@ -115,75 +261,75 @@
 
             <!-- Apply/Reset Button -->
             <div class="flex items-end">
-                <button onclick="resetFilters()" class="bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg text-sm transition w-full">
-                    <i class="fas fa-undo mr-2"></i>Reset Filters
+                <button onclick="resetFilters()" class="filter-reset-btn bg-white/10 hover:bg-white/20 text-white px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-[10px] sm:text-sm transition w-full">
+                    <i class="fas fa-undo mr-1 sm:mr-2"></i>Reset Filters
                 </button>
             </div>
         </div>
     </div>
 
     <!-- Products Grid -->
-    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6" id="productGrid">
+    <div class="products-grid" id="productGrid">
         {% for product in products %}
-            <div class="product-card bg-[#14101e] rounded-2xl overflow-hidden border border-white/5 card-hover" 
+            <div class="product-card bg-[#14101e] rounded-xl sm:rounded-2xl overflow-hidden border border-white/5 card-hover" 
                  data-price="{{ product.price }}"
                  data-name="{{ product.name }}"
                  data-category="{{ product.category }}">
-                <div class="relative aspect-square overflow-hidden bg-[#1f1a2c] cursor-pointer" 
+                <div class="product-image relative aspect-square overflow-hidden bg-[#1f1a2c] cursor-pointer" 
                      onclick="window.location.href='{{ url_for('product_detail', product_id=product.id) }}'">
                     {% if product.image_url %}
                         <img src="{{ product.image_url }}" class="w-full h-full object-cover hover:scale-105 transition duration-500">
                     {% else %}
                         <div class="w-full h-full flex items-center justify-center text-white/20">
-                            <i class="fas fa-tshirt text-6xl"></i>
+                            <i class="fas fa-tshirt text-4xl sm:text-6xl"></i>
                         </div>
                     {% endif %}
                     {% if product.badge %}
-                        <span class="absolute top-3 left-3 bg-[#d4a94b] text-black text-[10px] font-bold px-2 py-0.5 rounded-full">{{ product.badge }}</span>
+                        <span class="product-badge absolute top-2 sm:top-3 left-2 sm:left-3 bg-[#d4a94b] text-black text-[8px] sm:text-[10px] font-bold px-1.5 sm:px-2 py-0.5 rounded-full">{{ product.badge }}</span>
                     {% endif %}
                     {% if product.stock == 0 %}
-                        <span class="absolute bottom-3 left-3 bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">Out of Stock</span>
+                        <span class="product-stock-badge absolute bottom-2 sm:bottom-3 left-2 sm:left-3 bg-red-500 text-white text-[8px] sm:text-[10px] font-bold px-1.5 sm:px-2 py-0.5 rounded-full">Out of Stock</span>
                     {% endif %}
                     
                     <!-- Quick View Button -->
                     <button onclick="event.stopPropagation(); openQuickView({{ product.id }})" 
-                            class="absolute top-3 right-3 bg-[#0f0c17]/80 backdrop-blur-md text-white/70 hover:text-[#d4a94b] w-8 h-8 rounded-full flex items-center justify-center transition hover:scale-110">
-                        <i class="fas fa-eye text-sm"></i>
+                            class="quick-view-btn absolute top-2 sm:top-3 right-2 sm:right-3 bg-[#0f0c17]/80 backdrop-blur-md text-white/70 hover:text-[#d4a94b] w-6 sm:w-8 h-6 sm:h-8 rounded-full flex items-center justify-center transition hover:scale-110 text-[8px] sm:text-sm">
+                        <i class="fas fa-eye"></i>
                     </button>
                 </div>
-                <div class="p-4">
-                    <span class="text-xs text-white/30 uppercase tracking-wider">{{ product.category }}</span>
-                    <h3 class="text-white font-semibold mt-1 truncate">{{ product.name }}</h3>
-                    <div class="flex items-center justify-between mt-2">
-                        <span class="text-[#d4a94b] font-bold">{{ format_currency(product.price) }}</span>
+                <div class="p-2.5 sm:p-4">
+                    <span class="product-category text-[8px] sm:text-xs text-white/30 uppercase tracking-wider">{{ product.category }}</span>
+                    <h3 class="product-title text-white font-semibold mt-0.5 sm:mt-1 truncate text-xs sm:text-sm">{{ product.name }}</h3>
+                    <div class="flex items-center justify-between mt-1.5 sm:mt-2">
+                        <span class="product-price text-[#d4a94b] font-bold text-xs sm:text-sm">{{ format_currency(product.price) }}</span>
                         {% if product.is_in_stock %}
                             <form action="{{ url_for('add_to_cart', product_id=product.id) }}" method="POST" class="inline" onsubmit="event.stopPropagation();">
-                                <button type="submit" class="text-white/50 hover:text-[#d4a94b] transition">
+                                <button type="submit" class="text-white/50 hover:text-[#d4a94b] transition text-xs sm:text-sm">
                                     <i class="fas fa-cart-plus"></i>
                                 </button>
                             </form>
                         {% else %}
-                            <span class="text-white/20 text-sm">Unavailable</span>
+                            <span class="text-white/20 text-[8px] sm:text-sm">Unavailable</span>
                         {% endif %}
                     </div>
                 </div>
             </div>
         {% else %}
-            <div class="col-span-full text-center py-12">
-                <i class="fas fa-search text-4xl text-white/20 mb-4"></i>
-                <p class="text-white/50">No products found matching your criteria.</p>
+            <div class="col-span-full text-center py-8 sm:py-12">
+                <i class="fas fa-search text-3xl sm:text-4xl text-white/20 mb-3 sm:mb-4"></i>
+                <p class="text-white/50 text-sm sm:text-base">No products found matching your criteria.</p>
             </div>
         {% endfor %}
     </div>
 </div>
 
 <!-- Quick View Modal -->
-<div id="quickViewModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4" style="background: rgba(0,0,0,0.8); backdrop-filter: blur(8px);">
+<div id="quickViewModal" class="quick-view-modal fixed inset-0 z-50 hidden flex items-center justify-center p-2 sm:p-4" style="background: rgba(0,0,0,0.8); backdrop-filter: blur(8px);">
     <div class="bg-[#1a1625] rounded-2xl border border-white/10 max-w-2xl w-full max-h-[90vh] overflow-y-auto relative">
-        <button onclick="closeQuickView()" class="absolute top-4 right-4 text-white/40 hover:text-white transition z-10">
-            <i class="fas fa-times text-xl"></i>
+        <button onclick="closeQuickView()" class="absolute top-3 sm:top-4 right-3 sm:right-4 text-white/40 hover:text-white transition z-10">
+            <i class="fas fa-times text-lg sm:text-xl"></i>
         </button>
-        <div id="quickViewContent" class="p-6">
+        <div id="quickViewContent" class="quick-view-content p-4 sm:p-6">
             <div class="flex items-center justify-center py-8">
                 <i class="fas fa-spinner fa-spin text-2xl text-[#d4a94b]"></i>
             </div>
@@ -231,17 +377,15 @@
                     case 'price_low': return priceA - priceB;
                     case 'price_high': return priceB - priceA;
                     case 'name_asc': return nameA.localeCompare(nameB);
-                    case 'newest': return 0; // Assuming newest first, you'd need a date field
-                    case 'popular': return 0; // Assuming popular first, you'd need a popularity field
+                    case 'newest': return 0;
+                    case 'popular': return 0;
                     default: return 0;
                 }
             });
             
-            // Reorder DOM elements
             sortedCards.forEach(card => grid.appendChild(card));
         }
         
-        // Update count
         document.getElementById('product-count').textContent = visibleCount + ' products found';
     }
     
@@ -264,12 +408,11 @@
         modal.style.display = 'flex';
         document.body.style.overflow = 'hidden';
         
-        // Fetch product details
         fetch(`/api/product/${productId}`)
             .then(response => response.json())
             .then(data => {
                 document.getElementById('quickViewContent').innerHTML = `
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="quick-view-grid grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                         <div class="rounded-xl overflow-hidden bg-[#0f0c17]">
                             ${data.image_url ? 
                                 `<img src="${data.image_url}" class="w-full h-auto object-cover">` :
@@ -278,29 +421,29 @@
                                 </div>`
                             }
                         </div>
-                        <div class="space-y-4">
-                            <span class="text-[#d4a94b] text-xs uppercase tracking-widest font-bold">${data.category}</span>
-                            <h2 class="text-2xl font-bold">${data.name}</h2>
-                            <p class="text-2xl font-light text-[#d4a94b]">${formatCurrency(data.price)}</p>
-                            ${data.description ? `<p class="text-white/60 text-sm">${data.description}</p>` : ''}
+                        <div class="space-y-3 sm:space-y-4">
+                            <span class="text-[#d4a94b] text-[10px] sm:text-xs uppercase tracking-widest font-bold">${data.category}</span>
+                            <h2 class="quick-view-title text-xl sm:text-2xl font-bold">${data.name}</h2>
+                            <p class="quick-view-price text-xl sm:text-2xl font-light text-[#d4a94b]">${formatCurrency(data.price)}</p>
+                            ${data.description ? `<p class="text-white/60 text-xs sm:text-sm">${data.description}</p>` : ''}
                             <div class="flex items-center gap-2">
-                                <span class="text-sm text-white/50">Stock:</span>
-                                <span class="text-sm ${data.stock > 0 ? 'text-green-400' : 'text-red-400'}">
+                                <span class="text-xs sm:text-sm text-white/50">Stock:</span>
+                                <span class="text-xs sm:text-sm ${data.stock > 0 ? 'text-green-400' : 'text-red-400'}">
                                     ${data.stock > 0 ? `${data.stock} available` : 'Out of Stock'}
                                 </span>
                             </div>
                             ${data.stock > 0 ? `
-                                <form action="/add-to-cart/${data.id}" method="POST" class="mt-4">
-                                    <button type="submit" class="w-full btn-primary py-3 rounded-lg flex justify-center items-center gap-2">
+                                <form action="/add-to-cart/${data.id}" method="POST" class="mt-2 sm:mt-4">
+                                    <button type="submit" class="w-full btn-primary py-2.5 sm:py-3 rounded-lg flex justify-center items-center gap-2 text-sm sm:text-base">
                                         <i class="fas fa-shopping-bag"></i> Add to Cart
                                     </button>
                                 </form>
                             ` : `
-                                <button disabled class="w-full bg-white/10 text-white/40 py-3 rounded-lg cursor-not-allowed">
+                                <button disabled class="w-full bg-white/10 text-white/40 py-2.5 sm:py-3 rounded-lg cursor-not-allowed text-sm sm:text-base">
                                     Out of Stock
                                 </button>
                             `}
-                            <a href="/product/${data.id}" class="text-[#d4a94b] text-sm hover:underline inline-block mt-2">
+                            <a href="/product/${data.id}" class="text-[#d4a94b] text-xs sm:text-sm hover:underline inline-block mt-1 sm:mt-2">
                                 View Full Details →
                             </a>
                         </div>
@@ -311,7 +454,7 @@
                 document.getElementById('quickViewContent').innerHTML = `
                     <div class="text-center py-8 text-white/50">
                         <i class="fas fa-exclamation-triangle text-2xl text-yellow-400 mb-2"></i>
-                        <p>Failed to load product details.</p>
+                        <p class="text-sm sm:text-base">Failed to load product details.</p>
                     </div>
                 `;
             });
@@ -324,12 +467,10 @@
         document.body.style.overflow = '';
     }
     
-    // Close modal on outside click
     document.getElementById('quickViewModal').addEventListener('click', function(e) {
         if (e.target === this) closeQuickView();
     });
     
-    // Helper function for currency formatting in JS
     function formatCurrency(amount) {
         return 'GH₵ ' + Number(amount).toLocaleString(undefined, {minimumFractionDigits: 2});
     }

@@ -2,92 +2,149 @@
 
 {% block admin_title %}{{ title }}{% endblock %}
 
-{% block admin_content %}
-<div class="mb-8">
-    <h1 class="text-3xl font-bold text-white mb-1">{{ title }}</h1>
-    <p class="text-white/50 text-sm">{% if product %}Edit product details{% else %}Add a new product to the store{% endif %}</p>
-</div>
+{% block extra_css %}
+<style>
+    .product-form-container {
+        max-width: 640px;
+        margin: 0 auto;
+    }
+    
+    @media (max-width: 480px) {
+        .product-form-title {
+            font-size: 1.5rem !important;
+        }
+        .product-form-subtitle {
+            font-size: 0.8rem !important;
+        }
+        .product-form-card {
+            padding: 1rem !important;
+            border-radius: 0.75rem !important;
+        }
+        .product-form-label {
+            font-size: 0.75rem !important;
+        }
+        .product-form-input {
+            font-size: 0.85rem !important;
+            padding: 0.5rem 0.75rem !important;
+        }
+        .product-form-grid {
+            grid-template-columns: 1fr !important;
+            gap: 0.75rem !important;
+        }
+        .product-form-btn {
+            font-size: 0.85rem !important;
+            padding: 0.6rem 1rem !important;
+            width: 100%;
+            justify-content: center;
+        }
+        .product-form-actions {
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .product-form-grid {
+            grid-template-columns: 1fr !important;
+        }
+    }
+    
+    @media (min-width: 769px) {
+        .product-form-grid {
+            grid-template-columns: 1fr 1fr;
+        }
+    }
+</style>
+{% endblock %}
 
-<div class="bg-[#1a1625] border border-white/5 p-6 rounded-2xl max-w-2xl">
-    <form method="POST">
-        {{ form.hidden_tag() }}
-        
-        <div class="space-y-4">
-            <div>
-                {{ form.name.label(class="block text-sm font-medium text-white/70 mb-1") }}
-                {{ form.name(class="input-custom") }}
-                {% for error in form.name.errors %}
-                    <span class="text-red-400 text-sm">{{ error }}</span>
-                {% endfor %}
-            </div>
+{% block admin_content %}
+<div class="product-form-container px-3 sm:px-4">
+    <div class="mb-6 sm:mb-8">
+        <h1 class="product-form-title text-2xl sm:text-3xl font-bold text-white mb-1">{{ title }}</h1>
+        <p class="product-form-subtitle text-white/50 text-xs sm:text-sm">{% if product %}Edit product details{% else %}Add a new product to the store{% endif %}</p>
+    </div>
+
+    <div class="product-form-card bg-[#1a1625] border border-white/5 p-4 sm:p-6 rounded-xl sm:rounded-2xl">
+        <form method="POST">
+            {{ form.hidden_tag() }}
             
-            <div>
-                {{ form.description.label(class="block text-sm font-medium text-white/70 mb-1") }}
-                {{ form.description(class="input-custom", rows="4") }}
-                {% for error in form.description.errors %}
-                    <span class="text-red-400 text-sm">{{ error }}</span>
-                {% endfor %}
-            </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="space-y-3 sm:space-y-4">
                 <div>
-                    {{ form.price.label(class="block text-sm font-medium text-white/70 mb-1") }}
-                    {{ form.price(class="input-custom", type="number", step="0.01", min="0") }}
-                    {% for error in form.price.errors %}
-                        <span class="text-red-400 text-sm">{{ error }}</span>
+                    {{ form.name.label(class="product-form-label block text-xs sm:text-sm font-medium text-white/70 mb-1") }}
+                    {{ form.name(class="product-form-input input-custom text-sm sm:text-base") }}
+                    {% for error in form.name.errors %}
+                        <span class="text-red-400 text-xs sm:text-sm">{{ error }}</span>
                     {% endfor %}
                 </div>
+                
                 <div>
-                    {{ form.stock.label(class="block text-sm font-medium text-white/70 mb-1") }}
-                    {{ form.stock(class="input-custom", type="number", min="0") }}
-                    {% for error in form.stock.errors %}
-                        <span class="text-red-400 text-sm">{{ error }}</span>
+                    {{ form.description.label(class="product-form-label block text-xs sm:text-sm font-medium text-white/70 mb-1") }}
+                    {{ form.description(class="product-form-input input-custom text-sm sm:text-base", rows="4") }}
+                    {% for error in form.description.errors %}
+                        <span class="text-red-400 text-xs sm:text-sm">{{ error }}</span>
+                    {% endfor %}
+                </div>
+                
+                <div class="product-form-grid grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                    <div>
+                        {{ form.price.label(class="product-form-label block text-xs sm:text-sm font-medium text-white/70 mb-1") }}
+                        {{ form.price(class="product-form-input input-custom text-sm sm:text-base", type="number", step="0.01", min="0") }}
+                        {% for error in form.price.errors %}
+                            <span class="text-red-400 text-xs sm:text-sm">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    <div>
+                        {{ form.stock.label(class="product-form-label block text-xs sm:text-sm font-medium text-white/70 mb-1") }}
+                        {{ form.stock(class="product-form-input input-custom text-sm sm:text-base", type="number", min="0") }}
+                        {% for error in form.stock.errors %}
+                            <span class="text-red-400 text-xs sm:text-sm">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+                
+                <div class="product-form-grid grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                    <div>
+                        {{ form.category.label(class="product-form-label block text-xs sm:text-sm font-medium text-white/70 mb-1") }}
+                        {{ form.category(class="product-form-input input-custom text-sm sm:text-base") }}
+                        {% for error in form.category.errors %}
+                            <span class="text-red-400 text-xs sm:text-sm">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    <div>
+                        {{ form.status.label(class="product-form-label block text-xs sm:text-sm font-medium text-white/70 mb-1") }}
+                        {{ form.status(class="product-form-input input-custom text-sm sm:text-base") }}
+                        {% for error in form.status.errors %}
+                            <span class="text-red-400 text-xs sm:text-sm">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+                
+                <div>
+                    {{ form.image_url.label(class="product-form-label block text-xs sm:text-sm font-medium text-white/70 mb-1") }}
+                    {{ form.image_url(class="product-form-input input-custom text-sm sm:text-base", placeholder="https://example.com/image.jpg") }}
+                    {% for error in form.image_url.errors %}
+                        <span class="text-red-400 text-xs sm:text-sm">{{ error }}</span>
+                    {% endfor %}
+                </div>
+                
+                <div>
+                    {{ form.badge.label(class="product-form-label block text-xs sm:text-sm font-medium text-white/70 mb-1") }}
+                    {{ form.badge(class="product-form-input input-custom text-sm sm:text-base", placeholder="New, Best, Limited, etc.") }}
+                    {% for error in form.badge.errors %}
+                        <span class="text-red-400 text-xs sm:text-sm">{{ error }}</span>
                     {% endfor %}
                 </div>
             </div>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                    {{ form.category.label(class="block text-sm font-medium text-white/70 mb-1") }}
-                    {{ form.category(class="input-custom") }}
-                    {% for error in form.category.errors %}
-                        <span class="text-red-400 text-sm">{{ error }}</span>
-                    {% endfor %}
-                </div>
-                <div>
-                    {{ form.status.label(class="block text-sm font-medium text-white/70 mb-1") }}
-                    {{ form.status(class="input-custom") }}
-                    {% for error in form.status.errors %}
-                        <span class="text-red-400 text-sm">{{ error }}</span>
-                    {% endfor %}
-                </div>
+            <div class="product-form-actions flex flex-col sm:flex-row gap-3 sm:gap-4 mt-6 pt-6 border-t border-white/5">
+                <button type="submit" class="product-form-btn btn-primary px-6 sm:px-8 py-2.5 sm:py-3 rounded-lg text-sm sm:text-base flex items-center justify-center gap-2">
+                    {% if product %}<i class="fas fa-save"></i>Update{% else %}<i class="fas fa-plus"></i>Add{% endif %} Product
+                </button>
+                <a href="{{ url_for('admin_products') }}" class="product-form-btn bg-white/10 hover:bg-white/20 text-white px-6 sm:px-8 py-2.5 sm:py-3 rounded-lg transition text-center text-sm sm:text-base flex items-center justify-center gap-2">
+                    <i class="fas fa-times"></i> Cancel
+                </a>
             </div>
-            
-            <div>
-                {{ form.image_url.label(class="block text-sm font-medium text-white/70 mb-1") }}
-                {{ form.image_url(class="input-custom", placeholder="https://example.com/image.jpg") }}
-                {% for error in form.image_url.errors %}
-                    <span class="text-red-400 text-sm">{{ error }}</span>
-                {% endfor %}
-            </div>
-            
-            <div>
-                {{ form.badge.label(class="block text-sm font-medium text-white/70 mb-1") }}
-                {{ form.badge(class="input-custom", placeholder="New, Best, Limited, etc.") }}
-                {% for error in form.badge.errors %}
-                    <span class="text-red-400 text-sm">{{ error }}</span>
-                {% endfor %}
-            </div>
-        </div>
-        
-        <div class="flex gap-4 mt-6 pt-6 border-t border-white/5">
-            <button type="submit" class="btn-primary px-8 py-3 rounded-lg">
-                {% if product %}Update{% else %}Add{% endif %} Product
-            </button>
-            <a href="{{ url_for('admin_products') }}" class="bg-white/10 hover:bg-white/20 text-white px-8 py-3 rounded-lg transition text-center">
-                Cancel
-            </a>
-        </div>
-    </form>
+        </form>
+    </div>
 </div>
 {% endblock %}

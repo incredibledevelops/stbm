@@ -2,57 +2,121 @@
 
 {% block admin_title %}Messages{% endblock %}
 
-{% block admin_content %}
-<div class="mb-8 flex justify-between items-center">
-    <div>
-        <h1 class="text-3xl font-bold text-white mb-1">Contact Messages</h1>
-        <p class="text-white/50 text-sm">View and manage customer inquiries.</p>
-    </div>
-    <div class="flex gap-2">
-        <span class="bg-[#d4a94b]/20 text-[#d4a94b] px-4 py-2 rounded-lg text-sm font-semibold">
-            <i class="fas fa-envelope mr-2"></i>{{ unread_count }} Unread
-        </span>
-    </div>
-</div>
+{% block extra_css %}
+<style>
+    @media (max-width: 480px) {
+        .messages-title {
+            font-size: 1.5rem !important;
+        }
+        .messages-subtitle {
+            font-size: 0.75rem !important;
+        }
+        .messages-header {
+            flex-direction: column !important;
+            align-items: stretch !important;
+            gap: 0.75rem !important;
+        }
+        .messages-unread-badge {
+            font-size: 0.7rem !important;
+            padding: 0.3rem 0.75rem !important;
+            text-align: center;
+        }
+        .message-item {
+            padding: 0.75rem !important;
+        }
+        .message-name {
+            font-size: 0.8rem !important;
+        }
+        .message-email {
+            font-size: 0.6rem !important;
+        }
+        .message-new-badge {
+            font-size: 0.5rem !important;
+            padding: 0.1rem 0.3rem !important;
+        }
+        .message-preview {
+            font-size: 0.7rem !important;
+        }
+        .message-time {
+            font-size: 0.55rem !important;
+        }
+        .message-status {
+            font-size: 0.5rem !important;
+            padding: 0.1rem 0.3rem !important;
+        }
+        .message-item-grid {
+            flex-direction: column !important;
+            align-items: stretch !important;
+            gap: 0.5rem !important;
+        }
+        .message-item-right {
+            text-align: left !important;
+            margin-left: 0 !important;
+        }
+    }
+    
+    .message-item {
+        transition: all 0.2s ease;
+    }
+    .message-item:hover {
+        background: rgba(255,255,255,0.02);
+    }
+</style>
+{% endblock %}
 
-<div class="bg-[#1a1625] border border-white/5 rounded-2xl overflow-hidden shadow-xl">
-    {% if messages %}
-        <div class="divide-y divide-white/5">
-            {% for message in messages %}
-                <div class="hover:bg-white/[0.02] transition {% if message.status == 'Unread' %}bg-[#d4a94b]/5{% endif %}">
-                    <a href="{{ url_for('admin_message_detail', message_id=message.id) }}" class="block p-6">
-                        <div class="flex items-start justify-between">
-                            <div class="flex-1">
-                                <div class="flex items-center gap-3 mb-1">
-                                    <span class="font-semibold text-white">{{ message.name }}</span>
-                                    <span class="text-xs text-white/30">{{ message.email }}</span>
-                                    {% if message.status == 'Unread' %}
-                                        <span class="bg-[#d4a94b] text-black text-[10px] font-bold px-2 py-0.5 rounded-full">NEW</span>
-                                    {% endif %}
+{% block admin_content %}
+<div class="messages-container max-w-7xl mx-auto px-2 sm:px-4">
+    <div class="messages-header mb-6 sm:mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div>
+            <h1 class="messages-title text-2xl sm:text-3xl font-bold text-white mb-1">Contact Messages</h1>
+            <p class="messages-subtitle text-white/50 text-xs sm:text-sm">View and manage customer inquiries.</p>
+        </div>
+        <div class="flex flex-wrap gap-2">
+            <span class="messages-unread-badge bg-[#d4a94b]/20 text-[#d4a94b] px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-semibold flex items-center gap-2">
+                <i class="fas fa-envelope"></i>{{ unread_count }} Unread
+            </span>
+        </div>
+    </div>
+
+    <div class="bg-[#1a1625] border border-white/5 rounded-xl sm:rounded-2xl overflow-hidden shadow-xl">
+        {% if messages %}
+            <div class="divide-y divide-white/5">
+                {% for message in messages %}
+                    <div class="message-item {% if message.status == 'Unread' %}bg-[#d4a94b]/5{% endif %}">
+                        <a href="{{ url_for('admin_message_detail', message_id=message.id) }}" class="block p-4 sm:p-6">
+                            <div class="message-item-grid flex flex-col sm:flex-row items-start justify-between gap-3 sm:gap-0">
+                                <div class="flex-1 w-full sm:w-auto">
+                                    <div class="flex flex-wrap items-center gap-2 sm:gap-3 mb-1">
+                                        <span class="message-name font-semibold text-white text-sm sm:text-base">{{ message.name }}</span>
+                                        <span class="message-email text-[10px] sm:text-xs text-white/30">{{ message.email }}</span>
+                                        {% if message.status == 'Unread' %}
+                                            <span class="message-new-badge bg-[#d4a94b] text-black text-[8px] sm:text-[10px] font-bold px-1.5 sm:px-2 py-0.5 rounded-full">NEW</span>
+                                        {% endif %}
+                                    </div>
+                                    <p class="message-preview text-white/60 text-xs sm:text-sm line-clamp-2">{{ message.message|truncate(100) }}</p>
+                                    <span class="message-time text-[8px] sm:text-xs text-white/30 mt-1 sm:mt-2 block">
+                                        <i class="far fa-clock mr-1"></i>{{ message.created_at.strftime('%B %d, %Y at %I:%M %p') }}
+                                    </span>
                                 </div>
-                                <p class="text-white/60 text-sm line-clamp-2">{{ message.message|truncate(100) }}</p>
-                                <span class="text-xs text-white/30 mt-2 block">
-                                    <i class="far fa-clock mr-1"></i>{{ message.created_at.strftime('%B %d, %Y at %I:%M %p') }}
-                                </span>
+                                <div class="message-item-right ml-0 sm:ml-4 text-left sm:text-right w-full sm:w-auto">
+                                    <span class="message-status px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full text-[7px] sm:text-[10px] font-semibold border inline-block 
+                                        {% if message.status == 'Unread' %}border-[#d4a94b]/20 text-[#d4a94b] bg-[#d4a94b]/10
+                                        {% elif message.status == 'Replied' %}border-green-400/20 text-green-400 bg-green-400/10
+                                        {% else %}border-white/10 text-white/40 bg-white/5{% endif %}">
+                                        {{ message.status }}
+                                    </span>
+                                </div>
                             </div>
-                            <div class="ml-4 text-right">
-                                <span class="px-2.5 py-1 rounded-full text-[10px] font-semibold border 
-                                    {% if message.status == 'Unread' %}border-[#d4a94b]/20 text-[#d4a94b] bg-[#d4a94b]/10
-                                    {% elif message.status == 'Replied' %}border-green-400/20 text-green-400 bg-green-400/10
-                                    {% else %}border-white/10 text-white/40 bg-white/5{% endif %}">
-                                    {{ message.status }}
-                                </span>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-            {% endfor %}
-        </div>
-    {% else %}
-        <div class="text-center py-16">
-            <i class="fas fa-inbox text-4xl text-white/10 mb-4"></i>
-            <p class="text-white/40">No messages yet.</p>
-        </div>
-    {% endif %}
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="text-center py-12 sm:py-16">
+                <i class="fas fa-inbox text-3xl sm:text-4xl text-white/10 mb-3 sm:mb-4"></i>
+                <p class="text-white/40 text-sm sm:text-base">No messages yet.</p>
+            </div>
+        {% endif %}
+    </div>
 </div>
 {% endblock %}

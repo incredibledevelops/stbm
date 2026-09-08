@@ -12,102 +12,169 @@
         transform: translateY(-4px);
         border-color: rgba(212, 169, 75, 0.3);
     }
+    
+    @media (max-width: 480px) {
+        .analytics-title {
+            font-size: 1.5rem !important;
+        }
+        .analytics-subtitle {
+            font-size: 0.75rem !important;
+        }
+        .stats-grid {
+            grid-template-columns: 1fr 1fr !important;
+            gap: 0.75rem !important;
+        }
+        .stat-card {
+            padding: 0.75rem !important;
+            border-radius: 0.75rem !important;
+        }
+        .stat-icon {
+            padding: 0.5rem !important;
+            border-radius: 0.5rem !important;
+        }
+        .stat-icon i {
+            font-size: 0.9rem !important;
+        }
+        .stat-label {
+            font-size: 0.6rem !important;
+        }
+        .stat-value {
+            font-size: 1.1rem !important;
+        }
+        .charts-grid {
+            grid-template-columns: 1fr !important;
+            gap: 1rem !important;
+        }
+        .chart-card {
+            padding: 0.75rem !important;
+            border-radius: 0.75rem !important;
+        }
+        .chart-title {
+            font-size: 0.9rem !important;
+        }
+        .top-pages-table th,
+        .top-pages-table td {
+            padding: 0.4rem 0.5rem !important;
+            font-size: 0.65rem !important;
+        }
+        .top-pages-table th {
+            font-size: 0.5rem !important;
+        }
+        .top-pages-url {
+            font-size: 0.5rem !important;
+        }
+        .top-pages-visits {
+            font-size: 0.7rem !important;
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .charts-grid {
+            grid-template-columns: 1fr !important;
+        }
+    }
+    
+    @media (min-width: 769px) {
+        .charts-grid {
+            grid-template-columns: 1fr 1fr;
+        }
+    }
 </style>
 {% endblock %}
 
 {% block admin_content %}
-<div class="mb-8">
-    <h1 class="text-3xl font-bold text-white mb-1">Analytics Dashboard</h1>
-    <p class="text-white/50 text-sm">Track page visits and user engagement.</p>
-</div>
+<div class="analytics-container max-w-7xl mx-auto px-2 sm:px-4">
+    <div class="mb-6 sm:mb-8">
+        <h1 class="analytics-title text-2xl sm:text-3xl font-bold text-white mb-1">Analytics Dashboard</h1>
+        <p class="analytics-subtitle text-white/50 text-xs sm:text-sm">Track page visits and user engagement.</p>
+    </div>
 
-<!-- Stats Cards -->
-<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-    <div class="stat-card bg-[#1a1625] border border-white/5 p-6 rounded-2xl">
-        <div class="flex items-center gap-4">
-            <div class="bg-blue-500/20 p-3 rounded-xl">
-                <i class="fas fa-eye text-blue-400 text-xl"></i>
+    <!-- Stats Cards -->
+    <div class="stats-grid grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 mb-6 sm:mb-8">
+        <div class="stat-card bg-[#1a1625] border border-white/5 p-4 sm:p-6 rounded-xl sm:rounded-2xl">
+            <div class="flex items-center gap-3 sm:gap-4">
+                <div class="stat-icon bg-blue-500/20 p-2 sm:p-3 rounded-lg sm:rounded-xl">
+                    <i class="fas fa-eye text-blue-400 text-base sm:text-xl"></i>
+                </div>
+                <div>
+                    <p class="stat-label text-white/50 text-[10px] sm:text-sm font-medium">Total Visits</p>
+                    <h3 class="stat-value text-lg sm:text-2xl font-bold text-white">{{ total_visits }}</h3>
+                </div>
             </div>
-            <div>
-                <p class="text-white/50 text-sm font-medium">Total Visits</p>
-                <h3 class="text-2xl font-bold text-white">{{ total_visits }}</h3>
+        </div>
+        <div class="stat-card bg-[#1a1625] border border-white/5 p-4 sm:p-6 rounded-xl sm:rounded-2xl">
+            <div class="flex items-center gap-3 sm:gap-4">
+                <div class="stat-icon bg-purple-500/20 p-2 sm:p-3 rounded-lg sm:rounded-xl">
+                    <i class="fas fa-users text-purple-400 text-base sm:text-xl"></i>
+                </div>
+                <div>
+                    <p class="stat-label text-white/50 text-[10px] sm:text-sm font-medium">Unique Visitors</p>
+                    <h3 class="stat-value text-lg sm:text-2xl font-bold text-white">{{ unique_visitors }}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="stat-card bg-[#1a1625] border border-white/5 p-4 sm:p-6 rounded-xl sm:rounded-2xl">
+            <div class="flex items-center gap-3 sm:gap-4">
+                <div class="stat-icon bg-green-500/20 p-2 sm:p-3 rounded-lg sm:rounded-xl">
+                    <i class="fas fa-calendar-day text-green-400 text-base sm:text-xl"></i>
+                </div>
+                <div>
+                    <p class="stat-label text-white/50 text-[10px] sm:text-sm font-medium">Today's Visits</p>
+                    <h3 class="stat-value text-lg sm:text-2xl font-bold text-white">{{ today_visits }}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="stat-card bg-[#1a1625] border border-white/5 p-4 sm:p-6 rounded-xl sm:rounded-2xl">
+            <div class="flex items-center gap-3 sm:gap-4">
+                <div class="stat-icon bg-[#d4a94b]/20 p-2 sm:p-3 rounded-lg sm:rounded-xl">
+                    <i class="fas fa-clock text-[#d4a94b] text-base sm:text-xl"></i>
+                </div>
+                <div>
+                    <p class="stat-label text-white/50 text-[10px] sm:text-sm font-medium">Avg. Session</p>
+                    <h3 class="stat-value text-lg sm:text-2xl font-bold text-white">--</h3>
+                </div>
             </div>
         </div>
     </div>
-    <div class="stat-card bg-[#1a1625] border border-white/5 p-6 rounded-2xl">
-        <div class="flex items-center gap-4">
-            <div class="bg-purple-500/20 p-3 rounded-xl">
-                <i class="fas fa-users text-purple-400 text-xl"></i>
-            </div>
-            <div>
-                <p class="text-white/50 text-sm font-medium">Unique Visitors</p>
-                <h3 class="text-2xl font-bold text-white">{{ unique_visitors }}</h3>
-            </div>
-        </div>
-    </div>
-    <div class="stat-card bg-[#1a1625] border border-white/5 p-6 rounded-2xl">
-        <div class="flex items-center gap-4">
-            <div class="bg-green-500/20 p-3 rounded-xl">
-                <i class="fas fa-calendar-day text-green-400 text-xl"></i>
-            </div>
-            <div>
-                <p class="text-white/50 text-sm font-medium">Today's Visits</p>
-                <h3 class="text-2xl font-bold text-white">{{ today_visits }}</h3>
-            </div>
-        </div>
-    </div>
-    <div class="stat-card bg-[#1a1625] border border-white/5 p-6 rounded-2xl">
-        <div class="flex items-center gap-4">
-            <div class="bg-[#d4a94b]/20 p-3 rounded-xl">
-                <i class="fas fa-clock text-[#d4a94b] text-xl"></i>
-            </div>
-            <div>
-                <p class="text-white/50 text-sm font-medium">Avg. Session</p>
-                <h3 class="text-2xl font-bold text-white">--</h3>
-            </div>
-        </div>
-    </div>
-</div>
 
-<!-- Charts -->
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-    <!-- Daily Visits Chart -->
-    <div class="bg-[#1a1625] border border-white/5 p-6 rounded-2xl">
-        <h3 class="font-bold text-lg mb-4 text-white">Last 7 Days</h3>
-        <canvas id="dailyChart" height="200"></canvas>
+    <!-- Charts -->
+    <div class="charts-grid grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-8 mb-6 sm:mb-8">
+        <div class="chart-card bg-[#1a1625] border border-white/5 p-4 sm:p-6 rounded-xl sm:rounded-2xl">
+            <h3 class="chart-title font-bold text-sm sm:text-lg mb-3 sm:mb-4 text-white">Last 7 Days</h3>
+            <canvas id="dailyChart" height="200"></canvas>
+        </div>
+        
+        <div class="chart-card bg-[#1a1625] border border-white/5 p-4 sm:p-6 rounded-xl sm:rounded-2xl">
+            <h3 class="chart-title font-bold text-sm sm:text-lg mb-3 sm:mb-4 text-white">Last 24 Hours</h3>
+            <canvas id="hourlyChart" height="200"></canvas>
+        </div>
     </div>
-    
-    <!-- Hourly Visits Chart -->
-    <div class="bg-[#1a1625] border border-white/5 p-6 rounded-2xl">
-        <h3 class="font-bold text-lg mb-4 text-white">Last 24 Hours</h3>
-        <canvas id="hourlyChart" height="200"></canvas>
-    </div>
-</div>
 
-<!-- Top Pages -->
-<div class="bg-[#1a1625] border border-white/5 rounded-2xl overflow-hidden">
-    <div class="p-6 border-b border-white/5">
-        <h3 class="font-bold text-lg text-white">Most Visited Pages</h3>
-    </div>
-    <div class="overflow-x-auto">
-        <table class="w-full text-left border-collapse">
-            <thead>
-                <tr class="bg-white/5 text-white/40 text-xs uppercase tracking-wider">
-                    <th class="px-6 py-4 font-medium">Page</th>
-                    <th class="px-6 py-4 font-medium">URL</th>
-                    <th class="px-6 py-4 font-medium text-right">Visits</th>
-                </tr>
-            </thead>
-            <tbody class="divide-y divide-white/5 text-sm">
-                {% for page in top_pages %}
-                    <tr class="hover:bg-white/[0.02] transition">
-                        <td class="px-6 py-4 font-medium text-white">{{ page.name }}</td>
-                        <td class="px-6 py-4 text-white/50 font-mono text-xs">{{ page.url }}</td>
-                        <td class="px-6 py-4 text-right font-bold text-[#d4a94b]">{{ page.visits }}</td>
+    <!-- Top Pages -->
+    <div class="bg-[#1a1625] border border-white/5 rounded-xl sm:rounded-2xl overflow-hidden">
+        <div class="p-4 sm:p-6 border-b border-white/5">
+            <h3 class="font-bold text-sm sm:text-lg text-white">Most Visited Pages</h3>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="top-pages-table w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-white/5 text-white/40 text-[8px] sm:text-xs uppercase tracking-wider">
+                        <th class="px-3 sm:px-6 py-3 sm:py-4 font-medium">Page</th>
+                        <th class="px-3 sm:px-6 py-3 sm:py-4 font-medium">URL</th>
+                        <th class="px-3 sm:px-6 py-3 sm:py-4 font-medium text-right">Visits</th>
                     </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                </thead>
+                <tbody class="divide-y divide-white/5 text-xs sm:text-sm">
+                    {% for page in top_pages %}
+                        <tr class="hover:bg-white/[0.02] transition">
+                            <td class="px-3 sm:px-6 py-3 sm:py-4 font-medium text-white truncate max-w-[80px] sm:max-w-none">{{ page.name }}</td>
+                            <td class="top-pages-url px-3 sm:px-6 py-3 sm:py-4 text-white/50 font-mono text-[8px] sm:text-xs truncate max-w-[80px] sm:max-w-none">{{ page.url }}</td>
+                            <td class="top-pages-visits px-3 sm:px-6 py-3 sm:py-4 text-right font-bold text-[#d4a94b] text-xs sm:text-sm">{{ page.visits }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 
@@ -135,7 +202,8 @@ document.addEventListener('DOMContentLoaded', function() {
             plugins: {
                 legend: {
                     labels: {
-                        color: 'rgba(255,255,255,0.5)'
+                        color: 'rgba(255,255,255,0.5)',
+                        font: { size: window.innerWidth < 480 ? 8 : 12 }
                     }
                 }
             },
@@ -144,7 +212,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     beginAtZero: true,
                     ticks: {
                         color: 'rgba(255,255,255,0.3)',
-                        stepSize: 1
+                        stepSize: 1,
+                        font: { size: window.innerWidth < 480 ? 8 : 12 }
                     },
                     grid: {
                         color: 'rgba(255,255,255,0.05)'
@@ -152,7 +221,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 },
                 x: {
                     ticks: {
-                        color: 'rgba(255,255,255,0.3)'
+                        color: 'rgba(255,255,255,0.3)',
+                        font: { size: window.innerWidth < 480 ? 7 : 12 },
+                        maxRotation: window.innerWidth < 480 ? 45 : 0
                     },
                     grid: {
                         color: 'rgba(255,255,255,0.05)'
@@ -183,7 +254,8 @@ document.addEventListener('DOMContentLoaded', function() {
             plugins: {
                 legend: {
                     labels: {
-                        color: 'rgba(255,255,255,0.5)'
+                        color: 'rgba(255,255,255,0.5)',
+                        font: { size: window.innerWidth < 480 ? 8 : 12 }
                     }
                 }
             },
@@ -192,7 +264,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     beginAtZero: true,
                     ticks: {
                         color: 'rgba(255,255,255,0.3)',
-                        stepSize: 1
+                        stepSize: 1,
+                        font: { size: window.innerWidth < 480 ? 8 : 12 }
                     },
                     grid: {
                         color: 'rgba(255,255,255,0.05)'
@@ -201,7 +274,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 x: {
                     ticks: {
                         color: 'rgba(255,255,255,0.3)',
-                        maxTicksLimit: 12
+                        font: { size: window.innerWidth < 480 ? 7 : 12 },
+                        maxTicksLimit: window.innerWidth < 480 ? 6 : 12
                     },
                     grid: {
                         color: 'rgba(255,255,255,0.05)'

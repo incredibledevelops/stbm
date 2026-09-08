@@ -2,53 +2,114 @@
 
 {% block title %}Admin · {% block admin_title %}{% endblock %} · STBM{% endblock %}
 
+{% block extra_css %}
+<style>
+    .admin-sidebar {
+        width: 16rem;
+        background: #1a1625;
+        border: 1px solid rgba(255,255,255,0.05);
+        border-radius: 1rem;
+        padding: 1rem;
+        height: calc(100vh - 8rem);
+        position: sticky;
+        top: 6rem;
+        overflow-y: auto;
+    }
+    
+    .admin-sidebar::-webkit-scrollbar {
+        width: 4px;
+    }
+    .admin-sidebar::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    .admin-sidebar::-webkit-scrollbar-thumb {
+        background: rgba(255,255,255,0.1);
+        border-radius: 2px;
+    }
+    .admin-sidebar::-webkit-scrollbar-thumb:hover {
+        background: rgba(212, 169, 75, 0.3);
+    }
+    
+    @media (max-width: 1024px) {
+        .admin-sidebar {
+            display: none !important;
+        }
+        .admin-content {
+            width: 100% !important;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .admin-container {
+            padding: 0.5rem !important;
+        }
+        .admin-sidebar-mobile {
+            padding: 0.5rem !important;
+        }
+        .admin-nav-link {
+            font-size: 0.75rem !important;
+            padding: 0.5rem 0.75rem !important;
+        }
+        .admin-nav-icon {
+            font-size: 0.9rem !important;
+        }
+        .admin-badge {
+            font-size: 0.5rem !important;
+            padding: 0.1rem 0.4rem !important;
+        }
+        .admin-back-link {
+            font-size: 0.7rem !important;
+            padding: 0.4rem 0.75rem !important;
+        }
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="flex gap-6 max-w-7xl mx-auto px-4 py-8">
+<div class="admin-container flex gap-4 sm:gap-6 max-w-7xl mx-auto px-3 sm:px-4 py-4 sm:py-8">
     <!-- Admin Sidebar -->
-    <aside class="w-64 bg-[#1a1625] border border-white/5 rounded-2xl p-4 hidden lg:block h-[calc(100vh-12rem)] sticky top-24 overflow-y-auto">
-        <div class="border-b border-white/5 pb-4 mb-4">
-            <span class="text-xs text-white/30 uppercase tracking-wider font-bold">Admin Panel</span>
+    <aside class="admin-sidebar hidden lg:block">
+        <div class="border-b border-white/5 pb-3 sm:pb-4 mb-3 sm:mb-4">
+            <span class="text-[10px] sm:text-xs text-white/30 uppercase tracking-wider font-bold">Admin Panel</span>
         </div>
-        <nav class="space-y-1.5 text-sm">
-            <a href="{{ url_for('admin_dashboard') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 hover:bg-white/5 transition {% if request.endpoint == 'admin_dashboard' %}bg-[#d4a94b]/20 text-[#d4a94b]{% endif %}">
-                <i class="fas fa-chart-pie w-5 text-center"></i> Dashboard
+        <nav class="space-y-1 text-xs sm:text-sm">
+            <a href="{{ url_for('admin_dashboard') }}" class="admin-nav-link flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-3 rounded-xl text-white/70 hover:bg-white/5 transition {% if request.endpoint == 'admin_dashboard' %}bg-[#d4a94b]/20 text-[#d4a94b]{% endif %}">
+                <i class="admin-nav-icon fas fa-chart-pie w-4 sm:w-5 text-center"></i> Dashboard
             </a>
-            <a href="{{ url_for('admin_products') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 hover:bg-white/5 transition {% if request.endpoint in ['admin_products', 'admin_add_product', 'admin_edit_product'] %}bg-[#d4a94b]/20 text-[#d4a94b]{% endif %}">
-                <i class="fas fa-tshirt w-5 text-center"></i> Products
+            <a href="{{ url_for('admin_products') }}" class="admin-nav-link flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-3 rounded-xl text-white/70 hover:bg-white/5 transition {% if request.endpoint in ['admin_products', 'admin_add_product', 'admin_edit_product'] %}bg-[#d4a94b]/20 text-[#d4a94b]{% endif %}">
+                <i class="admin-nav-icon fas fa-tshirt w-4 sm:w-5 text-center"></i> Products
             </a>
-            <a href="{{ url_for('admin_orders') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 hover:bg-white/5 transition {% if request.endpoint == 'admin_orders' %}bg-[#d4a94b]/20 text-[#d4a94b]{% endif %}">
-                <i class="fas fa-shopping-cart w-5 text-center"></i> Orders
+            <a href="{{ url_for('admin_orders') }}" class="admin-nav-link flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-3 rounded-xl text-white/70 hover:bg-white/5 transition {% if request.endpoint == 'admin_orders' %}bg-[#d4a94b]/20 text-[#d4a94b]{% endif %}">
+                <i class="admin-nav-icon fas fa-shopping-cart w-4 sm:w-5 text-center"></i> Orders
             </a>
-            <a href="{{ url_for('admin_users') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 hover:bg-white/5 transition {% if request.endpoint in ['admin_users', 'admin_add_user', 'admin_edit_user_page'] %}bg-[#d4a94b]/20 text-[#d4a94b]{% endif %}">
-                <i class="fas fa-users w-5 text-center"></i> Users
+            <a href="{{ url_for('admin_users') }}" class="admin-nav-link flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-3 rounded-xl text-white/70 hover:bg-white/5 transition {% if request.endpoint in ['admin_users', 'admin_add_user', 'admin_edit_user_page'] %}bg-[#d4a94b]/20 text-[#d4a94b]{% endif %}">
+                <i class="admin-nav-icon fas fa-users w-4 sm:w-5 text-center"></i> Users
             </a>
-            <!-- Messages Link -->
-            <a href="{{ url_for('admin_messages') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 hover:bg-white/5 transition {% if request.endpoint in ['admin_messages', 'admin_message_detail'] %}bg-[#d4a94b]/20 text-[#d4a94b]{% endif %}">
-                <i class="fas fa-envelope w-5 text-center"></i> Messages
+            <a href="{{ url_for('admin_messages') }}" class="admin-nav-link flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-3 rounded-xl text-white/70 hover:bg-white/5 transition {% if request.endpoint in ['admin_messages', 'admin_message_detail'] %}bg-[#d4a94b]/20 text-[#d4a94b]{% endif %}">
+                <i class="admin-nav-icon fas fa-envelope w-4 sm:w-5 text-center"></i> Messages
                 {% set unread_count = get_unread_messages_count() %}
                 {% if unread_count > 0 %}
-                    <span class="ml-auto bg-[#d4a94b] text-black text-[10px] font-bold px-2 py-0.5 rounded-full messages-badge">{{ unread_count }}</span>
+                    <span class="admin-badge ml-auto bg-[#d4a94b] text-black text-[8px] sm:text-[10px] font-bold px-1.5 sm:px-2 py-0.5 rounded-full messages-badge">{{ unread_count }}</span>
                 {% else %}
-                    <span class="ml-auto messages-badge" style="display: none;">0</span>
+                    <span class="admin-badge ml-auto messages-badge" style="display: none;">0</span>
                 {% endif %}
             </a>
-            <!-- Analytics Link -->
-            <a href="{{ url_for('admin_analytics') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 hover:bg-white/5 transition {% if request.endpoint == 'admin_analytics' %}bg-[#d4a94b]/20 text-[#d4a94b]{% endif %}">
-                <i class="fas fa-chart-line w-5 text-center"></i> Analytics
+            <a href="{{ url_for('admin_analytics') }}" class="admin-nav-link flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-3 rounded-xl text-white/70 hover:bg-white/5 transition {% if request.endpoint == 'admin_analytics' %}bg-[#d4a94b]/20 text-[#d4a94b]{% endif %}">
+                <i class="admin-nav-icon fas fa-chart-line w-4 sm:w-5 text-center"></i> Analytics
             </a>
-            <a href="{{ url_for('admin_settings') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 hover:bg-white/5 transition {% if request.endpoint == 'admin_settings' %}bg-[#d4a94b]/20 text-[#d4a94b]{% endif %}">
-                <i class="fas fa-cog w-5 text-center"></i> Settings
+            <a href="{{ url_for('admin_settings') }}" class="admin-nav-link flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-3 rounded-xl text-white/70 hover:bg-white/5 transition {% if request.endpoint == 'admin_settings' %}bg-[#d4a94b]/20 text-[#d4a94b]{% endif %}">
+                <i class="admin-nav-icon fas fa-cog w-4 sm:w-5 text-center"></i> Settings
             </a>
         </nav>
-        <div class="border-t border-white/5 pt-4 mt-4">
-            <a href="{{ url_for('index') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-white/40 hover:text-white transition text-sm">
+        <div class="border-t border-white/5 pt-3 sm:pt-4 mt-3 sm:mt-4">
+            <a href="{{ url_for('index') }}" class="admin-back-link flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-3 rounded-xl text-white/40 hover:text-white transition text-xs sm:text-sm">
                 <i class="fas fa-arrow-left"></i> Back to Store
             </a>
         </div>
     </aside>
     
     <!-- Main Content -->
-    <div class="flex-1">
+    <div class="admin-content flex-1">
         {% block admin_content %}{% endblock %}
     </div>
 </div>
@@ -56,7 +117,6 @@
 
 {% block extra_js %}
 <script>
-// Auto-refresh unread message count
 function updateUnreadCount() {
     fetch('/api/unread-messages-count')
         .then(response => {
@@ -79,7 +139,6 @@ function updateUnreadCount() {
         .catch(error => console.error('Failed to update unread count:', error));
 }
 
-// Update every 30 seconds if user is on admin page
 document.addEventListener('DOMContentLoaded', function() {
     if (document.querySelector('.messages-badge')) {
         setInterval(updateUnreadCount, 30000);

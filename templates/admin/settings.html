@@ -48,152 +48,218 @@
         opacity: 1;
         transform: translateY(0);
     }
+    
+    @media (max-width: 480px) {
+        .settings-title {
+            font-size: 1.5rem !important;
+        }
+        .settings-subtitle {
+            font-size: 0.8rem !important;
+        }
+        .settings-card {
+            padding: 1rem !important;
+            border-radius: 0.75rem !important;
+        }
+        .settings-card-title {
+            font-size: 1rem !important;
+        }
+        .settings-label {
+            font-size: 0.6rem !important;
+        }
+        .settings-input {
+            font-size: 0.8rem !important;
+            padding: 0.5rem 0.75rem !important;
+        }
+        .webhook-card {
+            padding: 0.75rem !important;
+        }
+        .webhook-title {
+            font-size: 0.8rem !important;
+        }
+        .webhook-status-text {
+            font-size: 0.7rem !important;
+        }
+        .webhook-details {
+            font-size: 0.6rem !important;
+        }
+        .save-btn {
+            font-size: 0.85rem !important;
+            padding: 0.6rem 1.5rem !important;
+            width: 100%;
+        }
+        .settings-grid {
+            grid-template-columns: 1fr !important;
+            gap: 0.75rem !important;
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .settings-grid {
+            grid-template-columns: 1fr !important;
+        }
+        .webhook-grid {
+            grid-template-columns: 1fr !important;
+        }
+    }
+    
+    @media (min-width: 769px) {
+        .settings-grid {
+            grid-template-columns: 1fr 1fr;
+        }
+        .webhook-grid {
+            grid-template-columns: 1fr 1fr;
+        }
+    }
 </style>
 {% endblock %}
 
 {% block admin_content %}
-<div class="mb-8">
-    <h1 class="text-3xl font-bold text-white mb-1">Store Settings & Integrations</h1>
-    <p class="text-white/50 text-sm">Configure page info, payment gateway, and email credentials.</p>
-</div>
+<div class="settings-container max-w-3xl mx-auto px-3 sm:px-4">
+    <div class="mb-6 sm:mb-8">
+        <h1 class="settings-title text-2xl sm:text-3xl font-bold text-white mb-1">Store Settings & Integrations</h1>
+        <p class="settings-subtitle text-white/50 text-xs sm:text-sm">Configure page info, payment gateway, and email credentials.</p>
+    </div>
 
-<form method="POST" class="space-y-8 max-w-3xl">
-    {{ form.hidden_tag() }}
-    
-    <!-- Store Info -->
-    <div class="bg-[#1a1625] border border-white/5 p-6 rounded-2xl space-y-4">
-        <h3 class="text-lg font-bold text-[#d4a94b]">Page & Store Information</h3>
-        <div class="grid grid-cols-1 gap-4">
-            <div>
-                {{ form.store_name.label(class="block text-xs text-white/50 uppercase mb-2 font-medium") }}
-                {{ form.store_name(class="input-custom") }}
+    <form method="POST" class="space-y-6 sm:space-y-8">
+        {{ form.hidden_tag() }}
+        
+        <!-- Store Info -->
+        <div class="settings-card bg-[#1a1625] border border-white/5 p-4 sm:p-6 rounded-xl sm:rounded-2xl space-y-3 sm:space-y-4">
+            <h3 class="settings-card-title text-base sm:text-lg font-bold text-[#d4a94b]">Page & Store Information</h3>
+            <div class="space-y-3 sm:space-y-4">
+                <div>
+                    {{ form.store_name.label(class="settings-label block text-[10px] sm:text-xs text-white/50 uppercase mb-1 sm:mb-2 font-medium") }}
+                    {{ form.store_name(class="settings-input input-custom text-sm sm:text-base") }}
+                </div>
+                <div>
+                    {{ form.support_email.label(class="settings-label block text-[10px] sm:text-xs text-white/50 uppercase mb-1 sm:mb-2 font-medium") }}
+                    {{ form.support_email(class="settings-input input-custom text-sm sm:text-base") }}
+                    {% for error in form.support_email.errors %}
+                        <span class="text-red-400 text-xs sm:text-sm">{{ error }}</span>
+                    {% endfor %}
+                </div>
+                <div>
+                    {{ form.free_shipping_threshold.label(class="settings-label block text-[10px] sm:text-xs text-white/50 uppercase mb-1 sm:mb-2 font-medium") }}
+                    {{ form.free_shipping_threshold(class="settings-input input-custom text-sm sm:text-base", type="number", step="0.01") }}
+                    {% for error in form.free_shipping_threshold.errors %}
+                        <span class="text-red-400 text-xs sm:text-sm">{{ error }}</span>
+                    {% endfor %}
+                </div>
             </div>
-            <div>
-                {{ form.support_email.label(class="block text-xs text-white/50 uppercase mb-2 font-medium") }}
-                {{ form.support_email(class="input-custom") }}
-                {% for error in form.support_email.errors %}
-                    <span class="text-red-400 text-sm">{{ error }}</span>
-                {% endfor %}
-            </div>
-            <div>
-                {{ form.free_shipping_threshold.label(class="block text-xs text-white/50 uppercase mb-2 font-medium") }}
-                {{ form.free_shipping_threshold(class="input-custom", type="number", step="0.01") }}
-                {% for error in form.free_shipping_threshold.errors %}
-                    <span class="text-red-400 text-sm">{{ error }}</span>
-                {% endfor %}
-            </div>
-        </div>
-    </div>
-    
-    <!-- Currency & Regional Parameters -->
-    <div class="bg-[#1a1625] border border-white/5 p-6 rounded-2xl space-y-4">
-        <h3 class="text-lg font-bold text-[#d4a94b]">Currency & Regional Settings</h3>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-                <label class="block text-xs text-white/50 uppercase mb-2 font-medium">Currency Symbol</label>
-                <select id="currencySymbol" class="input-custom" onchange="updateConfig('currency_symbol', this.value)">
-                    <option value="GH₵" {% if get_setting('currency_symbol') == 'GH₵' %}selected{% endif %}>GH₵ (Ghana Cedis)</option>
-                    <option value="$" {% if get_setting('currency_symbol') == '$' %}selected{% endif %}>$ (US Dollar)</option>
-                    <option value="€" {% if get_setting('currency_symbol') == '€' %}selected{% endif %}>€ (Euro)</option>
-                    <option value="£" {% if get_setting('currency_symbol') == '£' %}selected{% endif %}>£ (British Pound)</option>
-                    <option value="₦" {% if get_setting('currency_symbol') == '₦' %}selected{% endif %}>₦ (Nigerian Naira)</option>
-                </select>
-            </div>
-            <div>
-                <label class="block text-xs text-white/50 uppercase mb-2 font-medium">Tax Rate (%)</label>
-                <input type="number" id="taxRate" class="input-custom" step="0.01" min="0" max="100"
-                       value="{{ get_setting('tax_rate') or '0' }}"
-                       onchange="updateConfig('tax_rate', this.value)">
-            </div>
-            <div>
-                <label class="block text-xs text-white/50 uppercase mb-2 font-medium">Tax Calculation</label>
-                <select id="taxCalculation" class="input-custom" onchange="updateConfig('tax_calculation', this.value)">
-                    <option value="exclusive" {% if get_setting('tax_calculation') == 'exclusive' %}selected{% endif %}>Exclusive (Added at checkout)</option>
-                    <option value="inclusive" {% if get_setting('tax_calculation') == 'inclusive' %}selected{% endif %}>Inclusive (Included in price)</option>
-                </select>
-            </div>
-            <div>
-                <label class="block text-xs text-white/50 uppercase mb-2 font-medium">Decimal Places</label>
-                <select id="decimalPlaces" class="input-custom" onchange="updateConfig('decimal_places', this.value)">
-                    <option value="0" {% if get_setting('decimal_places') == '0' %}selected{% endif %}>0 (Whole numbers)</option>
-                    <option value="2" {% if get_setting('decimal_places') != '0' %}selected{% endif %}>2 (Default)</option>
-                </select>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Integrations -->
-    <div class="bg-[#1a1625] border border-white/5 p-6 rounded-2xl space-y-4">
-        <h3 class="text-lg font-bold text-[#d4a94b]">Payment & Email Integrations</h3>
-        <div class="grid grid-cols-1 gap-4">
-            <div>
-                {{ form.paystack_public_key.label(class="block text-xs text-white/50 uppercase mb-2 font-medium") }}
-                {{ form.paystack_public_key(class="input-custom font-mono text-xs", placeholder="pk_live_...") }}
-            </div>
-            <div>
-                {{ form.paystack_secret_key.label(class="block text-xs text-white/50 uppercase mb-2 font-medium") }}
-                {{ form.paystack_secret_key(class="input-custom font-mono text-xs", type="password", placeholder="sk_live_...") }}
-            </div>
-            <div>
-                {{ form.email_app_password.label(class="block text-xs text-white/50 uppercase mb-2 font-medium") }}
-                {{ form.email_app_password(class="input-custom font-mono text-xs", type="password", placeholder="Email app password") }}
-                <p class="text-[11px] text-white/40 mt-1">Used for authenticating order notification emails sent via custom SMTP configuration.</p>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Webhook Health Monitors -->
-    <div class="bg-[#1a1625] border border-white/5 p-6 rounded-2xl space-y-4">
-        <div class="flex justify-between items-center">
-            <h3 class="text-lg font-bold text-[#d4a94b]">Service Health Monitor</h3>
-            <button type="button" onclick="checkServiceHealth()" class="text-sm text-[#d4a94b] hover:underline">
-                <i class="fas fa-sync-alt mr-1"></i> Refresh Status
-            </button>
         </div>
         
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <!-- Paystack Webhook Status -->
-            <div class="webhook-card bg-[#0f0c17] p-4 rounded-xl border border-white/5">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <span class="text-sm font-medium text-white">Paystack Webhook</span>
-                        <div class="flex items-center mt-1">
-                            <span id="paystack-status-dot" class="status-dot checking"></span>
-                            <span id="paystack-status-text" class="text-sm text-white/50">Checking...</span>
-                        </div>
-                    </div>
-                    <i class="fas fa-credit-card text-2xl text-white/20"></i>
+        <!-- Currency & Regional Parameters -->
+        <div class="settings-card bg-[#1a1625] border border-white/5 p-4 sm:p-6 rounded-xl sm:rounded-2xl space-y-3 sm:space-y-4">
+            <h3 class="settings-card-title text-base sm:text-lg font-bold text-[#d4a94b]">Currency & Regional Settings</h3>
+            <div class="settings-grid grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                <div>
+                    <label class="settings-label block text-[10px] sm:text-xs text-white/50 uppercase mb-1 sm:mb-2 font-medium">Currency Symbol</label>
+                    <select id="currencySymbol" class="settings-input input-custom text-sm sm:text-base" onchange="updateConfig('currency_symbol', this.value)">
+                        <option value="GH₵" {% if get_setting('currency_symbol') == 'GH₵' %}selected{% endif %}>GH₵ (Ghana Cedis)</option>
+                        <option value="$" {% if get_setting('currency_symbol') == '$' %}selected{% endif %}>$ (US Dollar)</option>
+                        <option value="€" {% if get_setting('currency_symbol') == '€' %}selected{% endif %}>€ (Euro)</option>
+                        <option value="£" {% if get_setting('currency_symbol') == '£' %}selected{% endif %}>£ (British Pound)</option>
+                        <option value="₦" {% if get_setting('currency_symbol') == '₦' %}selected{% endif %}>₦ (Nigerian Naira)</option>
+                    </select>
                 </div>
-                <div id="paystack-details" class="mt-2 text-xs text-white/30">
-                    <p>Endpoint: /webhook/paystack</p>
-                    <p id="paystack-ping-time">Last ping: Checking...</p>
+                <div>
+                    <label class="settings-label block text-[10px] sm:text-xs text-white/50 uppercase mb-1 sm:mb-2 font-medium">Tax Rate (%)</label>
+                    <input type="number" id="taxRate" class="settings-input input-custom text-sm sm:text-base" step="0.01" min="0" max="100"
+                           value="{{ get_setting('tax_rate') or '0' }}"
+                           onchange="updateConfig('tax_rate', this.value)">
                 </div>
-            </div>
-            
-            <!-- SMTP Status -->
-            <div class="webhook-card bg-[#0f0c17] p-4 rounded-xl border border-white/5">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <span class="text-sm font-medium text-white">SMTP Server</span>
-                        <div class="flex items-center mt-1">
-                            <span id="smtp-status-dot" class="status-dot checking"></span>
-                            <span id="smtp-status-text" class="text-sm text-white/50">Checking...</span>
-                        </div>
-                    </div>
-                    <i class="fas fa-envelope text-2xl text-white/20"></i>
+                <div>
+                    <label class="settings-label block text-[10px] sm:text-xs text-white/50 uppercase mb-1 sm:mb-2 font-medium">Tax Calculation</label>
+                    <select id="taxCalculation" class="settings-input input-custom text-sm sm:text-base" onchange="updateConfig('tax_calculation', this.value)">
+                        <option value="exclusive" {% if get_setting('tax_calculation') == 'exclusive' %}selected{% endif %}>Exclusive (Added at checkout)</option>
+                        <option value="inclusive" {% if get_setting('tax_calculation') == 'inclusive' %}selected{% endif %}>Inclusive (Included in price)</option>
+                    </select>
                 </div>
-                <div id="smtp-details" class="mt-2 text-xs text-white/30">
-                    <p id="smtp-server">Server: Checking...</p>
-                    <p id="smtp-last-test">Last test: Checking...</p>
+                <div>
+                    <label class="settings-label block text-[10px] sm:text-xs text-white/50 uppercase mb-1 sm:mb-2 font-medium">Decimal Places</label>
+                    <select id="decimalPlaces" class="settings-input input-custom text-sm sm:text-base" onchange="updateConfig('decimal_places', this.value)">
+                        <option value="0" {% if get_setting('decimal_places') == '0' %}selected{% endif %}>0 (Whole numbers)</option>
+                        <option value="2" {% if get_setting('decimal_places') != '0' %}selected{% endif %}>2 (Default)</option>
+                    </select>
                 </div>
             </div>
         </div>
-    </div>
-    
-    <div>
-        <button type="submit" class="btn-primary px-8 py-3 rounded-xl font-semibold">Save All Changes</button>
-    </div>
-</form>
+        
+        <!-- Integrations -->
+        <div class="settings-card bg-[#1a1625] border border-white/5 p-4 sm:p-6 rounded-xl sm:rounded-2xl space-y-3 sm:space-y-4">
+            <h3 class="settings-card-title text-base sm:text-lg font-bold text-[#d4a94b]">Payment & Email Integrations</h3>
+            <div class="space-y-3 sm:space-y-4">
+                <div>
+                    {{ form.paystack_public_key.label(class="settings-label block text-[10px] sm:text-xs text-white/50 uppercase mb-1 sm:mb-2 font-medium") }}
+                    {{ form.paystack_public_key(class="settings-input input-custom font-mono text-xs sm:text-sm", placeholder="pk_live_...") }}
+                </div>
+                <div>
+                    {{ form.paystack_secret_key.label(class="settings-label block text-[10px] sm:text-xs text-white/50 uppercase mb-1 sm:mb-2 font-medium") }}
+                    {{ form.paystack_secret_key(class="settings-input input-custom font-mono text-xs sm:text-sm", type="password", placeholder="sk_live_...") }}
+                </div>
+                <div>
+                    {{ form.email_app_password.label(class="settings-label block text-[10px] sm:text-xs text-white/50 uppercase mb-1 sm:mb-2 font-medium") }}
+                    {{ form.email_app_password(class="settings-input input-custom font-mono text-xs sm:text-sm", type="password", placeholder="Email app password") }}
+                    <p class="text-[10px] sm:text-[11px] text-white/40 mt-1">Used for authenticating order notification emails sent via custom SMTP configuration.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Webhook Health Monitors -->
+        <div class="settings-card bg-[#1a1625] border border-white/5 p-4 sm:p-6 rounded-xl sm:rounded-2xl space-y-3 sm:space-y-4">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 sm:gap-0">
+                <h3 class="settings-card-title text-base sm:text-lg font-bold text-[#d4a94b]">Service Health Monitor</h3>
+                <button type="button" onclick="checkServiceHealth()" class="text-xs sm:text-sm text-[#d4a94b] hover:underline">
+                    <i class="fas fa-sync-alt mr-1"></i> Refresh Status
+                </button>
+            </div>
+            
+            <div class="webhook-grid grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                <!-- Paystack Webhook Status -->
+                <div class="webhook-card bg-[#0f0c17] p-3 sm:p-4 rounded-xl border border-white/5">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <span class="webhook-title text-xs sm:text-sm font-medium text-white">Paystack Webhook</span>
+                            <div class="flex items-center mt-0.5 sm:mt-1">
+                                <span id="paystack-status-dot" class="status-dot checking"></span>
+                                <span id="paystack-status-text" class="webhook-status-text text-xs sm:text-sm text-white/50">Checking...</span>
+                            </div>
+                        </div>
+                        <i class="fas fa-credit-card text-xl sm:text-2xl text-white/20"></i>
+                    </div>
+                    <div id="paystack-details" class="webhook-details mt-1.5 sm:mt-2 text-[10px] sm:text-xs text-white/30">
+                        <p>Endpoint: /webhook/paystack</p>
+                        <p id="paystack-ping-time">Last ping: Checking...</p>
+                    </div>
+                </div>
+                
+                <!-- SMTP Status -->
+                <div class="webhook-card bg-[#0f0c17] p-3 sm:p-4 rounded-xl border border-white/5">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <span class="webhook-title text-xs sm:text-sm font-medium text-white">SMTP Server</span>
+                            <div class="flex items-center mt-0.5 sm:mt-1">
+                                <span id="smtp-status-dot" class="status-dot checking"></span>
+                                <span id="smtp-status-text" class="webhook-status-text text-xs sm:text-sm text-white/50">Checking...</span>
+                            </div>
+                        </div>
+                        <i class="fas fa-envelope text-xl sm:text-2xl text-white/20"></i>
+                    </div>
+                    <div id="smtp-details" class="webhook-details mt-1.5 sm:mt-2 text-[10px] sm:text-xs text-white/30">
+                        <p id="smtp-server">Server: Checking...</p>
+                        <p id="smtp-last-test">Last test: Checking...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="flex flex-col sm:flex-row gap-3 sm:gap-4">
+            <button type="submit" class="save-btn btn-primary px-6 sm:px-8 py-2.5 sm:py-3 rounded-xl font-semibold text-sm sm:text-base w-full sm:w-auto">
+                <i class="fas fa-save mr-2"></i> Save All Changes
+            </button>
+        </div>
+    </form>
+</div>
 
 <!-- Auto-save indicator -->
 <div id="autoSaveIndicator" class="auto-save-indicator">
@@ -207,7 +273,6 @@
     });
     
     function checkServiceHealth() {
-        // Update status indicators to "checking"
         setStatus('paystack', 'checking', 'Checking...', 'Checking...');
         setStatus('smtp', 'checking', 'Checking...', 'Checking...');
         
@@ -258,7 +323,7 @@
         }
         if (statusText) {
             statusText.textContent = text;
-            statusText.className = `text-sm ${
+            statusText.className = `text-xs sm:text-sm ${
                 status === 'healthy' ? 'text-green-400' : 
                 status === 'error' ? 'text-red-400' : 
                 status === 'unconfigured' ? 'text-yellow-400' : 
@@ -267,7 +332,6 @@
         }
         
         if (detailsDiv && details) {
-            // Update the last paragraph with details
             const paragraphs = detailsDiv.querySelectorAll('p');
             if (paragraphs.length > 0) {
                 const lastP = paragraphs[paragraphs.length - 1];
@@ -279,7 +343,6 @@
     }
     
     function updateConfig(key, value) {
-        // Auto-save configuration changes
         const data = {};
         data[key] = value;
         
@@ -299,7 +362,6 @@
         .then(data => {
             if (data.success) {
                 showAutoSaveIndicator('Settings saved successfully!');
-                // Show a subtle success indicator on the input
                 const inputs = document.querySelectorAll('input, select');
                 inputs.forEach(input => {
                     if (input.id === key || input.id === key.replace('_', '')) {
@@ -330,10 +392,8 @@
         }, 3000);
     }
     
-    // Auto-check health every 30 seconds
     let healthCheckInterval = setInterval(checkServiceHealth, 30000);
     
-    // Clean up interval when page is unloaded
     window.addEventListener('beforeunload', function() {
         clearInterval(healthCheckInterval);
     });
