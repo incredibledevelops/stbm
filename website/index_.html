@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#0f0c17" />
+<title>STBM · Safo The Black Messiah — Coming Soon</title>
+<meta name="description" content="Something is being tailored in the dark. Safo The Black Messiah — Spring '26. Join the list and see it first." />
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          ink:       '#0f0c17',
+          ink2:      '#1a1525',
+          gold:      '#d4a94b',
+          golddark:  '#b88d3a',
+          goldlight: '#f0d78c',
+        },
+        fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
+      },
+    },
+  };
+</script>
+
+<style>
+  /* ============ BASE ============ */
+  *{ -webkit-tap-highlight-color: transparent; }
+  html, body{ font-family:'Inter', system-ui, sans-serif; }
+  ::selection{ background:#d4a94b; color:#0f0c17; }
+
+  /* ============ TEXT EFFECTS ============ */
+  .glow-text{ text-shadow: 0 0 42px rgba(212,169,75,.35); }
+
+  .gold-gradient{
+    background: linear-gradient(100deg,#f7e9b8 0%,#d4a94b 28%,#b88d3a 50%,#f0d78c 72%,#d4a94b 100%);
+    background-size: 220% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: shineText 7s linear infinite;
+  }
+  @keyframes shineText{ to{ background-position: 220% center; } }
+
+  /* ============ BACKGROUND ============ */
+  .orb{
+    position:absolute;
+    border-radius:9999px;
+    filter: blur(90px);
+    animation: float 16s ease-in-out infinite;
+    will-change: transform;
+  }
+  @keyframes float{
+    0%,100%{ transform: translate3d(0,0,0) scale(1); }
+    50%    { transform: translate3d(0,-28px,0) scale(1.07); }
+  }
+
+  .grid-lines{
+    background-image:
+      linear-gradient(to right,  rgba(212,169,75,.06) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(212,169,75,.06) 1px, transparent 1px);
+    background-size: 56px 56px;
+    -webkit-mask-image: radial-gradient(ellipse 75% 55% at 50% 42%, #000 20%, transparent 78%);
+            mask-image: radial-gradient(ellipse 75% 55% at 50% 42%, #000 20%, transparent 78%);
+  }
+  @media (min-width: 640px){ .grid-lines{ background-size: 72px 72px; } }
+
+  .noise{
+    opacity:.035;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 180px 180px;
+  }
+
+  /* ============ COUNTDOWN ============ */
+  .count-box{
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:.2rem; padding:.7rem .25rem; border-radius:.9rem;
+    border:1px solid rgba(255,255,255,.08);
+    background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.012));
+    -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
+  }
+  @media (min-width: 640px){
+    .count-box{ padding:1rem .5rem; border-radius:1.15rem; }
+  }
+  .count-num{
+    font-weight:800; line-height:1;
+    font-variant-numeric: tabular-nums;
+    color:#fff;
+    font-size: clamp(1.3rem, 6.5vw, 2.4rem);
+  }
+  .count-label{
+    font-size: clamp(.5rem, 2.3vw, .68rem);
+    letter-spacing:.16em; text-transform:uppercase;
+    color: rgba(255,255,255,.38); font-weight:600;
+  }
+  .pop{ animation: pop .45s ease; }
+  @keyframes pop{
+    0%  { transform: scale(1.16); color:#f0d78c; }
+    100%{ transform: scale(1); }
+  }
+
+  /* ============ GOLD BUTTON ============ */
+  .btn-gold{
+    position:relative; overflow:hidden; color:#0f0c17; font-weight:700;
+    background: linear-gradient(135deg,#e9c977,#d4a94b 45%,#b88d3a);
+    transition: box-shadow .25s ease, transform .15s ease;
+  }
+  .btn-gold:hover{ box-shadow: 0 0 26px rgba(212,169,75,.45); }
+  .btn-gold:active{ transform: scale(.97); }
+  .btn-gold:disabled{ opacity:.75; cursor:wait; }
+  .btn-gold::after{
+    content:''; position:absolute; top:-20%; left:-140%; width:55%; height:140%;
+    background: linear-gradient(100deg, transparent, rgba(255,255,255,.6), transparent);
+    transform: skewX(-22deg);
+    animation: sweep 3.6s ease-in-out infinite;
+    pointer-events:none;
+  }
+  @keyframes sweep{
+    0%        { left:-140%; }
+    55%, 100% { left:160%; }
+  }
+
+  /* ============ ENTRANCE REVEAL ============ */
+  .reveal{ opacity:0; animation: fadeUp .85s cubic-bezier(.22,.68,.24,1) forwards; }
+  .d1{ animation-delay:.06s } .d2{ animation-delay:.14s } .d3{ animation-delay:.22s }
+  .d4{ animation-delay:.32s } .d5{ animation-delay:.42s }
+  @keyframes fadeUp{
+    from{ opacity:0; transform: translateY(22px); }
+    to  { opacity:1; transform:none; }
+  }
+
+  /* ============ SHAKE (invalid email) ============ */
+  .shake{ animation: shake .4s ease; }
+  @keyframes shake{
+    0%,100%{ transform: translateX(0); }
+    20%{ transform: translateX(-7px); }
+    40%{ transform: translateX(7px); }
+    60%{ transform: translateX(-5px); }
+    80%{ transform: translateX(5px); }
+  }
+
+  /* ============ MARQUEE ============ */
+  .marquee-track{
+    display:flex; width:max-content;
+    animation: marquee 32s linear infinite;
+    will-change: transform;
+  }
+  .marquee-group{
+    display:flex; align-items:center;
+    gap:1.25rem; padding-right:1.25rem;
+  }
+  .marquee-group span{
+    font-size:10px; font-weight:600;
+    text-transform:uppercase; letter-spacing:.28em;
+    color: rgba(255,255,255,.38); white-space:nowrap;
+  }
+  .marquee-group span.dot{ color: rgba(212,169,75,.75); letter-spacing:0; }
+  @media (min-width: 640px){
+    .marquee-group{ gap:2rem; padding-right:2rem; }
+    .marquee-group span{ font-size:12px; }
+  }
+  @keyframes marquee{
+    from{ transform: translateX(0); }
+    to  { transform: translateX(-50%); }
+  }
+
+  /* ============ REDUCED MOTION ============ */
+  @media (prefers-reduced-motion: reduce){
+    *, *::before, *::after{
+      animation-duration:.001ms !important;
+      animation-iteration-count:1 !important;
+      transition-duration:.001ms !important;
+    }
+    .reveal{ opacity:1 !important; }
+    .marquee-track{ animation:none !important; }
+  }
+</style>
+</head>
+
+<body class="min-h-screen bg-ink font-sans text-[#ece7e1] antialiased flex flex-col overflow-x-hidden">
+
+  <!-- ==================== BACKGROUND LAYERS ==================== -->
+  <div class="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
+    <img id="bgImg"
+         src="https://images.unsplash.com/photo-1594385208974-2e75f8d7bb48?w=1400&q=80"
+         alt=""
+         class="absolute inset-0 h-full w-full object-cover opacity-[0.14] grayscale transition-transform duration-700 ease-out" />
+
+    <div class="absolute inset-0 bg-gradient-to-b from-ink/70 via-ink/90 to-ink"></div>
+
+    <div id="orbLayer" class="absolute inset-0 transition-transform duration-500 ease-out">
+      <div class="orb h-[24rem] w-[24rem] -left-24 -top-24 bg-gold/25"></div>
+      <div class="orb h-[20rem] w-[20rem] -right-20 bottom-0 bg-[#6d4bd4]/25" style="animation-delay:-7s"></div>
+      <div class="orb h-[16rem] w-[16rem] left-1/2 top-1/3 bg-gold/10" style="animation-delay:-3s"></div>
+    </div>
+
+    <div class="grid-lines absolute inset-0"></div>
+    <div class="noise absolute inset-0"></div>
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_35%,#0f0c17_100%)]"></div>
+  </div>
+
+  <!-- ==================== HEADER ==================== -->
+  <header class="reveal relative z-10 flex w-full items-center justify-between px-5 py-5 sm:px-8 sm:py-7">
+    <a href="#" class="text-lg font-extrabold tracking-tight text-gold sm:text-xl">STBM</a>
+
+    <div class="flex items-center gap-4 text-sm text-white/50 sm:gap-6">
+      <a href="#" aria-label="Instagram" class="transition hover:text-gold"><i class="fab fa-instagram"></i></a>
+      <a href="#" aria-label="X" class="transition hover:text-gold"><i class="fab fa-x-twitter"></i></a>
+      <a href="#" aria-label="TikTok" class="transition hover:text-gold"><i class="fab fa-tiktok"></i></a>
+      <span class="h-4 w-px bg-white/10"></span>
+      <a href="/store" class="text-xs font-medium transition hover:text-gold sm:text-sm">
+        Store <i class="fas fa-arrow-right ml-1 text-[10px]"></i>
+      </a>
+    </div>
+  </header>
+
+  <!-- ==================== HERO ==================== -->
+  <main class="relative z-10 flex flex-1 items-center justify-center px-5 py-10 sm:px-8 sm:py-14">
+    <div class="mx-auto w-full max-w-3xl text-center">
+
+      <!-- Badge -->
+      <div class="reveal d1 mb-6 flex justify-center sm:mb-8">
+        <span class="inline-flex items-center gap-2 rounded-full border border-gold/30 bg-gold/10 px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.22em] text-gold sm:text-xs">
+          <span class="relative flex h-1.5 w-1.5">
+            <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-gold opacity-75"></span>
+            <span class="relative inline-flex h-1.5 w-1.5 rounded-full bg-gold"></span>
+          </span>
+          Spring '26 — Coming Soon
+        </span>
+      </div>
+
+      <!-- Headline -->
+      <h1 class="reveal d2 font-extrabold leading-[1.05] tracking-tight"
+          style="font-size:clamp(2.15rem, 8.5vw, 4.75rem)">
+        <span class="block text-white">Safo</span>
+        <span class="gold-gradient glow-text block">The Black Messiah</span>
+      </h1>
+
+      <!-- Subheadline -->
+      <p class="reveal d3 mx-auto mt-5 max-w-xl text-sm leading-relaxed text-white/55 sm:mt-7 sm:text-lg">
+        Bold silhouettes. Sacred craftsmanship. A new house is being tailored in the dark —
+        be the first to witness the drop.
+      </p>
+
+      <!-- Countdown -->
+      <div class="reveal d4 mt-9 sm:mt-12">
+        <p class="mb-3 text-[10px] font-semibold uppercase tracking-[0.3em] text-white/35 sm:text-xs">
+          The reveal begins in
+        </p>
+
+        <div class="mx-auto grid max-w-md grid-cols-4 gap-2 sm:gap-4">
+          <div class="count-box">
+            <span id="cd-days" class="count-num">00</span>
+            <span class="count-label">Days</span>
+          </div>
+          <div class="count-box">
+            <span id="cd-hours" class="count-num">00</span>
+            <span class="count-label">Hours</span>
+          </div>
+          <div class="count-box">
+            <span id="cd-mins" class="count-num">00</span>
+            <span class="count-label">Mins</span>
+          </div>
+          <div class="count-box">
+            <span id="cd-secs" class="count-num">00</span>
+            <span class="count-label">Secs</span>
+          </div>
+        </div>
+
+        <p id="launchNote" class="mt-4 min-h-[1.25rem] text-xs text-gold/80 sm:text-sm"></p>
+      </div>
+
+      <!-- Waitlist -->
+      <div class="reveal d5 mt-9 w-full sm:mt-12">
+        <div id="formWrap" class="mx-auto w-full max-w-md">
+          <form id="waitlistForm" novalidate class="w-full">
+            <div id="field"
+                 class="flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] p-1.5 pl-4 backdrop-blur-md transition focus-within:border-gold/60 focus-within:bg-white/[0.07] sm:pl-5">
+              <i class="far fa-envelope shrink-0 text-sm text-white/35"></i>
+              <input id="email" type="email" inputmode="email" autocomplete="email"
+                     placeholder="your@email.com" aria-label="Email address"
+                     class="min-w-0 flex-1 bg-transparent text-base text-white placeholder-white/30 outline-none sm:text-[15px]" />
+              <button id="submitBtn" type="submit"
+                      class="btn-gold shrink-0 rounded-full px-4 py-2.5 text-xs font-bold sm:px-6 sm:py-3 sm:text-sm">
+                <span class="btn-label">Notify me</span>
+              </button>
+            </div>
+            <p id="formMsg" aria-live="polite" class="mt-3 min-h-[1.25rem] text-xs sm:text-sm"></p>
+          </form>
+        </div>
+
+        <div id="successState" class="mx-auto hidden w-full max-w-md">
+          <div class="rounded-2xl border border-gold/25 bg-gold/[0.07] px-5 py-5 backdrop-blur-md">
+            <i class="fas fa-check-circle mb-2 text-2xl text-gold"></i>
+            <p class="text-sm font-semibold text-white sm:text-base">You're on the list.</p>
+            <p class="mt-1 text-xs text-white/50 sm:text-sm">We'll whisper first when the drop goes live.</p>
+          </div>
+        </div>
+
+        <p class="mt-4 text-[10px] uppercase tracking-[0.2em] text-white/25 sm:text-xs">
+          No spam · Only the drop
+        </p>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ==================== MARQUEE ==================== -->
+  <div class="relative z-10 mt-10 overflow-hidden border-y border-white/5 bg-white/[0.02] py-3 sm:py-4">
+    <div class="marquee-track">
+      <div class="marquee-group">
+        <span>Tailored Rebellion</span><span class="dot">✦</span>
+        <span>Sacred Craft</span><span class="dot">✦</span>
+        <span>Limited Drops</span><span class="dot">✦</span>
+        <span>Accra → The World</span><span class="dot">✦</span>
+        <span>Spring '26</span><span class="dot">✦</span>
+      </div>
+      <div class="marquee-group" aria-hidden="true">
+        <span>Tailored Rebellion</span><span class="dot">✦</span>
+        <span>Sacred Craft</span><span class="dot">✦</span>
+        <span>Limited Drops</span><span class="dot">✦</span>
+        <span>Accra → The World</span><span class="dot">✦</span>
+        <span>Spring '26</span><span class="dot">✦</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="relative z-10 px-5 py-6 text-center text-[11px] text-white/25 sm:text-xs">
+    © <span id="year">2026</span> Safo The Black Messiah · Accra, Ghana
+  </footer>
+
+  <!-- ==================== SCRIPT ==================== -->
+  <script>
+  (function () {
+    'use strict';
+
+    /* ---------- Auto year ---------- */
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    /* ---------- Countdown ---------- */
+    // Change this date to your real launch moment (UTC).
+    const LAUNCH = new Date('2026-03-20T18:00:00Z').getTime();
+
+    const cd = {
+      days:  document.getElementById('cd-days'),
+      hours: document.getElementById('cd-hours'),
+      mins:  document.getElementById('cd-mins'),
+      secs:  document.getElementById('cd-secs'),
+    };
+    const note = document.getElementById('launchNote');
+    const pad  = (n) => String(n).padStart(2, '0');
+    let timer  = null;
+
+    function setVal(el, value) {
+      if (el.textContent === value) return;
+      el.textContent = value;
+      el.classList.remove('pop');
+      void el.offsetWidth;      // restart animation
+      el.classList.add('pop');
+    }
+
+    function renderCountdown() {
+      const diff = LAUNCH - Date.now();
+
+      if (diff <= 0) {
+        Object.values(cd).forEach((el) => setVal(el, '00'));
+        note.textContent = 'The wait is over — the collection is live.';
+        if (timer) clearInterval(timer);
+        return;
+      }
+
+      const s = Math.floor(diff / 1000);
+      setVal(cd.days,  pad(Math.floor(s / 86400)));
+      setVal(cd.hours, pad(Math.floor((s % 86400) / 3600)));
+      setVal(cd.mins,  pad(Math.floor((s % 3600) / 60)));
+      setVal(cd.secs,  pad(s % 60));
+    }
+
+    renderCountdown();
+    timer = setInterval(renderCountdown, 1000);
+
+    /* ---------- Waitlist form ---------- */
+    const form      = document.getElementById('waitlistForm');
+    const input     = document.getElementById('email');
+    const msg       = document.getElementById('formMsg');
+    const field     = document.getElementById('field');
+    const btn       = document.getElementById('submitBtn');
+    const label     = btn.querySelector('.btn-label');
+    const formWrap  = document.getElementById('formWrap');
+    const success   = document.getElementById('successState');
+
+    const EMAIL_RE  = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+    function showMsg(text, type) {
+      msg.textContent = text;
+      msg.className = 'mt-3 min-h-[1.25rem] text-xs sm:text-sm ' +
+        (type === 'error' ? 'text-red-400' : 'text-gold');
+    }
+
+    function shake() {
+      field.classList.remove('shake');
+      void field.offsetWidth;
+      field.classList.add('shake');
+    }
+    field.addEventListener('animationend', () => field.classList.remove('shake'));
+
+    input.addEventListener('input', () => {
+      if (msg.textContent) showMsg('');
+    });
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const value = input.value.trim();
+
+      if (!value) {
+        showMsg('Please enter your email address.', 'error');
+        shake(); input.focus();
+        return;
+      }
+      if (!EMAIL_RE.test(value)) {
+        showMsg("Hmm, that email doesn't look right.", 'error');
+        shake(); input.focus();
+        return;
+      }
+
+      showMsg('');
+      btn.disabled = true;
+      label.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i>';
+
+      // Simulated request — swap this for your real endpoint.
+      setTimeout(function () {
+        try {
+          const list = JSON.parse(localStorage.getItem('stbm_waitlist') || '[]');
+          const key  = value.toLowerCase();
+          if (!list.includes(key)) list.push(key);
+          localStorage.setItem('stbm_waitlist', JSON.stringify(list));
+        } catch (_) { /* storage unavailable — ignore */ }
+
+        formWrap.classList.add('hidden');
+        success.classList.remove('hidden');
+        success.classList.add('reveal');
+      }, 900);
+    });
+
+    /* ---------- Pointer parallax (desktop / fine pointers only) ---------- */
+    const orbLayer = document.getElementById('orbLayer');
+    const bgImg    = document.getElementById('bgImg');
+    const fine     = window.matchMedia('(pointer: fine) and (prefers-reduced-motion: no-preference)');
+
+    if (fine.matches) {
+      window.addEventListener('mousemove', function (e) {
+        const x = (e.clientX / window.innerWidth  - 0.5);
+        const y = (e.clientY / window.innerHeight - 0.5);
+
+        orbLayer.style.transform = 'translate3d(' + (x * 26) + 'px,' + (y * 26) + 'px,0)';
+        bgImg.style.transform    = 'scale(1.06) translate3d(' + (x * -14) + 'px,' + (y * -14) + 'px,0)';
+      }, { passive: true });
+    }
+  })();
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STBM · Coming Soon</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        stbm: {
+                            gold: '#d4a94b',
+                            dark: '#0f0c17',
+                            card: '#1a1525',
+                            text: '#ece7e1'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'fade-in-up': 'fadeInUp 1s ease-out forwards',
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #0f0c17;
+            color: #ece7e1;
+            overflow-x: hidden;
+        }
+        .glow-text {
+            text-shadow: 0 0 20px rgba(212, 169, 75, 0.4);
+        }
+        .bg-glow {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(212, 169, 75, 0.08) 0%, rgba(15, 12, 23, 0) 70%);
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: -1;
+            pointer-events: none;
+        }
+        .btn-primary { 
+            background: #d4a94b; 
+            transition: all 0.3s ease; 
+            color: #000; 
+            font-weight: 700; 
+        }
+        .btn-primary:hover { 
+            background: #b88d3a; 
+            box-shadow: 0 0 20px rgba(212, 169, 75, 0.4); 
+            transform: translateY(-2px);
+        }
+        .input-dark {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        .input-dark:focus {
+            border-color: #d4a94b;
+            background: rgba(255, 255, 255, 0.05);
+            box-shadow: 0 0 15px rgba(212, 169, 75, 0.1);
+            outline: none;
+        }
+        /* Custom image overlay */
+        .hero-bg {
+            background-image: linear-gradient(to bottom, rgba(15, 12, 23, 0.8), #0f0c17), url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .delay-100 { animation-delay: 100ms; }
+        .delay-200 { animation-delay: 200ms; }
+        .delay-300 { animation-delay: 300ms; }
+        .delay-400 { animation-delay: 400ms; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col hero-bg relative">
+
+    <!-- Background glowing ambient orb -->
+    <div class="bg-glow animate-pulse-slow hidden md:block"></div>
+
+    <!-- Header -->
+    <header class="py-6 px-6 sm:px-10 z-10 opacity-0 animate-fade-in-up flex justify-between items-center">
+        <div class="text-2xl sm:text-3xl font-extrabold tracking-tighter text-stbm-gold glow-text cursor-default">
+            STBM
+        </div>
+        <div class="flex gap-4">
+            <a href="#" class="text-white/50 hover:text-stbm-gold transition duration-300"><i class="fab fa-instagram text-xl"></i></a>
+            <a href="#" class="text-white/50 hover:text-stbm-gold transition duration-300"><i class="fab fa-x-twitter text-xl"></i></a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow flex flex-col items-center justify-center px-4 sm:px-6 z-10 relative mt-[-40px]">
+        
+        <div class="max-w-4xl mx-auto text-center w-full">
+            <!-- Badge -->
+            <div class="inline-flex items-center gap-2 mb-6 sm:mb-8 opacity-0 animate-fade-in-up delay-100">
+                <span class="bg-stbm-gold/10 border border-stbm-gold/30 text-stbm-gold text-[10px] sm:text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-[0.2em] backdrop-blur-sm">
+                    Collection 01
+                </span>
+            </div>
+
+            <!-- Headline -->
+            <h1 class="text-4xl sm:text-5xl md:text-7xl font-black mb-4 sm:mb-6 leading-[1.1] opacity-0 animate-fade-in-up delay-200 uppercase tracking-tight">
+                <span class="text-white block">A New Era of</span>
+                <span class="text-stbm-gold glow-text block mt-1">Sacred Rebellion</span>
+            </h1>
+
+            <p class="text-white/60 text-sm sm:text-lg md:text-xl max-w-2xl mx-auto mb-10 sm:mb-14 font-light opacity-0 animate-fade-in-up delay-300 px-4">
+                Safo The Black Messiah is arriving soon. Where premium tailoring meets bold streetwear silhouettes. Prepare for the drop.
+            </p>
+
+            <!-- Countdown Timer -->
+            <div class="grid grid-cols-4 gap-2 sm:gap-4 md:gap-6 max-w-2xl mx-auto mb-12 sm:mb-16 opacity-0 animate-fade-in-up delay-400">
+                <div class="flex flex-col items-center p-3 sm:p-5 bg-stbm-card/80 backdrop-blur-md rounded-xl sm:rounded-2xl border border-white/5">
+                    <span id="days" class="text-2xl sm:text-4xl md:text-5xl font-bold text-white mb-1">00</span>
+                    <span class="text-[8px] sm:text-xs text-stbm-gold uppercase tracking-widest font-semibold">Days</span>
+                </div>
+                <div class="flex flex-col items-center p-3 sm:p-5 bg-stbm-card/80 backdrop-blur-md rounded-xl sm:rounded-2xl border border-white/5">
+                    <span id="hours" class="text-2xl sm:text-4xl md:text-5xl font-bold text-white mb-1">00</span>
+                    <span class="text-[8px] sm:text-xs text-stbm-gold uppercase tracking-widest font-semibold">Hours</span>
+                </div>
+                <div class="flex flex-col items-center p-3 sm:p-5 bg-stbm-card/80 backdrop-blur-md rounded-xl sm:rounded-2xl border border-white/5">
+                    <span id="minutes" class="text-2xl sm:text-4xl md:text-5xl font-bold text-white mb-1">00</span>
+                    <span class="text-[8px] sm:text-xs text-stbm-gold uppercase tracking-widest font-semibold">Mins</span>
+                </div>
+                <div class="flex flex-col items-center p-3 sm:p-5 bg-stbm-card/80 backdrop-blur-md rounded-xl sm:rounded-2xl border border-white/5">
+                    <span id="seconds" class="text-2xl sm:text-4xl md:text-5xl font-bold text-stbm-gold mb-1">00</span>
+                    <span class="text-[8px] sm:text-xs text-white/50 uppercase tracking-widest font-semibold">Secs</span>
+                </div>
+            </div>
+
+            <!-- Waitlist Form -->
+            <div class="max-w-md mx-auto opacity-0 animate-fade-in-up delay-400 w-full px-2">
+                <form id="waitlistForm" class="relative group">
+                    <div class="absolute -inset-0.5 bg-gradient-to-r from-stbm-gold/0 via-stbm-gold/20 to-stbm-gold/0 rounded-full blur opacity-0 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
+                    <div class="relative flex flex-col sm:flex-row gap-3">
+                        <div class="relative flex-grow">
+                            <i class="far fa-envelope absolute left-4 top-1/2 transform -translate-y-1/2 text-white/40"></i>
+                            <input type="email" id="email" required placeholder="Enter your email" 
+                                   class="w-full input-dark rounded-full py-3.5 sm:py-4 pl-11 pr-4 text-sm sm:text-base text-white placeholder-white/40">
+                        </div>
+                        <button type="submit" class="btn-primary rounded-full px-6 py-3.5 sm:py-4 flex items-center justify-center gap-2 whitespace-nowrap text-sm sm:text-base">
+                            Join the Waitlist <i class="fas fa-arrow-right text-xs"></i>
+                        </button>
+                    </div>
+                </form>
+                
+                <!-- Success Message (Hidden by default) -->
+                <div id="successMsg" class="hidden mt-4 text-sm text-stbm-gold bg-stbm-gold/10 border border-stbm-gold/20 py-2 px-4 rounded-full inline-flex items-center gap-2">
+                    <i class="fas fa-check-circle"></i> You're on the list. Keep an eye on your inbox.
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="py-6 sm:py-8 text-center z-10 opacity-0 animate-fade-in-up delay-400">
+        <p class="text-white/30 text-xs sm:text-sm font-medium">
+            © <span id="currentYear"></span> Safo The Black Messiah. All rights reserved.
+        </p>
+    </footer>
+
+    <!-- JavaScript for Countdown and Form Handling -->
+    <script>
+        // Set current year in footer
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        // 1. Countdown Timer Logic
+        // Set launch date to 30 days from now for demonstration
+        const launchDate = new Date();
+        launchDate.setDate(launchDate.getDate() + 30);
+        launchDate.setHours(10, 0, 0, 0);
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = launchDate.getTime() - now;
+
+            // Time calculations
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            // Update DOM with leading zeros
+            document.getElementById("days").innerText = days.toString().padStart(2, '0');
+            document.getElementById("hours").innerText = hours.toString().padStart(2, '0');
+            document.getElementById("minutes").innerText = minutes.toString().padStart(2, '0');
+            document.getElementById("seconds").innerText = seconds.toString().padStart(2, '0');
+
+            // If countdown is over
+            if (distance < 0) {
+                document.getElementById("days").innerText = "00";
+                document.getElementById("hours").innerText = "00";
+                document.getElementById("minutes").innerText = "00";
+                document.getElementById("seconds").innerText = "00";
+            }
+        }
+
+        // Run immediately then update every second
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+
+
+        // 2. Form Submission Logic
+        const form = document.getElementById('waitlistForm');
+        const successMsg = document.getElementById('successMsg');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // In a real app, you would send data to your Flask backend here using fetch()
+            const email = document.getElementById('email').value;
+            
+            // Simulate button loading state
+            const btn = form.querySelector('button');
+            const originalBtnText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+            btn.disabled = true;
+
+            setTimeout(() => {
+                // Hide form, show success message
+                form.classList.add('hidden');
+                successMsg.classList.remove('hidden');
+                successMsg.classList.add('animate-fade-in-up');
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
