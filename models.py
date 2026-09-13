@@ -5,6 +5,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 db = SQLAlchemy()
 
+
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
@@ -13,20 +14,21 @@ class User(UserMixin, db.Model):
     role = db.Column(db.String(20), default='Customer')
     status = db.Column(db.String(20), default='Active')
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    
+
     # Relationships
     orders = db.relationship('Order', backref='customer', lazy=True)
     cart_items = db.relationship('CartItem', backref='user', lazy=True)
     visits = db.relationship('PageVisit', backref='user', lazy=True)
-    
+
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
-    
+
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
-    
+
     def is_admin(self):
         return self.role == 'Admin'
+
 
 class Product(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -39,25 +41,70 @@ class Product(db.Model):
     badge = db.Column(db.String(20))
     status = db.Column(db.String(20), default='Active')
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    
+
     # Relationships
     cart_items = db.relationship('CartItem', backref='product', lazy=True)
     order_items = db.relationship('OrderItem', backref='product', lazy=True)
-    
+
     @property
     def is_in_stock(self):
         return self.stock > 0
-    
+
     @property
     def is_low_stock(self):
         return 0 < self.stock <= 5
+
+
+class ProductImage(db.Model):
+    """Stores multiple images for a product (variations)"""
+    id = db.Column(db.Integer, primary_key=True)
+    product_id = db.Column(db.Integer, db.ForeignKey('product.id'), nullable=False)
+    image_url = db.Column(db.String(500), nullable=False)
+    alt_text = db.Column(db.String(200))
+    is_primary = db.Column(db.Boolean, default=False)
+    sort_order = db.Column(db.Integer, default=0)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    # Relationship
+    product = db.relationship('Product', backref=db.backref('images', lazy=True, cascade='all, delete-orphan'))
+
+
+class ProductVariant(db.Model):
+    """Stores variants (color + size combinations) for a product"""
+    id = db.Column(db.Integer, primary_key=True)
+    product_id = db.Column(db.Integer, db.ForeignKey('product.id'), nullable=False)
+    color = db.Column(db.String(50))
+    color_hex = db.Column(db.String(7), default='#000000')  # e.g. #FF5733
+    size = db.Column(db.String(20))  # e.g. S, M, L, XL
+    stock = db.Column(db.Integer, default=0)
+    sku = db.Column(db.String(50))
+    price_adjustment = db.Column(db.Float, default=0.0)  # optional price adjustment
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    # Relationship
+    product = db.relationship('Product', backref=db.backref('variants', lazy=True, cascade='all, delete-orphan'))
+
+    @property
+    def effective_price(self):
+        """Return the effective price including any adjustment"""
+        return self.product.price + (self.price_adjustment or 0)
+
+    @property
+    def in_stock(self):
+        return self.stock > 0
+
 
 class CartItem(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     product_id = db.Column(db.Integer, db.ForeignKey('product.id'), nullable=False)
+    variant_id = db.Column(db.Integer, db.ForeignKey('product_variant.id'), nullable=True)
     quantity = db.Column(db.Integer, default=1)
     added_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    # Relationship
+    variant = db.relationship('ProductVariant', backref='cart_items', lazy=True)
+
 
 class Order(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -66,30 +113,46 @@ class Order(db.Model):
     total_amount = db.Column(db.Float, nullable=False)
     status = db.Column(db.String(20), default='Pending Payment')
     shipping_address = db.Column(db.Text)
+    # Detailed shipping / contact fields
+    phone_number = db.Column(db.String(30))
+    contact_email = db.Column(db.String(120))
+    city = db.Column(db.String(100))
+    region = db.Column(db.String(100))
+    landmark = db.Column(db.String(200))
+    delivery_notes = db.Column(db.Text)
+    # Payment
     payment_method = db.Column(db.String(50), default='paystack')
     payment_status = db.Column(db.String(20), default='Pending')
     payment_reference = db.Column(db.String(100), unique=True, nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
-    
+
     # Relationships
     items = db.relationship('OrderItem', backref='order', lazy=True, cascade='all, delete-orphan')
     payment_logs = db.relationship('PaymentLog', backref='order', lazy=True)
+
 
 class OrderItem(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     order_id = db.Column(db.Integer, db.ForeignKey('order.id'), nullable=False)
     product_id = db.Column(db.Integer, db.ForeignKey('product.id'), nullable=False)
+    variant_id = db.Column(db.Integer, db.ForeignKey('product_variant.id'), nullable=True)
     product_name = db.Column(db.String(200))
     product_price = db.Column(db.Float)
     quantity = db.Column(db.Integer)
     subtotal = db.Column(db.Float)
+    variant_info = db.Column(db.String(100))  # e.g. "Black / M"
+
+    # Relationship
+    variant = db.relationship('ProductVariant', backref='order_items', lazy=True)
+
 
 class Setting(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     key = db.Column(db.String(50), unique=True, nullable=False)
     value = db.Column(db.Text)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
 
 class PaymentLog(db.Model):
     """Model to track payment transactions"""
@@ -103,6 +166,7 @@ class PaymentLog(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
+
 class ContactMessage(db.Model):
     """Model to store contact form submissions"""
     id = db.Column(db.Integer, primary_key=True)
@@ -112,9 +176,10 @@ class ContactMessage(db.Model):
     status = db.Column(db.String(20), default='Unread')  # Unread, Read, Replied
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
-    
+
     def __repr__(self):
         return f'<ContactMessage {self.name} - {self.email}>'
+
 
 class PageVisit(db.Model):
     """Model to track page visits"""

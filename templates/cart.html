@@ -13,7 +13,7 @@
                     <div class="flex items-center gap-3 sm:gap-4 w-full sm:w-auto">
                         <div class="w-16 sm:w-20 h-16 sm:h-20 rounded-lg overflow-hidden bg-[#0f0c17] flex-shrink-0">
                             {% if item.product.image_url %}
-                                <img src="{{ item.product.image_url }}" class="w-full h-full object-cover">
+                                <img src="{{ product_image_url(item.product.image_url) }}" class="w-full h-full object-cover">
                             {% else %}
                                 <div class="w-full h-full flex items-center justify-center text-white/20">
                                     <i class="fas fa-tshirt text-2xl sm:text-3xl"></i>

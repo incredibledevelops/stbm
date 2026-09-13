@@ -6,16 +6,18 @@
 <div class="max-w-7xl mx-auto">
     <div class="mb-6 sm:mb-8">
         <h1 class="text-2xl sm:text-3xl font-bold text-white mb-1">Orders</h1>
-        <p class="text-white/50 text-xs sm:text-sm">Track and manage customer orders.</p>
+        <p class="text-white/50 text-xs sm:text-sm">Track and manage customer orders. Click any row for full details.</p>
     </div>
 
     <div class="bg-[#1a1625] border border-white/5 rounded-xl sm:rounded-2xl overflow-hidden shadow-xl">
         <div class="overflow-x-auto">
-            <table class="w-full text-left border-collapse min-w-[600px]">
+            <table class="w-full text-left border-collapse min-w-[800px]">
                 <thead>
                     <tr class="bg-white/5 text-white/40 text-[8px] sm:text-xs uppercase tracking-wider">
                         <th class="px-2 sm:px-6 py-3 sm:py-4 font-medium">Order ID</th>
                         <th class="px-2 sm:px-6 py-3 sm:py-4 font-medium">Customer</th>
+                        <th class="px-2 sm:px-6 py-3 sm:py-4 font-medium hidden md:table-cell">Contact</th>
+                        <th class="px-2 sm:px-6 py-3 sm:py-4 font-medium hidden lg:table-cell">Location</th>
                         <th class="px-2 sm:px-6 py-3 sm:py-4 font-medium hidden sm:table-cell">Date</th>
                         <th class="px-2 sm:px-6 py-3 sm:py-4 font-medium">Status</th>
                         <th class="px-2 sm:px-6 py-3 sm:py-4 font-medium">Total</th>
@@ -24,10 +26,24 @@
                 </thead>
                 <tbody class="divide-y divide-white/5 text-[9px] sm:text-sm">
                     {% for order in orders %}
-                        <tr class="hover:bg-white/[0.02] transition">
+                        <tr class="hover:bg-white/[0.02] transition cursor-pointer" onclick="openOrderModal({{ order.id }})">
                             <td class="px-2 sm:px-6 py-3 sm:py-4 font-medium text-white font-mono text-[7px] sm:text-sm">{{ order.order_number }}</td>
-                            <td class="px-2 sm:px-6 py-3 sm:py-4 truncate max-w-[60px] sm:max-w-none">{{ order.customer.name }}</td>
-                            <td class="px-2 sm:px-6 py-3 sm:py-4 text-white/50 text-[6px] sm:text-sm hidden sm:table-cell">{{ order.created_at.strftime('%b %d, %Y • %I:%M %p') }}</td>
+                            <td class="px-2 sm:px-6 py-3 sm:py-4">
+                                <div class="font-medium text-white truncate max-w-[120px] sm:max-w-none">{{ order.customer.name }}</div>
+                                {% if order.phone_number %}
+                                    <div class="text-[8px] sm:text-xs text-white/40 mt-0.5">{{ order.phone_number }}</div>
+                                {% endif %}
+                            </td>
+                            <td class="px-2 sm:px-6 py-3 sm:py-4 hidden md:table-cell">
+                                <div class="text-white/60 text-[10px] sm:text-xs truncate max-w-[150px]">{{ order.contact_email or order.customer.email }}</div>
+                            </td>
+                            <td class="px-2 sm:px-6 py-3 sm:py-4 hidden lg:table-cell">
+                                <div class="text-white/60 text-[10px] sm:text-xs">
+                                    {% if order.city %}{{ order.city }}{% endif %}
+                                    {% if order.region %}<span class="text-white/30"> • {{ order.region }}</span>{% endif %}
+                                </div>
+                            </td>
+                            <td class="px-2 sm:px-6 py-3 sm:py-4 text-white/50 text-[8px] sm:text-sm hidden sm:table-cell">{{ order.created_at.strftime('%b %d, %Y') }}</td>
                             <td class="px-2 sm:px-6 py-3 sm:py-4">
                                 <span class="px-1.5 sm:px-2.5 py-0.5 sm:py-1 rounded-full text-[6px] sm:text-xs font-semibold border 
                                     {% if order.status == 'Processing' %}border-blue-400/20 text-blue-400 bg-blue-400/10
@@ -39,14 +55,17 @@
                             </td>
                             <td class="px-2 sm:px-6 py-3 sm:py-4 font-medium text-[#d4a94b] text-[8px] sm:text-sm">{{ format_currency(order.total_amount) }}</td>
                             <td class="px-2 sm:px-6 py-3 sm:py-4 text-right">
-                                <form action="{{ url_for('admin_update_order_status', order_id=order.id) }}" method="POST" class="inline">
-                                    <select name="status" class="bg-[#0f0c17] text-white text-[7px] sm:text-xs border border-white/10 rounded px-1 sm:px-2 py-0.5 sm:py-1 outline-none focus:border-[#d4a94b] min-w-[60px] sm:min-w-[80px]" onchange="this.form.submit()">
-                                        <option value="Processing" {% if order.status == 'Processing' %}selected{% endif %}>Processing</option>
-                                        <option value="Shipped" {% if order.status == 'Shipped' %}selected{% endif %}>Shipped</option>
-                                        <option value="Delivered" {% if order.status == 'Delivered' %}selected{% endif %}>Delivered</option>
-                                        <option value="Cancelled" {% if order.status == 'Cancelled' %}selected{% endif %}>Cancelled</option>
-                                    </select>
-                                </form>
+                                <button type="button" onclick="event.stopPropagation(); openOrderModal({{ order.id }})" 
+                                        class="text-white/40 hover:text-[#d4a94b] transition text-[10px] sm:text-sm">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="8" class="px-6 py-12 text-center">
+                                <i class="fas fa-shopping-bag text-3xl text-white/10 mb-3 block"></i>
+                                <p class="text-white/40 text-sm">No orders yet.</p>
                             </td>
                         </tr>
                     {% endfor %}
@@ -55,4 +74,222 @@
         </div>
     </div>
 </div>
+
+<!-- ============================================================ -->
+<!-- ORDER DETAIL MODAL -->
+<!-- ============================================================ -->
+<div id="orderDetailModal" class="fixed inset-0 z-50 hidden items-center justify-center p-2 sm:p-4" style="background: rgba(0,0,0,0.8); backdrop-filter: blur(8px);">
+    <div class="bg-[#1a1625] rounded-2xl border border-white/10 max-w-3xl w-full max-h-[95vh] overflow-y-auto relative">
+        <!-- Header -->
+        <div class="sticky top-0 bg-[#1a1625] border-b border-white/5 px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between z-10 rounded-t-2xl">
+            <div>
+                <h2 class="text-lg sm:text-xl font-bold text-white">Order Details</h2>
+                <p id="modalOrderNumber" class="text-white/40 text-[10px] sm:text-xs font-mono"></p>
+            </div>
+            <button type="button" onclick="closeOrderModal()" class="text-white/40 hover:text-white transition p-1">
+                <i class="fas fa-times text-lg sm:text-xl"></i>
+            </button>
+        </div>
+
+        <!-- Body -->
+        <div id="orderModalBody" class="p-4 sm:p-6 space-y-4">
+            <div class="flex items-center justify-center py-8">
+                <i class="fas fa-spinner fa-spin text-2xl text-[#d4a94b]"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ============================================================
+    // ORDER DETAIL MODAL
+    // ============================================================
+    function openOrderModal(orderId) {
+        const modal = document.getElementById('orderDetailModal');
+        modal.classList.remove('hidden');
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+
+        // Show loading state
+        document.getElementById('orderModalBody').innerHTML = `
+            <div class="flex items-center justify-center py-8">
+                <i class="fas fa-spinner fa-spin text-2xl text-[#d4a94b]"></i>
+            </div>
+        `;
+
+        fetch(`/api/order/${orderId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    document.getElementById('orderModalBody').innerHTML = `
+                        <div class="text-center py-8 text-red-400">
+                            <i class="fas fa-exclamation-triangle text-2xl mb-2"></i>
+                            <p>${data.error}</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                document.getElementById('modalOrderNumber').textContent = data.order_number || '';
+
+                // Status badge colors
+                const statusClasses = {
+                    'Processing': 'border-blue-400/20 text-blue-400 bg-blue-400/10',
+                    'Shipped': 'border-purple-400/20 text-purple-400 bg-purple-400/10',
+                    'Delivered': 'border-green-400/20 text-green-400 bg-green-400/10',
+                    'Cancelled': 'border-white/10 text-white/40 bg-white/5',
+                    'Payment Failed': 'border-red-400/20 text-red-400 bg-red-400/10'
+                };
+                const statusClass = statusClasses[data.status] || 'border-white/10 text-white/40 bg-white/5';
+
+                // Build items HTML
+                let itemsHtml = '';
+                if (data.items && data.items.length > 0) {
+                    itemsHtml = data.items.map(item => `
+                        <div class="flex justify-between items-start py-2 border-b border-white/5 last:border-0">
+                            <div class="flex-1">
+                                <p class="text-white text-xs sm:text-sm font-medium">${item.product_name}</p>
+                                ${item.variant_info ? `<p class="text-[10px] sm:text-xs text-[#d4a94b] mt-0.5">${item.variant_info}</p>` : ''}
+                                <p class="text-[10px] sm:text-xs text-white/40 mt-0.5">Qty: ${item.quantity} × ${formatCurrency(item.product_price)}</p>
+                            </div>
+                            <span class="text-[#d4a94b] font-bold text-xs sm:text-sm whitespace-nowrap ml-2">${formatCurrency(item.subtotal)}</span>
+                        </div>
+                    `).join('');
+                } else {
+                    itemsHtml = '<p class="text-white/40 text-xs">No items</p>';
+                }
+
+                // Format phone number for WhatsApp (strip non-digits)
+                const rawPhone = (data.phone_number || '').replace(/[^0-9]/g, '');
+                const whatsappPhone = rawPhone.startsWith('0') && rawPhone.length === 10
+                    ? '233' + rawPhone.substring(1)  // Ghana default: convert 0XXXXXXXXX to 233XXXXXXXXX
+                    : rawPhone;
+
+                document.getElementById('orderModalBody').innerHTML = `
+                    <!-- Order Header Info -->
+                    <div class="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-white/5">
+                        <div>
+                            <span class="text-white/40 text-[10px] sm:text-xs uppercase tracking-wider">Order Date</span>
+                            <p class="text-white text-xs sm:text-sm">${new Date(data.created_at).toLocaleDateString('en-US', { 
+                                weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'
+                            })}</p>
+                        </div>
+                        <span class="px-3 py-1 rounded-full text-[10px] sm:text-xs font-semibold border ${statusClass}">${data.status}</span>
+                    </div>
+
+                    <!-- Customer Section -->
+                    <div class="bg-[#0f0c17] rounded-lg p-3 sm:p-4 space-y-3">
+                        <h3 class="text-[#d4a94b] text-xs sm:text-sm font-bold flex items-center gap-2">
+                            <i class="fas fa-user"></i> Customer Information
+                        </h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs sm:text-sm">
+                            <div>
+                                <span class="text-white/40 text-[10px] sm:text-xs block">Phone Number</span>
+                                ${data.phone_number 
+                                    ? `<a href="tel:${data.phone_number}" class="text-white hover:text-[#d4a94b] transition">${data.phone_number}</a>` 
+                                    : '<span class="text-white/30">Not provided</span>'}
+                            </div>
+                            <div>
+                                <span class="text-white/40 text-[10px] sm:text-xs block">Contact Email</span>
+                                ${data.contact_email 
+                                    ? `<a href="mailto:${data.contact_email}" class="text-white hover:text-[#d4a94b] transition break-all">${data.contact_email}</a>` 
+                                    : '<span class="text-white/30">Not provided</span>'}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Shipping Address Section -->
+                    <div class="bg-[#0f0c17] rounded-lg p-3 sm:p-4 space-y-3">
+                        <h3 class="text-[#d4a94b] text-xs sm:text-sm font-bold flex items-center gap-2">
+                            <i class="fas fa-map-marker-alt"></i> Shipping Address
+                        </h3>
+                        <div class="text-xs sm:text-sm text-white/80 space-y-1.5">
+                            <p>${data.shipping_address || '<span class="text-white/30">Not provided</span>'}</p>
+                            ${data.city ? `<p><span class="text-white/40">City:</span> ${data.city}</p>` : ''}
+                            ${data.region ? `<p><span class="text-white/40">Region:</span> ${data.region}</p>` : ''}
+                            ${data.landmark ? `<p><span class="text-white/40">Landmark:</span> <span class="text-[#d4a94b]">${data.landmark}</span></p>` : ''}
+                        </div>
+                    </div>
+
+                    ${data.delivery_notes ? `
+                        <div class="bg-[#d4a94b]/10 border border-[#d4a94b]/20 rounded-lg p-3 sm:p-4">
+                            <h3 class="text-[#d4a94b] text-xs sm:text-sm font-bold flex items-center gap-2 mb-1">
+                                <i class="fas fa-sticky-note"></i> Delivery Notes
+                            </h3>
+                            <p class="text-white/70 text-xs sm:text-sm">${data.delivery_notes}</p>
+                        </div>
+                    ` : ''}
+
+                    <!-- Items Section -->
+                    <div class="bg-[#0f0c17] rounded-lg p-3 sm:p-4">
+                        <h3 class="text-[#d4a94b] text-xs sm:text-sm font-bold flex items-center gap-2 mb-2">
+                            <i class="fas fa-shopping-bag"></i> Items Ordered
+                        </h3>
+                        <div>${itemsHtml}</div>
+                    </div>
+
+                    <!-- Totals -->
+                    <div class="border-t border-white/5 pt-3 flex justify-between items-center">
+                        <span class="text-white/60 text-xs sm:text-sm">Total Amount</span>
+                        <span class="text-xl sm:text-2xl font-bold text-[#d4a94b]">${formatCurrency(data.total_amount)}</span>
+                    </div>
+
+                    <!-- Quick Contact Actions -->
+                    ${data.phone_number ? `
+                        <div class="flex flex-wrap gap-2 pt-3 border-t border-white/5">
+                            <a href="tel:${data.phone_number}" 
+                               class="inline-flex items-center gap-2 bg-green-500/10 hover:bg-green-500/20 text-green-400 border border-green-500/20 px-3 py-2 rounded-lg text-xs sm:text-sm transition">
+                                <i class="fas fa-phone"></i> Call Customer
+                            </a>
+                            <a href="https://wa.me/${whatsappPhone}" 
+                               target="_blank"
+                               rel="noopener noreferrer"
+                               class="inline-flex items-center gap-2 bg-green-500/10 hover:bg-green-500/20 text-green-400 border border-green-500/20 px-3 py-2 rounded-lg text-xs sm:text-sm transition">
+                                <i class="fab fa-whatsapp"></i> WhatsApp
+                            </a>
+                            ${data.contact_email ? `
+                                <a href="mailto:${data.contact_email}" 
+                                   class="inline-flex items-center gap-2 bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 border border-blue-500/20 px-3 py-2 rounded-lg text-xs sm:text-sm transition">
+                                    <i class="fas fa-envelope"></i> Email
+                                </a>
+                            ` : ''}
+                        </div>
+                    ` : ''}
+                `;
+            })
+            .catch(error => {
+                console.error('Order detail error:', error);
+                document.getElementById('orderModalBody').innerHTML = `
+                    <div class="text-center py-8 text-red-400">
+                        <i class="fas fa-exclamation-triangle text-2xl mb-2"></i>
+                        <p>Failed to load order details.</p>
+                    </div>
+                `;
+            });
+    }
+
+    function closeOrderModal() {
+        const modal = document.getElementById('orderDetailModal');
+        modal.classList.add('hidden');
+        modal.style.display = 'none';
+        document.body.style.overflow = '';
+    }
+
+    // Close modal on backdrop click
+    document.getElementById('orderDetailModal').addEventListener('click', function(e) {
+        if (e.target === this) closeOrderModal();
+    });
+
+    // Close modal on Escape
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            const modal = document.getElementById('orderDetailModal');
+            if (!modal.classList.contains('hidden')) closeOrderModal();
+        }
+    });
+
+    function formatCurrency(amount) {
+        return 'GH₵ ' + Number(amount).toLocaleString(undefined, {minimumFractionDigits: 2});
+    }
+</script>
 {% endblock %}

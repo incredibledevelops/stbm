@@ -8,10 +8,15 @@ class Config:
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'sqlite:///stbm.db'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     
+    # File Upload Configuration
+    UPLOAD_FOLDER = os.path.join(os.getcwd(), 'static', 'uploads', 'products')
+    ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'webp'}
+    MAX_CONTENT_LENGTH = 5 * 1024 * 1024  # 5MB max file size
+    
     # Paystack Config
-    PAYSTACK_PUBLIC_KEY = os.environ.get('PAYSTACK_PUBLIC_KEY', 'pk_test_4caf27ba085782664d98466d38b07ec4d334426a')
-    PAYSTACK_SECRET_KEY = os.environ.get('PAYSTACK_SECRET_KEY', 'sk_test_c45dabd81218e4fac598659fc1368c1dd76e3b26')
-    PAYSTACK_CALLBACK_URL = os.environ.get('PAYSTACK_CALLBACK_URL', 'http://localhost:5000/payment/callback')
+    PAYSTACK_PUBLIC_KEY = os.environ.get('PAYSTACK_PUBLIC_KEY', 'pk_test_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
+    PAYSTACK_SECRET_KEY = os.environ.get('PAYSTACK_SECRET_KEY', 'sk_test_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
+    PAYSTACK_CALLBACK_URL = os.environ.get('PAYSTACK_CALLBACK_URL', 'http://localhost:5001/payment/callback')
     
     # Email Config
     MAIL_SERVER = 'smtp.gmail.com'
@@ -22,7 +27,7 @@ class Config:
     
     # App Config
     FREE_SHIPPING_THRESHOLD = 1000
-    CURRENCY = 'GHS'  
+    CURRENCY = 'GHS'
     
     # Admin credentials
     ADMIN_EMAIL = os.environ.get('ADMIN_EMAIL', 'admin@stbm.com')

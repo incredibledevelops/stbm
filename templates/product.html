@@ -5,46 +5,159 @@
 {% block content %}
 <div class="max-w-7xl mx-auto px-3 sm:px-4 py-6 sm:py-12">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 lg:gap-12">
-        <div class="rounded-xl sm:rounded-2xl overflow-hidden border border-white/10 bg-[#1a1625]">
+        <!-- ============================================ -->
+        <!-- IMAGE GALLERY -->
+        <!-- ============================================ -->
+        <div class="space-y-3">
+            <!-- Main image -->
+            <div class="rounded-xl sm:rounded-2xl overflow-hidden border border-white/10 bg-[#1a1625] aspect-square">
+                <img id="mainProductImage" 
+                     src="{{ product_image_url(product.image_url) if product.image_url else 'https://via.placeholder.com/600x600/1a1625/d4a94b?text=No+Image' }}" 
+                     class="w-full h-full object-cover transition-all duration-300">
+            </div>
+            
+            <!-- Thumbnails -->
+            {% set all_images = [] %}
             {% if product.image_url %}
-                <img src="{{ product.image_url }}" class="w-full h-auto object-cover">
-            {% else %}
-                <div class="w-full aspect-square flex items-center justify-center text-white/20">
-                    <i class="fas fa-tshirt text-6xl sm:text-8xl"></i>
+                {% set _ = all_images.append({'url': product.image_url, 'is_primary': True}) %}
+            {% endif %}
+            {% for img in product.images|sort(attribute='sort_order') %}
+                {% set _ = all_images.append({'url': img.image_url, 'is_primary': False, 'id': img.id}) %}
+            {% endfor %}
+            
+            {% if all_images|length > 1 %}
+                <div class="grid grid-cols-4 sm:grid-cols-5 gap-2">
+                    {% for img in all_images %}
+                        <button type="button" 
+                                onclick="changeMainImage('{{ product_image_url(img.url) }}', this)"
+                                class="thumbnail-btn aspect-square rounded-lg overflow-hidden border-2 border-white/10 hover:border-[#d4a94b]/50 transition {% if loop.first %}border-[#d4a94b]{% endif %}">
+                            <img src="{{ product_image_url(img.url) }}" class="w-full h-full object-cover">
+                        </button>
+                    {% endfor %}
                 </div>
             {% endif %}
         </div>
+        
+        <!-- ============================================ -->
+        <!-- PRODUCT INFO -->
+        <!-- ============================================ -->
         <div class="space-y-4 sm:space-y-6 pt-2 sm:pt-4">
             <span class="text-[#d4a94b] uppercase tracking-widest text-[10px] sm:text-sm font-bold">{{ product.category }}</span>
             <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold">{{ product.name }}</h1>
-            <p class="text-2xl sm:text-3xl font-light text-white/90">{{ format_currency(product.price) }}</p>
+            <p id="productPrice" class="text-2xl sm:text-3xl font-light text-white/90">{{ format_currency(product.price) }}</p>
             
             {% if product.is_in_stock %}
-                <span class="inline-block text-green-400 text-xs sm:text-sm font-semibold">
-                    <i class="fas fa-check-circle"></i> In Stock ({{ product.stock }} available)
+                <span id="stockStatus" class="inline-block text-green-400 text-xs sm:text-sm font-semibold">
+                    <i class="fas fa-check-circle"></i> In Stock (<span id="stockCount">{{ product.stock }}</span> available)
                 </span>
             {% else %}
-                <span class="inline-block text-red-400 text-xs sm:text-sm font-semibold">
+                <span id="stockStatus" class="inline-block text-red-400 text-xs sm:text-sm font-semibold">
                     <i class="fas fa-times-circle"></i> Out of Stock
                 </span>
             {% endif %}
             
             <p class="text-white/60 text-sm sm:text-base leading-relaxed">{{ product.description or 'Premium construction meets cultural heritage. Designed in Kumasi, crafted for the fearless.' }}</p>
             
-            <div class="pt-4 sm:pt-6">
-                {% if product.is_in_stock %}
-                    <form action="{{ url_for('add_to_cart', product_id=product.id) }}" method="POST" class="w-full">
-                        <button type="submit" class="w-full btn-primary py-3 sm:py-4 rounded-xl text-base sm:text-lg flex justify-center items-center gap-2">
-                            <i class="fas fa-shopping-bag"></i> Add to Cart
-                        </button>
-                    </form>
-                {% else %}
-                    <button disabled class="w-full bg-white/10 text-white/40 py-3 sm:py-4 rounded-xl text-base sm:text-lg cursor-not-allowed">
-                        Out of Stock
-                    </button>
+            <!-- ============================================ -->
+            <!-- COLOR SELECTION -->
+            <!-- ============================================ -->
+            {% if product.variants %}
+                {% set colors_seen = [] %}
+                {% set unique_colors = [] %}
+                {% for v in product.variants %}
+                    {% if v.color and v.color not in colors_seen %}
+                        {% set _ = colors_seen.append(v.color) %}
+                        {% set _ = unique_colors.append({'name': v.color, 'hex': v.color_hex or '#000000'}) %}
+                    {% endif %}
+                {% endfor %}
+                
+                {% if unique_colors %}
+                    <div id="colorSelector">
+                        <label class="block text-xs sm:text-sm font-medium text-white/70 mb-2">
+                            Color: <span id="selectedColorName" class="text-[#d4a94b]">Select a color</span>
+                        </label>
+                        <div class="flex flex-wrap gap-2">
+                            {% for color in unique_colors %}
+                                <button type="button" 
+                                        onclick="selectColor('{{ color.name }}', this)"
+                                        class="color-btn relative w-10 h-10 rounded-full border-2 border-white/10 hover:border-[#d4a94b]/50 transition overflow-hidden"
+                                        style="background-color: {{ color.hex }}"
+                                        data-color="{{ color.name }}"
+                                        title="{{ color.name }}">
+                                </button>
+                            {% endfor %}
+                        </div>
+                    </div>
                 {% endif %}
+                
+                <!-- ============================================ -->
+                <!-- SIZE SELECTION -->
+                <!-- ============================================ -->
+                {% set sizes_seen = [] %}
+                {% set unique_sizes = [] %}
+                {% for v in product.variants %}
+                    {% if v.size and v.size not in sizes_seen %}
+                        {% set _ = sizes_seen.append(v.size) %}
+                        {% set _ = unique_sizes.append(v.size) %}
+                    {% endif %}
+                {% endfor %}
+                
+                {% if unique_sizes %}
+                    <div id="sizeSelector">
+                        <label class="block text-xs sm:text-sm font-medium text-white/70 mb-2">
+                            Size: <span id="selectedSizeName" class="text-[#d4a94b]">Select a size</span>
+                        </label>
+                        <div class="flex flex-wrap gap-2" id="sizeButtons">
+                            {% for size in unique_sizes %}
+                                <button type="button" 
+                                        onclick="selectSize('{{ size }}', this)"
+                                        class="size-btn min-w-[48px] h-10 px-3 rounded-lg border-2 border-white/10 text-white/70 hover:border-[#d4a94b]/50 hover:text-white transition text-sm font-semibold"
+                                        data-size="{{ size }}">
+                                    {{ size }}
+                                </button>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+                
+                <!-- Hidden variant data for JS -->
+                <script id="variantsData" type="application/json">
+                    {{ product.variants|map(attribute='color')|list|tojson }}
+                </script>
+                <script id="fullVariantsData" type="application/json">
+                    [
+                        {% for v in product.variants %}
+                            {
+                                "id": {{ v.id }},
+                                "color": {{ (v.color or '')|tojson }},
+                                "color_hex": {{ (v.color_hex or '#000000')|tojson }},
+                                "size": {{ (v.size or '')|tojson }},
+                                "stock": {{ v.stock }},
+                                "price_adjustment": {{ v.price_adjustment or 0 }},
+                                "effective_price": {{ v.effective_price }}
+                            }{% if not loop.last %},{% endif %}
+                        {% endfor %}
+                    ]
+                </script>
+            {% endif %}
+            
+            <!-- ============================================ -->
+            <!-- ADD TO CART -->
+            <!-- ============================================ -->
+            <div class="pt-4 sm:pt-6">
+                <form action="{{ url_for('add_to_cart', product_id=product.id) }}" method="POST" class="w-full" id="addToCartForm">
+                    <input type="hidden" name="selected_color" id="inputSelectedColor" value="">
+                    <input type="hidden" name="selected_size" id="inputSelectedSize" value="">
+                    <input type="hidden" name="selected_variant_id" id="inputSelectedVariant" value="">
+                    
+                    <button type="submit" id="addToCartBtn"
+                            class="w-full btn-primary py-3 sm:py-4 rounded-xl text-base sm:text-lg flex justify-center items-center gap-2">
+                        <i class="fas fa-shopping-bag"></i> Add to Cart
+                    </button>
+                </form>
             </div>
             
+            <!-- Features -->
             <div class="border-t border-white/5 pt-4 sm:pt-6 mt-4 sm:mt-6">
                 <div class="flex flex-wrap items-center gap-3 sm:gap-4 text-xs sm:text-sm text-white/50">
                     <span><i class="fas fa-truck text-[#d4a94b]"></i> Free shipping over GH₵ 1000</span>
@@ -58,12 +171,12 @@
     <section class="py-8 sm:py-12 px-0 border-t border-white/5 mt-6 sm:mt-8">
         <h2 class="text-2xl sm:text-3xl font-bold text-white mb-4 sm:mb-8">You May Also Like</h2>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 lg:gap-5">
-            {% for product in related_products %}
+            {% for related_product in related_products %}
                 <div class="bg-[#14101e] rounded-xl sm:rounded-2xl overflow-hidden border border-white/5 card-hover cursor-pointer" 
-                     onclick="window.location.href='{{ url_for('product_detail', product_id=product.id) }}'">
+                     onclick="window.location.href='{{ url_for('product_detail', product_id=related_product.id) }}'">
                     <div class="relative aspect-square overflow-hidden bg-[#1f1a2c]">
-                        {% if product.image_url %}
-                            <img src="{{ product.image_url }}" class="w-full h-full object-cover hover:scale-105 transition duration-500">
+                        {% if related_product.image_url %}
+                            <img src="{{ product_image_url(related_product.image_url) }}" class="w-full h-full object-cover hover:scale-105 transition duration-500">
                         {% else %}
                             <div class="w-full h-full flex items-center justify-center text-white/20">
                                 <i class="fas fa-tshirt text-4xl sm:text-6xl"></i>
@@ -71,10 +184,10 @@
                         {% endif %}
                     </div>
                     <div class="p-3 sm:p-4">
-                        <span class="text-[8px] sm:text-xs text-white/30 uppercase tracking-wider">{{ product.category }}</span>
-                        <h3 class="text-white font-semibold mt-0.5 truncate text-xs sm:text-sm">{{ product.name }}</h3>
+                        <span class="text-[8px] sm:text-xs text-white/30 uppercase tracking-wider">{{ related_product.category }}</span>
+                        <h3 class="text-white font-semibold mt-0.5 truncate text-xs sm:text-sm">{{ related_product.name }}</h3>
                         <div class="flex items-center justify-between mt-1.5">
-                            <span class="text-[#d4a94b] font-bold text-xs sm:text-sm">{{ format_currency(product.price) }}</span>
+                            <span class="text-[#d4a94b] font-bold text-xs sm:text-sm">{{ format_currency(related_product.price) }}</span>
                         </div>
                     </div>
                 </div>
@@ -83,4 +196,124 @@
     </section>
     {% endif %}
 </div>
+
+<script>
+    // ============================================
+    // IMAGE GALLERY
+    // ============================================
+    function changeMainImage(url, btn) {
+        document.getElementById('mainProductImage').src = url;
+        document.querySelectorAll('.thumbnail-btn').forEach(el => {
+            el.classList.remove('border-[#d4a94b]');
+            el.classList.add('border-white/10');
+        });
+        btn.classList.remove('border-white/10');
+        btn.classList.add('border-[#d4a94b]');
+    }
+    
+    // ============================================
+    // VARIANT SELECTION
+    // ============================================
+    let selectedColor = null;
+    let selectedSize = null;
+    let allVariants = [];
+    const basePrice = {{ product.price }};
+    
+    try {
+        allVariants = JSON.parse(document.getElementById('fullVariantsData').textContent);
+    } catch(e) {
+        allVariants = [];
+    }
+    
+    function selectColor(colorName, btn) {
+        selectedColor = colorName;
+        document.querySelectorAll('.color-btn').forEach(el => {
+            el.classList.remove('border-[#d4a94b]', 'ring-2', 'ring-[#d4a94b]/30');
+            el.classList.add('border-white/10');
+        });
+        btn.classList.remove('border-white/10');
+        btn.classList.add('border-[#d4a94b]', 'ring-2', 'ring-[#d4a94b]/30');
+        document.getElementById('selectedColorName').textContent = colorName;
+        document.getElementById('inputSelectedColor').value = colorName;
+        updateAvailability();
+    }
+    
+    function selectSize(sizeName, btn) {
+        selectedSize = sizeName;
+        document.querySelectorAll('.size-btn').forEach(el => {
+            el.classList.remove('border-[#d4a94b]', 'text-[#d4a94b]', 'bg-[#d4a94b]/10');
+            el.classList.add('border-white/10', 'text-white/70');
+        });
+        btn.classList.remove('border-white/10', 'text-white/70');
+        btn.classList.add('border-[#d4a94b]', 'text-[#d4a94b]', 'bg-[#d4a94b]/10');
+        document.getElementById('selectedSizeName').textContent = sizeName;
+        document.getElementById('inputSelectedSize').value = sizeName;
+        updateAvailability();
+    }
+    
+    function updateAvailability() {
+        if (!selectedColor || !selectedSize) {
+            return;
+        }
+        
+        // Find matching variant
+        const variant = allVariants.find(v => v.color === selectedColor && v.size === selectedSize);
+        
+        const priceEl = document.getElementById('productPrice');
+        const stockStatusEl = document.getElementById('stockStatus');
+        const variantInput = document.getElementById('inputSelectedVariant');
+        const addBtn = document.getElementById('addToCartBtn');
+        
+        if (variant) {
+            variantInput.value = variant.id;
+            
+            // Update price (with adjustment)
+            priceEl.textContent = formatCurrency(variant.effective_price);
+            
+            // Update stock
+            if (variant.stock > 0) {
+                stockStatusEl.className = 'inline-block text-green-400 text-xs sm:text-sm font-semibold';
+                stockStatusEl.innerHTML = `<i class="fas fa-check-circle"></i> In Stock (<span id="stockCount">${variant.stock}</span> available)`;
+                addBtn.disabled = false;
+                addBtn.innerHTML = '<i class="fas fa-shopping-bag"></i> Add to Cart';
+                addBtn.className = 'w-full btn-primary py-3 sm:py-4 rounded-xl text-base sm:text-lg flex justify-center items-center gap-2';
+            } else {
+                stockStatusEl.className = 'inline-block text-red-400 text-xs sm:text-sm font-semibold';
+                stockStatusEl.innerHTML = '<i class="fas fa-times-circle"></i> Out of Stock for this variant';
+                addBtn.disabled = true;
+                addBtn.innerHTML = '<i class="fas fa-times-circle"></i> Out of Stock';
+                addBtn.className = 'w-full bg-white/10 text-white/40 py-3 sm:py-4 rounded-xl text-base sm:text-lg cursor-not-allowed flex justify-center items-center gap-2';
+            }
+        } else {
+            // No matching variant
+            variantInput.value = '';
+            stockStatusEl.className = 'inline-block text-yellow-400 text-xs sm:text-sm font-semibold';
+            stockStatusEl.innerHTML = '<i class="fas fa-exclamation-triangle"></i> This combination is not available';
+            addBtn.disabled = true;
+            addBtn.innerHTML = '<i class="fas fa-times-circle"></i> Unavailable';
+            addBtn.className = 'w-full bg-white/10 text-white/40 py-3 sm:py-4 rounded-xl text-base sm:text-lg cursor-not-allowed flex justify-center items-center gap-2';
+        }
+    }
+    
+    function formatCurrency(amount) {
+        return 'GH₵ ' + Number(amount).toLocaleString(undefined, {minimumFractionDigits: 2});
+    }
+    
+    // Validate on form submit
+    document.getElementById('addToCartForm').addEventListener('submit', function(e) {
+        const hasColorVariants = document.querySelectorAll('.color-btn').length > 0;
+        const hasSizeVariants = document.querySelectorAll('.size-btn').length > 0;
+        
+        if (hasColorVariants && !selectedColor) {
+            e.preventDefault();
+            alert('Please select a color first.');
+            return;
+        }
+        if (hasSizeVariants && !selectedSize) {
+            e.preventDefault();
+            alert('Please select a size first.');
+            return;
+        }
+    });
+</script>
 {% endblock %}

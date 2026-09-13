@@ -3,18 +3,127 @@
 {% block title %}Checkout · STBM{% endblock %}
 
 {% block content %}
-<div class="max-w-4xl mx-auto px-3 sm:px-4 py-6 sm:py-12">
+<div class="max-w-6xl mx-auto px-3 sm:px-4 py-6 sm:py-12">
     <h1 class="text-2xl sm:text-3xl font-bold mb-4 sm:mb-8">Checkout</h1>
-    
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
-        <div class="md:col-span-2">
-            <form method="POST" class="bg-[#1a1625] p-4 sm:p-6 rounded-xl border border-white/5">
-                <div class="space-y-4">
-                    <div>
-                        <label class="block text-xs sm:text-sm font-medium text-white/70 mb-1">Shipping Address</label>
-                        <textarea name="shipping_address" required class="w-full bg-[#1a1625] border border-white/10 text-white rounded-lg px-3 sm:px-4 py-2 sm:py-3 outline-none focus:border-[#d4a94b] focus:shadow-[0_0_0_3px_rgba(212,169,75,0.2)] text-sm sm:text-base min-h-[80px]" rows="3" placeholder="Enter your full shipping address...">{% if current_user.address %}{{ current_user.address }}{% endif %}</textarea>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
+        <!-- ============================================================ -->
+        <!-- SHIPPING & CONTACT FORM -->
+        <!-- ============================================================ -->
+        <div class="lg:col-span-2">
+            <form method="POST" class="bg-[#1a1625] p-4 sm:p-6 rounded-xl border border-white/5 space-y-6" id="checkoutForm">
+                
+                <!-- Section: Contact Information -->
+                <div>
+                    <h3 class="text-sm sm:text-base font-bold text-[#d4a94b] mb-3 flex items-center gap-2">
+                        <i class="fas fa-user-circle"></i> Contact Information
+                    </h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                        <div>
+                            <label class="block text-xs sm:text-sm font-medium text-white/70 mb-1">
+                                Full Name <span class="text-red-400">*</span>
+                            </label>
+                            <input type="text" name="full_name" required
+                                   value="{{ current_user.name }}"
+                                   class="w-full bg-[#1a1625] border border-white/10 text-white rounded-lg px-3 sm:px-4 py-2 sm:py-3 outline-none focus:border-[#d4a94b] focus:shadow-[0_0_0_3px_rgba(212,169,75,0.2)] text-sm sm:text-base"
+                                   placeholder="e.g. Kwame Mensah">
+                        </div>
+                        <div>
+                            <label class="block text-xs sm:text-sm font-medium text-white/70 mb-1">
+                                Phone Number <span class="text-red-400">*</span>
+                            </label>
+                            <input type="tel" name="phone_number" required
+                                   pattern="[0-9+\s\-()]{7,20}"
+                                   class="w-full bg-[#1a1625] border border-white/10 text-white rounded-lg px-3 sm:px-4 py-2 sm:py-3 outline-none focus:border-[#d4a94b] focus:shadow-[0_0_0_3px_rgba(212,169,75,0.2)] text-sm sm:text-base"
+                                   placeholder="e.g. +233 24 123 4567">
+                        </div>
+                        <div class="sm:col-span-2">
+                            <label class="block text-xs sm:text-sm font-medium text-white/70 mb-1">
+                                Contact Email <span class="text-red-400">*</span>
+                            </label>
+                            <input type="email" name="contact_email" required
+                                   value="{{ current_user.email }}"
+                                   class="w-full bg-[#1a1625] border border-white/10 text-white rounded-lg px-3 sm:px-4 py-2 sm:py-3 outline-none focus:border-[#d4a94b] focus:shadow-[0_0_0_3px_rgba(212,169,75,0.2)] text-sm sm:text-base"
+                                   placeholder="you@example.com">
+                            <p class="text-[10px] sm:text-xs text-white/40 mt-1">
+                                <i class="fas fa-info-circle mr-1"></i>We'll send order updates to this email
+                            </p>
+                        </div>
                     </div>
-                    
+                </div>
+
+                <!-- Section: Shipping Address -->
+                <div class="border-t border-white/5 pt-5">
+                    <h3 class="text-sm sm:text-base font-bold text-[#d4a94b] mb-3 flex items-center gap-2">
+                        <i class="fas fa-map-marker-alt"></i> Shipping Address
+                    </h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                        <div class="sm:col-span-2">
+                            <label class="block text-xs sm:text-sm font-medium text-white/70 mb-1">
+                                Street Address <span class="text-red-400">*</span>
+                            </label>
+                            <input type="text" name="shipping_address" required
+                                   class="w-full bg-[#1a1625] border border-white/10 text-white rounded-lg px-3 sm:px-4 py-2 sm:py-3 outline-none focus:border-[#d4a94b] focus:shadow-[0_0_0_3px_rgba(212,169,75,0.2)] text-sm sm:text-base"
+                                   placeholder="e.g. 12 Ring Road East, Adabraka">
+                        </div>
+                        <div>
+                            <label class="block text-xs sm:text-sm font-medium text-white/70 mb-1">
+                                City / Town <span class="text-red-400">*</span>
+                            </label>
+                            <input type="text" name="city" required
+                                   class="w-full bg-[#1a1625] border border-white/10 text-white rounded-lg px-3 sm:px-4 py-2 sm:py-3 outline-none focus:border-[#d4a94b] focus:shadow-[0_0_0_3px_rgba(212,169,75,0.2)] text-sm sm:text-base"
+                                   placeholder="e.g. Accra">
+                        </div>
+                        <div>
+                            <label class="block text-xs sm:text-sm font-medium text-white/70 mb-1">
+                                Region / State <span class="text-red-400">*</span>
+                            </label>
+                            <select name="region" required
+                                    class="w-full bg-[#1a1625] border border-white/10 text-white rounded-lg px-3 sm:px-4 py-2 sm:py-3 outline-none focus:border-[#d4a94b] focus:shadow-[0_0_0_3px_rgba(212,169,75,0.2)] text-sm sm:text-base">
+                                <option value="">Select region...</option>
+                                <option value="Greater Accra">Greater Accra</option>
+                                <option value="Ashanti">Ashanti</option>
+                                <option value="Western">Western</option>
+                                <option value="Central">Central</option>
+                                <option value="Eastern">Eastern</option>
+                                <option value="Northern">Northern</option>
+                                <option value="Volta">Volta</option>
+                                <option value="Upper East">Upper East</option>
+                                <option value="Upper West">Upper West</option>
+                                <option value="Bono">Bono</option>
+                                <option value="Bono East">Bono East</option>
+                                <option value="Ahafo">Ahafo</option>
+                                <option value="Western North">Western North</option>
+                                <option value="Oti">Oti</option>
+                                <option value="Savannah">Savannah</option>
+                                <option value="North East">North East</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="sm:col-span-2">
+                            <label class="block text-xs sm:text-sm font-medium text-white/70 mb-1">
+                                Nearest Landmark
+                            </label>
+                            <input type="text" name="landmark"
+                                   class="w-full bg-[#1a1625] border border-white/10 text-white rounded-lg px-3 sm:px-4 py-2 sm:py-3 outline-none focus:border-[#d4a94b] focus:shadow-[0_0_0_3px_rgba(212,169,75,0.2)] text-sm sm:text-base"
+                                   placeholder="e.g. Opposite Melcom, near the blue kiosk">
+                            <p class="text-[10px] sm:text-xs text-white/40 mt-1">
+                                <i class="fas fa-info-circle mr-1"></i>Helps our delivery riders find you faster
+                            </p>
+                        </div>
+                        <div class="sm:col-span-2">
+                            <label class="block text-xs sm:text-sm font-medium text-white/70 mb-1">
+                                Delivery Notes (optional)
+                            </label>
+                            <textarea name="delivery_notes" rows="2"
+                                      class="w-full bg-[#1a1625] border border-white/10 text-white rounded-lg px-3 sm:px-4 py-2 sm:py-3 outline-none focus:border-[#d4a94b] focus:shadow-[0_0_0_3px_rgba(212,169,75,0.2)] text-sm sm:text-base min-h-[60px]"
+                                      placeholder="e.g. Call me when you arrive, gate is on the left..."></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Paystack Badge -->
+                <div class="border-t border-white/5 pt-5">
                     <div class="bg-[#d4a94b]/10 border border-[#d4a94b]/20 rounded-lg p-3 sm:p-4">
                         <div class="flex items-center gap-2 sm:gap-3">
                             <img src="https://paystack.com/assets/images/paystack-logo-og.png" alt="Paystack" class="h-6 sm:h-8">
@@ -24,25 +133,39 @@
                             <i class="fas fa-lock mr-1"></i> Your payment information is encrypted and secure
                         </p>
                     </div>
-                    
-                    <button type="submit" class="w-full btn-primary py-2.5 sm:py-3 rounded-lg font-semibold text-sm sm:text-lg flex items-center justify-center gap-2">
-                        <i class="fas fa-credit-card"></i> Pay with Paystack
-                    </button>
-                    
-                    <p class="text-center text-[10px] sm:text-xs text-white/30">
-                        You will be redirected to Paystack to complete your payment securely
-                    </p>
                 </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="w-full btn-primary py-3 sm:py-4 rounded-lg font-semibold text-sm sm:text-lg flex items-center justify-center gap-2">
+                    <i class="fas fa-credit-card"></i> Pay {{ format_currency(total) }} with Paystack
+                </button>
+
+                <p class="text-center text-[10px] sm:text-xs text-white/30">
+                    You will be redirected to Paystack to complete your payment securely
+                </p>
             </form>
         </div>
-        
-        <div class="md:col-span-1">
+
+        <!-- ============================================================ -->
+        <!-- ORDER SUMMARY -->
+        <!-- ============================================================ -->
+        <div class="lg:col-span-1">
             <div class="bg-[#1a1625] p-4 sm:p-6 rounded-xl border border-white/5 sticky top-24">
                 <h3 class="font-bold text-base sm:text-lg mb-3 sm:mb-4">Order Summary</h3>
                 {% for item in cart_items %}
-                    <div class="flex justify-between text-xs sm:text-sm py-1.5 sm:py-2 border-b border-white/5">
-                        <span class="text-white/70">{{ item.product.name }} × {{ item.quantity }}</span>
-                        <span class="text-white/70">{{ format_currency(item.product.price * item.quantity) }}</span>
+                    <div class="flex justify-between text-xs sm:text-sm py-2 border-b border-white/5">
+                        <div class="flex-1 pr-2">
+                            <span class="text-white/70">{{ item.product.name }}</span>
+                            {% if item.variant %}
+                                <span class="block text-[10px] sm:text-xs text-white/40 mt-0.5">
+                                    {% if item.variant.color %}{{ item.variant.color }}{% endif %}
+                                    {% if item.variant.color and item.variant.size %} / {% endif %}
+                                    {% if item.variant.size %}Size {{ item.variant.size }}{% endif %}
+                                </span>
+                            {% endif %}
+                            <span class="block text-[10px] sm:text-xs text-white/40 mt-0.5">Qty: {{ item.quantity }}</span>
+                        </div>
+                        <span class="text-white/70 whitespace-nowrap">{{ format_currency(item.product.price * item.quantity) }}</span>
                     </div>
                 {% endfor %}
                 
@@ -76,6 +199,12 @@
                     {% else %}
                         Add {{ format_currency(free_shipping_threshold - total) }} more for free shipping
                     {% endif %}
+                </div>
+
+                <div class="mt-4 pt-4 border-t border-white/5 text-[10px] sm:text-xs text-white/40 space-y-1">
+                    <p><i class="fas fa-lock text-[#d4a94b] mr-1"></i>Secure checkout</p>
+                    <p><i class="fas fa-truck text-[#d4a94b] mr-1"></i>Fast delivery within 3-5 days</p>
+                    <p><i class="fas fa-undo text-[#d4a94b] mr-1"></i>14-day return policy</p>
                 </div>
             </div>
         </div>
