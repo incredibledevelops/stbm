@@ -14,8 +14,8 @@ class Config:
     MAX_CONTENT_LENGTH = 5 * 1024 * 1024  # 5MB max file size
     
     # Paystack Config
-    PAYSTACK_PUBLIC_KEY = os.environ.get('PAYSTACK_PUBLIC_KEY', 'pk_test_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
-    PAYSTACK_SECRET_KEY = os.environ.get('PAYSTACK_SECRET_KEY', 'sk_test_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
+    PAYSTACK_PUBLIC_KEY = os.environ.get('PAYSTACK_PUBLIC_KEY', 'pk_test_4caf27ba085782664d98466d38b07ec4d334426a')
+    PAYSTACK_SECRET_KEY = os.environ.get('PAYSTACK_SECRET_KEY', 'sk_test_c45dabd81218e4fac598659fc1368c1dd76e3b26')
     PAYSTACK_CALLBACK_URL = os.environ.get('PAYSTACK_CALLBACK_URL', 'http://localhost:5001/payment/callback')
     
     # Email Config
