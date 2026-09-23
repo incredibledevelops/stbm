@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 from sqlalchemy import func, extract
 from flask import Flask, render_template, request, jsonify, redirect, url_for, flash, session
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
+from flask_sqlalchemy import SQLAlchemy
 from models import (db, User, Product, CartItem, Order, OrderItem, Setting,
                     ContactMessage, PageVisit, PaymentLog, ProductImage, ProductVariant)
 from forms import LoginForm, SignupForm, ProductForm, SettingsForm, ContactForm
@@ -18,11 +19,19 @@ import hmac
 import uuid
 import os
 
+# Initialize the Flask application
 app = Flask(__name__)
+
+# Load configuration from config.py
 app.config.from_object(Config)
+
+# Ensure the MySQL database URI and tracking configurations are explicitly set
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root@localhost/stbm_db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Initialize extensions
 db.init_app(app)
+
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
